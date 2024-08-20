@@ -7,7 +7,7 @@
   "importOrder": [
     "^next|^react",
     "<THIRD_PARTY_MODULES>",
-    "components/(.*)$|hooks/(.*)$|utils/(.*)$",
+    "^(components|hooks|i18n|utils)",
     "^[./]"
   ],
   "importOrderSeparation": true,

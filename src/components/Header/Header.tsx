@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Trans } from 'react-i18next/TransWithoutContext';
 
-import { useTranslation } from '../../app/i18n';
-import { LanguageType, languages } from '../../app/i18n/settings';
+import { useTranslation } from 'i18n/hook';
+import { LanguageType, languages } from 'i18n/settings';
 
 interface IHeaderProps {
   lng: LanguageType;

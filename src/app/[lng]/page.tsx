@@ -1,8 +1,8 @@
 import Button from 'components/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
+import { useTranslation } from 'i18n/hook';
 
-import { useTranslation } from '../i18n';
 import { RootLayoutPropsType } from './layout';
 
 export default async function Home({ params: { lng } }: RootLayoutPropsType) {
