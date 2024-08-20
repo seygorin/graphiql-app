@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+
+import { LanguageType, languages } from 'i18n/settings';
 import { dir } from 'i18next';
 
-import { LanguageType, languages } from '../i18n/settings';
+import theme from '../../theme/theme';
 import './globals.css';
 
 export async function generateStaticParams() {
@@ -26,7 +30,11 @@ export default function RootLayout({ children, params: { lng } }: RootLayoutProp
   return (
     <html lang={lng} dir={dir(lng)}>
       <head />
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }
