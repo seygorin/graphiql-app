@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 
+import Header from 'components/Header';
 import { LanguageType, languages } from 'i18n/settings';
 import { dir } from 'i18next';
 
@@ -32,7 +33,10 @@ export default function RootLayout({ children, params: { lng } }: RootLayoutProp
       <head />
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Header lng={lng} />
+            {children}
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

@@ -11,9 +11,13 @@ interface IHeaderProps {
 const Header: React.FC<IHeaderProps> = async ({ lng }) => {
   const { t } = await useTranslation(lng);
   return (
-    <header style={{ marginTop: 50 }}>
+    <header>
       <Trans i18nKey="languageSwitcher" t={t}>
-        Switch from <>{{ lng }}</> to:{' '}
+        Switch from
+        <strong>
+          <>{{ lng }}</>
+        </strong>
+        to:{' '}
       </Trans>
       {languages
         .filter((l) => lng !== l)
