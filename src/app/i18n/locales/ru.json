@@ -1,0 +1,5 @@
+{
+  "component.button": "Кнопка",
+  "component.input": "Ввод",
+  "languageSwitcher": "Переключиться с <1>{{lng}}</1> на: "
+}

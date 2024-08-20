@@ -1,7 +1,11 @@
 import s from './Button.module.scss';
 
-const Button: React.FC = () => {
-  return <button className={s.root} />;
+interface IButtonProps {
+  children: React.ReactNode;
+}
+
+const Button: React.FC<IButtonProps> = ({ children }) => {
+  return <button className={s.root}>{children}</button>;
 };
 
 export default Button;

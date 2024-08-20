@@ -1,7 +1,9 @@
 import s from './Input.module.scss';
 
-const Input: React.FC = () => {
-  return <input type="text" className={s.root} />;
+interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+const Input: React.FC<IInputProps> = ({ ...rest }) => {
+  return <input {...rest} className={s.root} />;
 };
 
 export default Input;
