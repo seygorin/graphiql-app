@@ -1,5 +1,7 @@
 {
-  "component.button": "Button",
-  "component.input": "Input",
-  "languageSwitcher": "Switch from <1>{{lng}}</1> to: "
+  "ru": "Русский",
+  "en": "English",
+  "header.select.language": "Language",
+  "header.login": "Sign in",
+  "component.input": "Input"
 }

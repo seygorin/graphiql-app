@@ -1,8 +1,10 @@
-import Link from 'next/link';
-import { Trans } from 'react-i18next/TransWithoutContext';
-
-import { useTranslation } from 'i18n/hook';
-import { LanguageType, languages } from 'i18n/settings';
+import Image from 'next/image';
+import { Button } from '@mui/material';
+import { useTranslation } from 'i18n/server';
+import { LanguageType } from 'i18n/settings';
+import logo from 'public/logo-rsschool3.png';
+import s from './Header.module.scss';
+import SelectLanguage from './SelectLanguage';
 
 interface IHeaderProps {
   lng: LanguageType;
@@ -10,25 +12,18 @@ interface IHeaderProps {
 
 const Header: React.FC<IHeaderProps> = async ({ lng }) => {
   const { t } = await useTranslation(lng);
+
   return (
-    <header>
-      <Trans i18nKey="languageSwitcher" t={t}>
-        Switch from
-        <strong>
-          <>{{ lng }}</>
-        </strong>
-        to:{' '}
-      </Trans>
-      {languages
-        .filter((l) => lng !== l)
-        .map((l, index) => {
-          return (
-            <span key={l}>
-              {index > 0 && ' or '}
-              <Link href={`/${l}`}>{l}</Link>
-            </span>
-          );
-        })}
+    <header className={s.header_wrapper}>
+      <div className={s.header}>
+        <Image src={logo} width={110} height={110} alt="logoRsSchool" />
+        <div className={s.left_side_header}>
+          <SelectLanguage lng={lng} />
+          <Button size="large" variant="contained" min-width="120px">
+            {t('header.login')}
+          </Button>
+        </div>
+      </div>
     </header>
   );
 };

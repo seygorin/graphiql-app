@@ -1,12 +1,12 @@
-export const fallbackLng = 'en';
-export const languages = [fallbackLng, 'ru'];
+export const FALLBACK_LNG = 'en';
+export const LANGUAGES = [FALLBACK_LNG, 'ru'];
+export const COOKIE_NAME = 'i18next';
 export type LanguageType = 'en' | 'ru';
-export const cookieName = 'i18next';
 
-export function getOptions(lng: LanguageType = fallbackLng) {
+export function getOptions(lng: LanguageType = FALLBACK_LNG) {
   return {
-    supportedLngs: languages,
-    fallbackLng,
+    supportedLngs: LANGUAGES,
+    fallbackLng: FALLBACK_LNG,
     lng,
   };
 }

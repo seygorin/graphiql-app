@@ -1,0 +1,21 @@
+@import '../../styles/vars.scss';
+
+.header_wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: $background-color-header;
+  box-shadow: 5px 5px 5px 1px rgba(161, 161, 161, 0.136);
+  .header {
+    width: 990px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 16px 30px;
+    .left_side_header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+  }
+}

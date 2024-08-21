@@ -7,10 +7,9 @@
   "importOrder": [
     "^next|^react",
     "<THIRD_PARTY_MODULES>",
-    "^(components|hooks|i18n|utils)",
+    "^(components|hooks|i18n|utils|public)",
     "^[./]"
   ],
-  "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

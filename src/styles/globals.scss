@@ -1,0 +1,83 @@
+@import './vars';
+
+// Миксины
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Базовые стили для html и body
+html {
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $text-color;
+  background-color: $background-color;
+  margin: 0;
+  padding: 0;
+}
+
+// Стили заголовков
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: $spacer / 2;
+  font-weight: 600;
+  line-height: 1.2;
+  color: $primary-color;
+}
+
+// Стили ссылок
+a {
+  color: $primary-color;
+  text-decoration: none;
+
+  &:hover {
+    color: darken($primary-color, 10%);
+    text-decoration: underline;
+  }
+}
+
+// Стили для списков
+ul,
+ol {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+// Стили для изображений
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+// Глобальные классы
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $padding-base;
+  padding-left: $padding-base;
+
+  @media (min-width: 576px) {
+    max-width: 540px;
+  }
+  @media (min-width: 768px) {
+    max-width: 720px;
+  }
+  @media (min-width: 992px) {
+    max-width: 960px;
+  }
+  @media (min-width: 1200px) {
+    max-width: 1140px;
+  }
+}

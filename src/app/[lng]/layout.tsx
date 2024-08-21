@@ -1,18 +1,16 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
-
 import Header from 'components/Header';
-import { LanguageType, languages } from 'i18n/settings';
+import { LANGUAGES, LanguageType } from 'i18n/settings';
 import { dir } from 'i18next';
-
+import '../../styles/_reset.css';
+import '../../styles/globals.scss';
 import theme from '../../theme/theme';
-import './globals.css';
 
 export async function generateStaticParams() {
-  return languages.map((lng) => ({ lng }));
+  return LANGUAGES.map((lng) => ({ lng }));
 }
 
 const inter = Inter({ subsets: ['latin'] });

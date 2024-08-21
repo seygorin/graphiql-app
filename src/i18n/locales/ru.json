@@ -1,5 +1,7 @@
 {
-  "component.button": "Кнопка",
-  "component.input": "Ввод",
-  "languageSwitcher": "Переключиться с <1>{{lng}}</1> на: "
+  "ru": "Русский",
+  "en": "English",
+  "header.select.language": "Язык",
+  "header.login": "Войти",
+  "component.input": "Ввод"
 }
