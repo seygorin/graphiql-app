@@ -1,0 +1,24 @@
+@import '../../styles/vars.scss';
+
+.footer_wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: $background-color-footer;
+  margin-top: 36px;
+  border-top: 2px solid $border-color-footer;
+}
+
+.footer {
+  color: $text-color-footer;
+  width: 990px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 10px 0px;
+}
+
+.footer_links {
+  flex-grow: 1;
+}

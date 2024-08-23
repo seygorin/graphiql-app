@@ -4,6 +4,7 @@
   "header.select.language": "Language",
   "header.login": "Sign in",
   "header.logout": "Sign out",
+  "footer.year": "year",
   "component.input": "Input",
   "form.title.signUp": "Sign up",
   "form.title.signIn": "Sign in",

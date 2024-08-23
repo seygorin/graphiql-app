@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import React from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
+import Footer from 'components/Footer';
 import Header from 'components/Header';
 import { AuthProvider } from 'hooks/useAuth';
 import { LANGUAGES, LanguageType } from 'i18n/settings';
@@ -43,6 +44,7 @@ export default function RootLayout({ children, params: { lng } }: RootLayoutProp
               {/* delete - temporary solution */}
               <SignIn />
               {/* delete - temporary solution */}
+              <Footer lng={lng} />
             </ThemeProvider>
           </AuthProvider>
         </AppRouterCacheProvider>
