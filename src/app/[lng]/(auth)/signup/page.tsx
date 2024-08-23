@@ -22,8 +22,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import PasswordStrength from 'components/PasswordStrength/PasswordStrength';
 import useTranslation from 'i18n/client';
+import { LanguageType } from 'i18n/settings';
 import { signUpUser } from '../../../../lib/auth';
-import { SignUpFormData, signUpSchema } from '../../../../validations/signUpValidation.shema';
+import {
+  SignUpFormData,
+  validateSignUpSchema,
+} from '../../../../validations/signUpValidation.shema';
 import s from './signup.module.css';
 
 const SignUp = () => {
@@ -40,7 +44,7 @@ const SignUp = () => {
     event.preventDefault();
   };
   const pathname = usePathname();
-  const lng = pathname.split('/')[1];
+  const lng = pathname.split('/')[1] as LanguageType;
   const { t } = useTranslation(lng);
 
   const {
@@ -51,7 +55,7 @@ const SignUp = () => {
   } = useForm<SignUpFormData>({
     mode: 'all',
     // mode: 'onBlur',
-    resolver: yupResolver(signUpSchema),
+    resolver: yupResolver(validateSignUpSchema(t)),
   });
 
   const onSubmit: SubmitHandler<SignUpFormData> = (data) => {

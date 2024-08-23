@@ -5,16 +5,16 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended",
-    "airbnb",
-    "airbnb/hooks",
-    "prettier",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript"
+    'next/core-web-vitals',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:jsx-a11y/recommended',
+    'airbnb',
+    'airbnb/hooks',
+    'prettier',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   overrides: [],
@@ -23,23 +23,29 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ["@typescript-eslint", "react", "jsx-a11y", "import", "prettier"],
+  plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'prettier'],
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
   },
   rules: {
-    "prettier/prettier": "error",
+    'prettier/prettier': 'error',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'no-bitwise': 'off',
-    "import/extensions": [
-      "error",
-      "ignorePackages",
+    'import/extensions': [
+      'error',
+      'ignorePackages',
       {
-        ts: "never",
-        tsx: "never",
+        ts: 'never',
+        tsx: 'never',
       },
+    ],
+    'no-restricted-imports': [
+      'error',
+      {
+        'patterns': ['@mui/*/*/*']
+      }
     ],
     'react/function-component-definition': 'off',
     'import/no-extraneous-dependencies': 'off',
@@ -51,7 +57,7 @@ module.exports = {
     'no-restricted-exports': 'off',
     'react/self-closing-comp': 'off',
     // 'import/prefer-default-export': 'off',
-    // "@typescript-eslint/no-explicit-any": "error", // by default
+    // "@typescript-eslint/no-explicit-any": "error", // is turned on by default
     // "no-undef": "error", // add if necessary
     // "@typescript-eslint/no-unused-vars": "off", // add if necessary
     // "no-unused-vars": "off", // add if necessary

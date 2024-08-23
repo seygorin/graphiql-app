@@ -22,8 +22,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import SignInWithGoogle from 'components/SignInWithGoogle/SignInWithGoogle';
 import useTranslation from 'i18n/client';
+import { LanguageType } from 'i18n/settings';
 import { signInUser } from '../../../../lib/auth';
-import { signInFormData, signInSchema } from '../../../../validations/signInValidation.schema';
+import {
+  signInFormData,
+  validateSignInSchema,
+} from '../../../../validations/signInValidation.schema';
 import s from './signin.module.css';
 
 const SignIn = () => {
@@ -34,7 +38,7 @@ const SignIn = () => {
     event.preventDefault();
   };
   const pathname = usePathname();
-  const lng = pathname.split('/')[1];
+  const lng = pathname.split('/')[1] as LanguageType;
   const { t } = useTranslation(lng);
 
   const {
@@ -45,7 +49,7 @@ const SignIn = () => {
   } = useForm<signInFormData>({
     // mode: 'all',
     mode: 'onBlur',
-    resolver: yupResolver(signInSchema),
+    resolver: yupResolver(validateSignInSchema(t)),
   });
 
   const onSubmit: SubmitHandler<signInFormData> = (data) => {
@@ -145,3 +149,33 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+export interface TranslationKeys {
+  ru: string;
+  en: string;
+  'header.select.language': string;
+  'header.login': string;
+  'header.logout': string;
+  'component.input': string;
+  'form.title.signUp': string;
+  'form.title.signIn': string;
+  'form.name': string;
+  'form.email': string;
+  'form.password': string;
+  'form.confirmPassword': string;
+  'form.button.signUp': string;
+  'form.button.signIn': string;
+  'form.button.google': string;
+  'form.subtitle.signUp': string;
+  'form.subtitle.signIn': string;
+  'form.subtitle.google': string;
+  'form.error.name.required': string;
+  'form.error.name.capitalized': string;
+  'form.error.email.required': string;
+  'form.error.email.format': string;
+  'form.error.password.required': string;
+  'form.error.password.content': string;
+  'form.error.password.length': string;
+  'form.error.confirmPassword.required': string;
+  'form.error.confirmPassword.match': string;
+}

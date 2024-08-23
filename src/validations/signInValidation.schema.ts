@@ -1,21 +1,24 @@
 import * as yup from 'yup';
+import type { TFunction } from 'i18next';
 
-export const signInSchema = yup.object().shape({
-  email: yup
-    .string()
-    .lowercase()
-    .trim()
-    .required('Email is required')
-    .email('Invalid email format'),
-  password: yup
-    .string()
-    .required('Password is required')
-    .matches(
-      /^(?=.*\d)(?=.*[@$#№:;^!%*?&*()_+,."'`~/|])[\p{L}\d@$!%*?&*()_+."']/u,
-      'Password must have at least one letter, one digit, one special character',
-    )
-    .min(8, 'Password must be at least 8 characters long'),
-});
+export const validateSignInSchema = (t: TFunction) => {
+  return yup.object().shape({
+    email: yup
+      .string()
+      .lowercase()
+      .trim()
+      .required(t('form.error.email.required'))
+      .email(t('form.error.email.format')),
+    password: yup
+      .string()
+      .required(t('form.error.password.required'))
+      .matches(
+        /^(?=.*\d)(?=.*[@$#№:;^!%*?&*()_+,."'`~/|])[\p{L}\d@$!%*?&*()_+."']/u,
+        t('form.error.password.content'),
+      )
+      .min(8, t('form.error.password.length')),
+  });
+};
 
 export type signInFormData = {
   email: string;
