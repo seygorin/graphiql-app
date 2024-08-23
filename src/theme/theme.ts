@@ -6,7 +6,7 @@ const theme = createTheme({
   typography: {},
   palette: {
     primary: {
-      main: '#95999a',
+      main: 'rgba(41,108,235,0.9)',
     },
   },
 });

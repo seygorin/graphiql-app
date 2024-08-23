@@ -1,6 +1,7 @@
 import Image from 'next/image';
+import React from 'react';
 import { Button } from '@mui/material';
-import { useTranslation } from 'i18n/server';
+import useTranslation from 'i18n/server';
 import { LanguageType } from 'i18n/settings';
 import logo from 'public/logo-rsschool3.png';
 import s from './Header.module.scss';

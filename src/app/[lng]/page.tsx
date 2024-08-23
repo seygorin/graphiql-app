@@ -1,8 +1,12 @@
 import { Input } from '@mui/material';
-import { useTranslation } from 'i18n/server';
-import { RootLayoutPropsType } from './layout';
+import useTranslation from 'i18n/server';
+import { LanguageType } from 'i18n/settings';
 
-export default async function Home({ params: { lng } }: RootLayoutPropsType) {
+export type HomeProps = {
+  params: { lng: LanguageType };
+};
+
+export default async function Home({ params: { lng } }: HomeProps) {
   const { t } = await useTranslation(lng);
   return (
     <main>

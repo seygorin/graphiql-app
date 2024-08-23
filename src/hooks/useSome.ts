@@ -1,3 +1,5 @@
 import { useEffect } from 'react';
 
-export const useSome = () => useEffect(() => {}, []);
+const useSome = () => useEffect(() => {}, []);
+
+export default useSome;

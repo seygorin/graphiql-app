@@ -37,7 +37,9 @@
     "react-cookie": "^7.2.0",
     "react-dom": "^18",
     "react-i18next": "^15.0.1",
-    "sass": "^1.77.8"
+    "sass": "^1.77.8",
+    "sharp": "^0.33.5",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
@@ -50,9 +52,14 @@
     "@vitejs/plugin-react": "^4.3.1",
     "@vitest/coverage-v8": "^2.0.5",
     "eslint": "^8",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-next": "14.2.5",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.34.4",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "husky": "^9.1.5",
     "jsdom": "^24.1.1",
     "typescript": "^5",

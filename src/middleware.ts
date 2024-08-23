@@ -9,7 +9,7 @@ export const config = {
   matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|site.webmanifest).*)'],
 };
 
-export function middleware(req: NextRequest) {
+export const middleware = (req: NextRequest) => {
   let lng;
   if (req.cookies.has(COOKIE_NAME)) lng = acceptLanguage.get(req.cookies.get(COOKIE_NAME)?.value);
   if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'));
@@ -32,4 +32,4 @@ export function middleware(req: NextRequest) {
   }
 
   return NextResponse.next();
-}
+};

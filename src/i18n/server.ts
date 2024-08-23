@@ -12,10 +12,12 @@ const initI18next = async (lng: LanguageType) => {
   return i18nInstance;
 };
 
-export async function useTranslation(lng: LanguageType) {
+const useTranslation = async (lng: LanguageType) => {
   const i18nextInstance = await initI18next(lng);
   return {
     t: i18nextInstance.getFixedT(lng),
     i18n: i18nextInstance,
   };
-}
+};
+
+export default useTranslation;

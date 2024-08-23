@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { useTranslation } from 'i18n/client';
+import useTranslation from 'i18n/client';
 import { LANGUAGES, LanguageType } from 'i18n/settings';
 
 interface ISelectLanguageProps {
