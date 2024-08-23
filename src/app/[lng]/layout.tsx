@@ -4,11 +4,14 @@ import React from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import Header from 'components/Header';
+import { AuthProvider } from 'hooks/useAuth';
 import { LANGUAGES, LanguageType } from 'i18n/settings';
 import { dir } from 'i18next';
 import '../../styles/_reset.css';
 import '../../styles/globals.scss';
 import theme from '../../theme/theme';
+import SignIn from './(auth)/signin/page';
+import SignUp from './(auth)/signup/page';
 
 export async function generateStaticParams() {
   return LANGUAGES.map((lng) => ({ lng }));
@@ -32,10 +35,16 @@ export default function RootLayout({ children, params: { lng } }: RootLayoutProp
       <head />
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <Header lng={lng} />
-            {children}
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider theme={theme}>
+              <Header lng={lng} />
+              {children}
+              <SignUp />
+              {/* delete - temporary solution */}
+              <SignIn />
+              {/* delete - temporary solution */}
+            </ThemeProvider>
+          </AuthProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

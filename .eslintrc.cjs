@@ -49,6 +49,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/button-has-type': 'off',
     'no-restricted-exports': 'off',
+    'react/self-closing-comp': 'off',
     // 'import/prefer-default-export': 'off',
     // "@typescript-eslint/no-explicit-any": "error", // by default
     // "no-undef": "error", // add if necessary

@@ -81,3 +81,11 @@ img {
     max-width: 1140px;
   }
 }
+
+.error_form {
+  position: absolute;
+  left: 0;
+  color: $error-color;
+  font-family: $font-family-message;
+  font-size: 0.65rem;
+}

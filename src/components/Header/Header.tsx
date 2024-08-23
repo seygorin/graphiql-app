@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import { Button } from '@mui/material';
-import useTranslation from 'i18n/server';
+import SignInButton from 'components/SignInButton/SignInButton';
 import { LanguageType } from 'i18n/settings';
 import logo from 'public/logo-rsschool3.png';
 import s from './Header.module.scss';
@@ -12,7 +11,7 @@ interface IHeaderProps {
 }
 
 const Header: React.FC<IHeaderProps> = async ({ lng }) => {
-  const { t } = await useTranslation(lng);
+  // const { t } = await useTranslation(lng); // no longer needed
 
   return (
     <header className={s.header_wrapper}>
@@ -20,9 +19,11 @@ const Header: React.FC<IHeaderProps> = async ({ lng }) => {
         <Image src={logo} width={110} height={110} alt="logoRsSchool" />
         <div className={s.left_side_header}>
           <SelectLanguage lng={lng} />
-          <Button size="large" variant="contained" min-width="120px">
-            {t('header.login')}
-          </Button>
+          {/* no longer needed */}
+          {/* <Button size="large" variant="contained" min-width="120px"> */}
+          {/* {t('header.login')} */}
+          {/* </Button> */}
+          <SignInButton lng={lng} />
         </div>
       </div>
     </header>
