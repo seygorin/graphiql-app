@@ -4,6 +4,7 @@
   "header.select.language": "Язык",
   "header.login": "Войти",
   "header.logout": "Выйти",
+  "footer.year": "год",
   "component.input": "Ввод",
   "form.title.signUp": "Регистрация",
   "form.title.signIn": "Вход в аккаунт",
