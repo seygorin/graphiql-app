@@ -25,6 +25,6 @@
       "i18n/*": ["./src/i18n/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".eslintrc.cjs"],
   "exclude": ["node_modules"]
 }

@@ -17,6 +17,7 @@ coverage
 *.sw?
 node_modules
 dist
+public
 build
 dist-ssr
 .next
