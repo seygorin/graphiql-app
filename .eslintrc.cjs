@@ -3,40 +3,57 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: [
     'next/core-web-vitals',
+    'airbnb',
+    'airbnb/hooks',
+    'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
-    'airbnb',
-    'airbnb/hooks',
-    'prettier',
     'plugin:import/errors',
     'plugin:import/warnings',
-    'plugin:import/typescript'
+    'plugin:import/typescript',
+    'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
-  overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'import', 'prettier'],
   settings: {
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    'import/resolver': {
+      typescript: {},
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
     },
   },
   rules: {
     'prettier/prettier': 'error',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
-    'no-bitwise': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
+    'react/require-default-props': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'import/prefer-default-export': 'off',
+    'react/function-component-definition': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'arrow-body-style': 'off',
+    'react/button-has-type': 'off',
+    'no-restricted-exports': 'off',
+    'react/self-closing-comp': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
       {
+        js: 'never',
+        jsx: 'never',
         ts: 'never',
         tsx: 'never',
       },
@@ -44,25 +61,25 @@ module.exports = {
     'no-restricted-imports': [
       'error',
       {
-        'patterns': ['@mui/*/*/*']
-      }
+        patterns: ['@mui/*/*/*'],
+      },
     ],
-    'react/function-component-definition': 'off',
-    'import/no-extraneous-dependencies': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off',
-    'arrow-body-style': 'off',
-    'react/jsx-props-no-spreading': 'off',
-    'react/button-has-type': 'off',
-    'no-restricted-exports': 'off',
-    'react/self-closing-comp': 'off',
-    // 'import/prefer-default-export': 'off',
-    // "@typescript-eslint/no-explicit-any": "error", // is turned on by default
-    // "no-undef": "error", // add if necessary
-    // "@typescript-eslint/no-unused-vars": "off", // add if necessary
-    // "no-unused-vars": "off", // add if necessary
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'jsx-a11y/anchor-is-valid': [
+      'error',
+      {
+        components: ['Link'],
+        specialLink: ['hrefLeft', 'hrefRight'],
+        aspects: ['invalidHref', 'preferButton'],
+      },
+    ],
   },
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      parserOptions: {
+        project: ['./tsconfig.json'],
+      },
+    },
+  ],
 };
-
-
-
