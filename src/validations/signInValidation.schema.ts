@@ -20,7 +20,7 @@ export const validateSignInSchema = (t: TFunction) => {
   });
 };
 
-export type signInFormData = {
+export type SignInFormData = {
   email: string;
   password: string;
 };

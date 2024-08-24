@@ -7,7 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import { deepOrange } from '@mui/material/colors';
-import ISelectLanguageProps from 'components/Header/SelectLanguage';
+import { ISelectLanguageProps } from 'components/Header/SelectLanguage';
 import { useAuth } from 'hooks/useAuth';
 import useTranslation from 'i18n/client';
 import stringAvatar from 'utils/getStringAvatar';
@@ -17,11 +17,7 @@ const SignInButton: FC<ISelectLanguageProps> = ({ lng }) => {
   const { t } = useTranslation(lng);
   const { user, isLoggedIn } = useAuth();
   const router = useRouter();
-  let name: string;
-
-  if (user) {
-    name = user?.displayName ? user.displayName : user?.email;
-  }
+  const name = user?.displayName || user?.displayName || '?';
 
   const signOut = () => {
     signOutUser();
@@ -33,7 +29,7 @@ const SignInButton: FC<ISelectLanguageProps> = ({ lng }) => {
 
   return isLoggedIn ? (
     <>
-      <Avatar sx={{ bgcolor: deepOrange[500] }} {...stringAvatar(name)} />
+      <Avatar {...stringAvatar(name)} sx={{ bgcolor: deepOrange[500] }} />
       {/* <Typography sx={{color: '#325bb4'}}>{user?.displayName ? user.displayName : user?.email}</Typography> */}
       <Button
         size="medium"

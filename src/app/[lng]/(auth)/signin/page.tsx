@@ -25,7 +25,7 @@ import useTranslation from 'i18n/client';
 import { LanguageType } from 'i18n/settings';
 import { signInUser } from '../../../../lib/auth';
 import {
-  signInFormData,
+  SignInFormData,
   validateSignInSchema,
 } from '../../../../validations/signInValidation.schema';
 import s from './signin.module.css';
@@ -46,13 +46,13 @@ const SignIn = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<signInFormData>({
+  } = useForm<SignInFormData>({
     // mode: 'all',
     mode: 'onBlur',
     resolver: yupResolver(validateSignInSchema(t)),
   });
 
-  const onSubmit: SubmitHandler<signInFormData> = (data) => {
+  const onSubmit: SubmitHandler<SignInFormData> = (data) => {
     signInUser(data.email, data.password);
     router.push('/'); // Change
     reset();

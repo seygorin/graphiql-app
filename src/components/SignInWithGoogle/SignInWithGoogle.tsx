@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ISelectLanguageProps from 'components/Header/SelectLanguage';
+import { ISelectLanguageProps } from 'components/Header/SelectLanguage';
 import useTranslation from 'i18n/client';
 import googleIcon from '../../assets/google.png';
 import { signInWithGoogle } from '../../lib/auth';

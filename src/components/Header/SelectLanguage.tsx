@@ -6,7 +6,7 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@m
 import useTranslation from 'i18n/client';
 import { LANGUAGES, LanguageType } from 'i18n/settings';
 
-interface ISelectLanguageProps {
+export interface ISelectLanguageProps {
   lng: LanguageType;
 }
 const SelectLanguage: React.FC<ISelectLanguageProps> = ({ lng }) => {
