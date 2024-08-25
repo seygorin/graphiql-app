@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useAuth } from 'hooks/useAuth';
 import { LanguageType } from 'i18n/settings';
 
-const withAuth = (WrappedComponent) => {
-  const ComponentWithAuth = (props) => {
+const withAuth = <P extends Record<string, never>>(WrappedComponent: React.ComponentType<P>) => {
+  const ComponentWithAuth = (props: P) => {
     const { user } = useAuth();
     const router = useRouter();
     const pathname = usePathname();

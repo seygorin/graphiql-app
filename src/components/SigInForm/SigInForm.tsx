@@ -56,9 +56,11 @@ const SignInForm = () => {
       await signInUser(data.email, data.password);
       router.push(`/${lng}`); // Main page
       reset();
-    } catch (error) {
-      console.error('Error logging in:', error);
-      setloginError(error.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error('Error logging in:', err);
+        setloginError(err.message);
+      }
     }
   };
 

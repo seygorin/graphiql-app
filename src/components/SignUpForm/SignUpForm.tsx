@@ -31,7 +31,7 @@ const SignUpForm = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  const [, setSignUpError] = useState<string | null>(null);
+  // const [, setSignUpError] = useState<string | null>(null);
   const router = useRouter();
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,9 +62,11 @@ const SignUpForm = () => {
       await signUpUser(data.name, data.email, data.password);
       router.push(`/${lng}`); // Main page
       reset();
-    } catch (error) {
-      console.error('Error signing up:', error);
-      setSignUpError(error.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error('Error logging in:', err);
+        // setloginError(err.message);
+      }
     }
   };
 
