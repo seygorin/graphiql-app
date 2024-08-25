@@ -3,12 +3,15 @@
 import React from 'react';
 import ProtectedAuthRoute from 'components/ProtectedAuthRoute/ProtectedAuthRoute';
 import SignInForm from 'components/SigInForm/SigInForm';
+import { AuthProvider } from 'hooks/useAuth';
 
 const SignInPage = () => {
   return (
-    <ProtectedAuthRoute>
-      <SignInForm />
-    </ProtectedAuthRoute>
+    <AuthProvider>
+      <ProtectedAuthRoute>
+        <SignInForm />
+      </ProtectedAuthRoute>
+    </AuthProvider>
   );
 };
 

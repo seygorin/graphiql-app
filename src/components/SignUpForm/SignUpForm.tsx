@@ -1,6 +1,7 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,8 +22,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import PasswordStrength from 'components/PasswordStrength/PasswordStrength';
-import useTranslation from 'i18n/client';
-import { LanguageType } from 'i18n/settings';
 import { signUpUser } from '../../lib/auth';
 import { SignUpFormData, validateSignUpSchema } from '../../validations/signUpValidation.shema';
 import s from './SignUpForm.module.css';
@@ -41,10 +40,7 @@ const SignUpForm = () => {
   const onMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
-  const pathname = usePathname();
-  const lng = pathname.split('/')[1] as LanguageType;
-  const signInHref = `/${lng}/signin`;
-  const { t } = useTranslation(lng);
+  const t = useTranslations();
 
   const {
     register,
@@ -60,7 +56,7 @@ const SignUpForm = () => {
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
       await signUpUser(data.name, data.email, data.password);
-      router.push(`/${lng}`); // Main page
+      router.push(`/`); // Main page
       reset();
     } catch (err) {
       if (err instanceof Error) {
@@ -74,7 +70,7 @@ const SignUpForm = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 6,
+          paddingTop: 6,
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'column',
@@ -194,7 +190,7 @@ const SignUpForm = () => {
           </FormGroup>
           <Grid container>
             <Grid item>
-              <Link href={signInHref} variant="subtitle2" underline="hover">
+              <Link href="/signin" variant="subtitle2" underline="hover">
                 {t('form.subtitle.signUp')}
               </Link>
             </Grid>

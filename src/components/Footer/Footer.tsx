@@ -1,17 +1,12 @@
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import React from 'react';
 import { Link } from '@mui/material';
-import useTranslation from 'i18n/server';
-import { LanguageType } from 'i18n/settings';
 import courseLogo from 'public/rss-logo.svg';
 import s from './Footer.module.scss';
 
-interface IHeaderProps {
-  lng: LanguageType;
-}
-
-const Footer: React.FC<IHeaderProps> = async ({ lng }) => {
-  const { t } = await useTranslation(lng);
+const Footer: React.FC = () => {
+  const t = useTranslations();
 
   return (
     <footer className={s.footer_wrapper}>

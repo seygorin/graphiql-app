@@ -1,20 +1,19 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { Box, Container, Tab, Tabs } from '@mui/material';
-import useTranslation from 'i18n/client';
-import { LanguageType } from 'i18n/settings';
 
 export type DashboardLayoutProps = Readonly<{
   children: React.ReactNode;
-  params: { lng: LanguageType };
+  params: { locale: string };
 }>;
 
-const DashboardLayout = ({ children, params: { lng } }: DashboardLayoutProps) => {
+const DashboardLayout = ({ children, params: { locale } }: DashboardLayoutProps) => {
+  const t = useTranslations();
   const pathname = usePathname();
-  const { t } = useTranslation(lng);
 
   return (
     <Container maxWidth="lg">
@@ -22,21 +21,21 @@ const DashboardLayout = ({ children, params: { lng } }: DashboardLayoutProps) =>
         <Tabs value={pathname} aria-label="dashboard tabs">
           <Tab
             label={t('dashboard.restful')}
-            value={`/${lng}/dashboard/restful`}
+            value={`/${locale}/dashboard/restful`}
             component={Link}
-            href={`/${lng}/dashboard/restful`}
+            href={`/${locale}/dashboard/restful`}
           />
           <Tab
             label={t('dashboard.graphiql')}
-            value={`/${lng}/dashboard/graphiql`}
+            value={`/${locale}/dashboard/graphiql`}
             component={Link}
-            href={`/${lng}/dashboard/graphiql`}
+            href={`/${locale}/dashboard/graphiql`}
           />
           <Tab
             label={t('dashboard.history')}
-            value={`/${lng}/dashboard/history`}
+            value={`/${locale}/dashboard/history`}
             component={Link}
-            href={`/${lng}/dashboard/history`}
+            href={`/${locale}/dashboard/history`}
           />
         </Tabs>
       </Box>

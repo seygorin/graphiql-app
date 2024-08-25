@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import {
   Box,
@@ -11,15 +12,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import useTranslation from 'i18n/client';
-import { LanguageType } from 'i18n/settings';
 
-interface RESTfulClientProps {
-  lng: LanguageType;
-}
-
-const RESTfulClient: React.FC<RESTfulClientProps> = ({ lng }) => {
-  const { t } = useTranslation(lng);
+const RESTfulClient: React.FC = () => {
+  const t = useTranslations();
 
   return (
     <Box sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>

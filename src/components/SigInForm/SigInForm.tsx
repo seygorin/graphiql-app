@@ -1,6 +1,7 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,8 +22,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import SignInWithGoogle from 'components/SignInWithGoogle/SignInWithGoogle';
-import useTranslation from 'i18n/client';
-import { LanguageType } from 'i18n/settings';
 import { signInUser } from '../../lib/auth';
 import { SignInFormData, validateSignInSchema } from '../../validations/signInValidation.schema';
 import s from './SignInForm.module.css';
@@ -35,10 +34,7 @@ const SignInForm = () => {
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
-  const pathname = usePathname();
-  const lng = pathname.split('/')[1] as LanguageType;
-  const signUpHref = `/${lng}/signup`;
-  const { t } = useTranslation(lng);
+  const t = useTranslations();
 
   const {
     register,
@@ -54,7 +50,7 @@ const SignInForm = () => {
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     try {
       await signInUser(data.email, data.password);
-      router.push(`/${lng}`); // Main page
+      router.push(`/`); // Main page
       reset();
     } catch (err) {
       if (err instanceof Error) {
@@ -68,7 +64,7 @@ const SignInForm = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 6,
+          paddingTop: 6,
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'column',
@@ -137,14 +133,14 @@ const SignInForm = () => {
           </FormGroup>
           <Grid container>
             <Grid item>
-              <Link href={signUpHref} variant="subtitle2" underline="hover">
+              <Link href="/signup" variant="subtitle2" underline="hover">
                 {t('form.subtitle.signIn')}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <SignInWithGoogle lng={lng} />
+      <SignInWithGoogle />
     </Container>
   );
 };

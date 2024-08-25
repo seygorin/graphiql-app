@@ -1,24 +1,28 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
-import SignInButton from 'components/SignInButton/SignInButton';
-import { LanguageType } from 'i18n/settings';
+import { Stack } from '@mui/material';
+import { AuthProvider } from 'hooks/useAuth';
 import logo from 'public/logo-rsschool3.png';
+import Buttons from './Buttons';
 import s from './Header.module.scss';
 import SelectLanguage from './SelectLanguage';
 
-interface IHeaderProps {
-  lng: LanguageType;
-}
-
-const Header: React.FC<IHeaderProps> = async ({ lng }) => {
+const Header: React.FC = () => {
   return (
     <header className={s.header_wrapper}>
       <div className={s.header}>
-        <Image src={logo} width={110} height={110} alt="logoRsSchool" />
-        <div className={s.left_side_header}>
-          <SelectLanguage lng={lng} />
-          <SignInButton lng={lng} />
-        </div>
+        <Stack direction="row" gap={2}>
+          <Link href="/">
+            <Image src={logo} width={110} height={110} alt="logoRsSchool" />
+          </Link>
+          <SelectLanguage />
+        </Stack>
+        <Stack direction="row" gap={2}>
+          <AuthProvider>
+            <Buttons />
+          </AuthProvider>
+        </Stack>
       </div>
     </header>
   );

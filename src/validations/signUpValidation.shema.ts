@@ -1,7 +1,7 @@
+import { useTranslations } from 'next-intl';
 import * as yup from 'yup';
-import type { TFunction } from 'i18next';
 
-export const validateSignUpSchema = (t: TFunction) => {
+export const validateSignUpSchema = (t: ReturnType<typeof useTranslations>) => {
   return yup.object().shape({
     name: yup
       .string()

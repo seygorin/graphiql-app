@@ -18,7 +18,7 @@ module.exports = {
     'plugin:import/typescript',
     'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', 'bin', '.eslintrc.cjs', 'next.config.mjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',

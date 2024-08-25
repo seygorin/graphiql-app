@@ -22,7 +22,7 @@ describe('stringAvatar', () => {
 
   it('should handle empty strings gracefully', () => {
     const result = stringAvatar('');
-    expect(result.children).toBeUndefined();
+    expect(result.children).toBe('');
     expect(result.sx.bgcolor).toMatch(/^#[0-9A-F]{6}$/i);
   });
 });
