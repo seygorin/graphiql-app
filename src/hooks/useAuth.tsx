@@ -1,7 +1,9 @@
 'use client';
 
-import React, { ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import React, { ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { User, onIdTokenChanged } from 'firebase/auth';
+import { signOutUser } from '../lib/auth';
 import { auth } from '../lib/firebase';
 
 interface AuthContextType {
@@ -27,24 +29,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUserInfoLoading, setIsUserInfoLoading] = useState(true);
-
-  async function initializeUser(currentUser: User | null) {
-    if (currentUser) {
-      setUser({ ...currentUser });
-      setIsLoggedIn(true);
-    } else {
-      setUser(null);
-      setIsLoggedIn(false);
-    }
-    setIsUserInfoLoading(false);
-  }
+  const router = useRouter();
+  const tokenTimerIDRef = useRef<NodeJS.Timeout | number | undefined>();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, initializeUser);
+    async function initializeUser(currentUser: User | null) {
+      if (currentUser) {
+        const { expirationTime } = await currentUser.getIdTokenResult();
+        const sessionDuration = new Date(expirationTime).getTime() - Date.now();
+
+        tokenTimerIDRef.current = setTimeout(() => {
+          signOutUser();
+          router.push('/');
+        }, sessionDuration);
+
+        setUser({ ...currentUser });
+        setIsLoggedIn(true);
+      } else {
+        setUser(null);
+        setIsLoggedIn(false);
+        // router.replace(`/${lng}`) // change link later
+      }
+      setIsUserInfoLoading(false);
+    }
+
+    // const unsubscribe = onAuthStateChanged(auth, initializeUser);
+    const unsubscribe = onIdTokenChanged(auth, initializeUser);
     return () => {
       unsubscribe();
+      if (tokenTimerIDRef.current) {
+        clearTimeout(tokenTimerIDRef.current);
+      }
     };
-  }, []);
+  }, [router]);
 
   const value = useMemo<AuthContextType>(
     () => ({

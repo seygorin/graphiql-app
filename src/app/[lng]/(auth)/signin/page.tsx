@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -33,6 +33,7 @@ import s from './signin.module.css';
 const SignIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [, setloginError] = useState<string | null>(null);
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -40,6 +41,7 @@ const SignIn = () => {
   const pathname = usePathname();
   const lng = pathname.split('/')[1] as LanguageType;
   const { t } = useTranslation(lng);
+  // const { isLoggedIn } = useAuth();
 
   const {
     register,
@@ -52,15 +54,22 @@ const SignIn = () => {
     resolver: yupResolver(validateSignInSchema(t)),
   });
 
-  const onSubmit: SubmitHandler<SignInFormData> = (data) => {
-    signInUser(data.email, data.password);
-    router.push('/'); // Change
-    reset();
+  const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
+    try {
+      await signInUser(data.email, data.password);
+      router.push('/dashboard/restful'); // or router.push('/dashboard');
+      reset();
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setloginError(error.message);
+    }
   };
 
-  //   useEffect(() => {
-  //     if (user) navigate(/);
-  //   }, [user]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     router.push('/');
+  //   }
+  // }, [isLoggedIn]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -149,33 +158,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
-export interface TranslationKeys {
-  ru: string;
-  en: string;
-  'header.select.language': string;
-  'header.login': string;
-  'header.logout': string;
-  'component.input': string;
-  'form.title.signUp': string;
-  'form.title.signIn': string;
-  'form.name': string;
-  'form.email': string;
-  'form.password': string;
-  'form.confirmPassword': string;
-  'form.button.signUp': string;
-  'form.button.signIn': string;
-  'form.button.google': string;
-  'form.subtitle.signUp': string;
-  'form.subtitle.signIn': string;
-  'form.subtitle.google': string;
-  'form.error.name.required': string;
-  'form.error.name.capitalized': string;
-  'form.error.email.required': string;
-  'form.error.email.format': string;
-  'form.error.password.required': string;
-  'form.error.password.content': string;
-  'form.error.password.length': string;
-  'form.error.confirmPassword.required': string;
-  'form.error.confirmPassword.match': string;
-}

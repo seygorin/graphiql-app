@@ -19,8 +19,8 @@ const SignInButton: FC<ISelectLanguageProps> = ({ lng }) => {
   const router = useRouter();
   const name = user?.displayName || user?.email || '?';
 
-  const signOut = () => {
-    signOutUser();
+  const signOut = async () => {
+    await signOutUser();
   };
 
   const handleSignIn = () => {

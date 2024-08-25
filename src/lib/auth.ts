@@ -40,6 +40,11 @@ export const signInWithGoogle = async () => {
   const { user } = res;
   const q = query(collection(db, 'users'), where('uid', '==', user.uid));
   const docs = await getDocs(q);
+  // in process
+  if (!res || !user) {
+    throw new Error('Google sign in failed');
+  }
+  //
   if (docs.docs.length === 0) {
     await addDoc(collection(db, 'users'), {
       uid: user.uid,
@@ -48,6 +53,9 @@ export const signInWithGoogle = async () => {
       email: user.email,
     });
   }
+  // in process
+  return user.uid;
+  //
 };
 
 export const signUpUser = async (name: string, email: string, password: string) => {
@@ -80,15 +88,17 @@ export const signInUser = async (email: string, password: string) => {
   }
 };
 
-export const signOutUser = () => {
-  signOut(auth)
-    .then(() => {
-      // Sign-out successful.
-    })
-    .catch((err) => {
-      if (err instanceof Error) {
-        console.error(err);
-        // An error happened.
-      }
-    });
+export const signOutUser = async () => {
+  try {
+    await signOut(auth);
+    console.log('User signed out');
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error('Error signing out:', err);
+    }
+  }
 };
+
+// export function onAuthStateChanged(callback: (authUser: User | null) => void) {
+//   return _onAuthStateChanged(auth, callback);
+// }
