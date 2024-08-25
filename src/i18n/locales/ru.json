@@ -1,57 +1,83 @@
 {
   "ru": "Русский",
   "en": "English",
-  "header.select.language": "Язык",
-  "header.login": "Войти",
-  "header.logout": "Выйти",
-  "header.signUp": "Регистрация",
-  "footer.year": "год",
-  "component.input": "Ввод",
-  "form.title.signUp": "Регистрация",
-  "form.title.signIn": "Вход в аккаунт",
-  "form.name": "Имя",
-  "form.email": "Электронная почта",
-  "form.password": "Пароль",
-  "form.confirmPassword": "Подтвердите пароль",
-  "form.button.signUp": "Зарегистрироваться",
-  "form.button.signIn": "Войти",
-  "form.button.google": "Войти через Google",
-  "form.subtitle.signUp": "Уже есть аккаунт? Пожалуйста, войдите",
-  "form.subtitle.signIn": "Нет учетной записи? Зарегистрируйтесь",
-  "form.subtitle.google": "Или войдите через Ваш аккаунт Google",
-  "form.error.name.required": "Поле 'Имя' обязательно для заполнения",
-  "form.error.name.capitalized": "Первая буква имени должна быть заглавной",
-  "form.error.email.required": "Поле 'Эл. почты' обязательно для заполнения",
-  "form.error.email.format": "Неверный формат электронной почты",
-  "form.error.password.required": "Поле 'Пароль' обязательно для заполнения",
-  "form.error.password.content": "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ",
-  "form.error.password.length": "Пароль должен быть длиной не менее 8 символов",
-  "form.error.confirmPassword.required": "Поле 'Пароль' обязательно для заполнения",
-  "form.error.confirmPassword.match": "Введенные пароли не совпадают",
-  "dashboard.restful": "RESTful клиент",
-  "dashboard.graphiql": "GraphiQL клиент",
-  "dashboard.history": "История",
-  "graphiql.title": "GraphiQL клиент",
-  "graphiql.endpoint": "URL эндпоинта",
-  "graphiql.sdlEndpoint": "URL SDL эндпоинта",
-  "graphiql.query": "Запрос",
-  "graphiql.variables": "Переменные",
-  "graphiql.headers": "Заголовки",
-  "graphiql.executeQuery": "Выполнить запрос",
-  "graphiql.response": "Ответ",
-  "graphiql.documentation": "Документация",
-  "graphiql.documentationPlaceholder": "Документация будет отображена здесь, когда она станет доступна",
-  "history.title": "История запросов",
-  "history.noRequests": "Вы еще не выполнили ни одного запроса",
-  "history.tryRESTful": "Попробовать RESTful клиент",
-  "history.tryGraphiQL": "Попробовать GraphiQL клиент",
-  "restful.title": "RESTful клиент",
-  "restful.method": "Метод",
-  "restful.endpoint": "URL эндпоинта",
-  "restful.requestBody": "Тело запроса",
-  "restful.headers": "Заголовки",
-  "restful.sendRequest": "Отправить запрос",
-  "restful.response": "Ответ",
-  "restful.status": "Статус",
-  "restful.responseBody": "Тело ответа"
+  "header": {
+    "select": { "language": "Язык" },
+    "login": "Войти",
+    "logout": "Выйти",
+    "signUp": "Регистрация"
+  },
+  "notfound": {
+    "title": "Страница не найдена:(",
+    "description": "Не удалось найти запрошенный ресурс",
+    "link": "Вернуться на главную"
+  },
+  "main": {
+    "welcomeUser": "Снова здравствуйте, {user}!",
+    "welcome": "Здравствуйте!"
+  },
+  "footer": { "year": "год" },
+  "component": { "input": "Ввод" },
+  "form": {
+    "title": { "signUp": "Регистрация", "signIn": "Вход в аккаунт" },
+    "name": "Имя",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "button": { "signUp": "Зарегистрироваться", "signIn": "Войти", "google": "Войти через Google" },
+    "subtitle": {
+      "signUp": "Уже есть аккаунт? Пожалуйста, войдите",
+      "signIn": "Нет учетной записи? Зарегистрируйтесь",
+      "google": "Или войдите через Ваш аккаунт Google"
+    },
+    "error": {
+      "name": {
+        "required": "Поле 'Имя' обязательно для заполнения",
+        "capitalized": "Первая буква имени должна быть заглавной"
+      },
+      "email": {
+        "required": "Поле 'Эл. почты' обязательно для заполнения",
+        "format": "Неверный формат электронной почты"
+      },
+      "password": {
+        "required": "Поле 'Пароль' обязательно для заполнения",
+        "content": "Пароль должен содержать хотя бы одну букву, одну цифру и один специальный символ",
+        "length": "Пароль должен быть длиной не менее 8 символов"
+      },
+      "confirmPassword": {
+        "required": "Поле 'Пароль' обязательно для заполнения",
+        "match": "Введенные пароли не совпадают"
+      }
+    }
+  },
+  "dashboard": { "restful": "RESTful клиент", "graphiql": "GraphiQL клиент", "history": "История" },
+  "graphiql": {
+    "title": "GraphiQL клиент",
+    "endpoint": "URL эндпоинта",
+    "sdlEndpoint": "URL SDL эндпоинта",
+    "query": "Запрос",
+    "variables": "Переменные",
+    "headers": "Заголовки",
+    "executeQuery": "Выполнить запрос",
+    "response": "Ответ",
+    "documentation": "Документация",
+    "documentationPlaceholder": "Документация будет отображена здесь, когда она станет доступна"
+  },
+  "history": {
+    "title": "История запросов",
+    "noRequests": "Вы еще не выполнили ни одного запроса",
+    "tryRESTful": "Попробовать RESTful клиент",
+    "tryGraphiQL": "Попробовать GraphiQL клиент"
+  },
+  "restful": {
+    "title": "RESTful клиент",
+    "method": "Метод",
+    "endpoint": "URL эндпоинта",
+    "requestBody": "Тело запроса",
+    "headers": "Заголовки",
+    "sendRequest": "Отправить запрос",
+    "response": "Ответ",
+    "status": "Статус",
+    "responseBody": "Тело ответа"
+  }
 }

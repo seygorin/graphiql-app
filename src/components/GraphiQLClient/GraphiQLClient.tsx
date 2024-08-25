@@ -1,16 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import useTranslation from 'i18n/client';
-import { LanguageType } from 'i18n/settings';
 
-interface GraphiQLClientProps {
-  lng: LanguageType;
-}
-
-const GraphiQLClient: React.FC<GraphiQLClientProps> = ({ lng }) => {
-  const { t } = useTranslation(lng);
+const GraphiQLClient: React.FC = () => {
+  const t = useTranslations();
 
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', padding: 2 }}>

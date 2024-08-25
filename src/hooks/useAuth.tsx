@@ -1,9 +1,8 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { User, onIdTokenChanged } from 'firebase/auth';
-import { LanguageType } from 'i18n/settings';
 import { signOutUser } from '../lib/auth';
 import { auth } from '../lib/firebase';
 
@@ -32,8 +31,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isUserInfoLoading, setIsUserInfoLoading] = useState(true);
   const router = useRouter();
   const tokenTimerIDRef = useRef<NodeJS.Timeout | number | undefined>();
-  const pathname = usePathname();
-  const lng = pathname.split('/')[1] as LanguageType;
 
   useEffect(() => {
     async function initializeUser(currentUser: User | null) {
@@ -43,7 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         tokenTimerIDRef.current = setTimeout(() => {
           signOutUser();
-          router.push(`/${lng}`);
+          router.push(`/`);
         }, sessionDuration);
 
         setUser({ ...currentUser });
@@ -64,7 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         clearTimeout(tokenTimerIDRef.current);
       }
     };
-  }, [router, lng]);
+  }, [router]);
 
   const value = useMemo<AuthContextType>(
     () => ({

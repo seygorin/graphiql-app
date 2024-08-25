@@ -14,7 +14,8 @@ const stringToColor = (string: string) => {
   return color;
 };
 
-const stringAvatar = (name: string) => {
+const stringAvatar = (name?: string | null) => {
+  if (!name) return { sx: { bgcolor: stringToColor('Anonym') }, children: '' };
   const nameArray = name.split(' ');
   const initials =
     nameArray.length === 1 ? nameArray[0][0] : `${nameArray[0][0]}${nameArray[1][0]}`;

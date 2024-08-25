@@ -1,7 +1,5 @@
 'use client';
 
-import withAuth from 'utils/withAuth';
-
 const Dashboard = () => {
   return (
     // <ProtectedAuthRoute> // variant 2 using Protected Route
@@ -10,5 +8,5 @@ const Dashboard = () => {
   );
 };
 
-export default withAuth(Dashboard); // variant 1 using withAuth HOC
+export default /* withAuth */ Dashboard; // variant 1 using withAuth HOC
 // export default Dashboard; // variant 2 using Protected Route

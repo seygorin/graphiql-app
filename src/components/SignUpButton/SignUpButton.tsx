@@ -3,20 +3,14 @@ import React from 'react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Button from '@mui/material/Button';
 
-const SignInButton: React.FC = () => {
+const SignUpButton: React.FC = () => {
   const t = useTranslations();
 
   return (
-    <Button
-      size="medium"
-      variant="contained"
-      color="info"
-      endIcon={<ExitToAppIcon />}
-      href="/signin"
-    >
-      {t('header.login')}
+    <Button href="/signup" size="medium" color="info" endIcon={<ExitToAppIcon />}>
+      {t('header.signUp')}
     </Button>
   );
 };
 
-export default SignInButton;
+export default SignUpButton;

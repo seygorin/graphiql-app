@@ -1,11 +1,9 @@
 // 'use client'
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { ISelectLanguageProps } from 'components/Header/SelectLanguage';
-import useTranslation from 'i18n/client';
 import googleIcon from '../../assets/google.png';
 import { signInWithGoogle } from '../../lib/auth';
 
@@ -15,20 +13,20 @@ import { signInWithGoogle } from '../../lib/auth';
  * https://github.com/firebase/firebase-js-sdk/issues/8213
  */
 
-const SignInWithGoogle: FC<ISelectLanguageProps> = ({ lng }) => {
-  const { t } = useTranslation(lng);
+const SignInWithGoogle: React.FC = () => {
+  const t = useTranslations();
 
   const router = useRouter();
   const signInGoogle = async () => {
     try {
       await signInWithGoogle();
-      router.push(`/${lng}`);
+      router.push(`/`);
       console.log('Sign in with Google account successful');
     } catch (err) {
       if (err instanceof Error) {
         console.error(err.message);
         // Show error
-        router.push(`/${lng}/signin`); // refactor later if needed
+        router.push(`/signin`); // refactor later if needed
       }
     }
   };

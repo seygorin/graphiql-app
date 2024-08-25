@@ -1,35 +1,32 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import useTranslation from 'i18n/client';
-import { LANGUAGES, LanguageType } from 'i18n/settings';
+import { locales } from 'i18n/config';
 
-export interface ISelectLanguageProps {
-  lng: LanguageType;
-}
-const SelectLanguage: React.FC<ISelectLanguageProps> = ({ lng }) => {
+const SelectLanguage: React.FC = () => {
   const router = useRouter();
-  const { t } = useTranslation(lng);
+  const t = useTranslations();
+  const locale = useLocale();
+  const pathname = usePathname();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    router.push(`/${event.target.value}`);
+  const handleChange = ({ target }: SelectChangeEvent) => {
+    router.replace(`/${target.value}/${pathname.split('/').slice(2).join('/')}`);
   };
 
   return (
-    <FormControl className="select_language">
-      <InputLabel id="demo-simple-select-label">{t('header.select.language')}</InputLabel>
+    <FormControl>
+      <InputLabel>{t('header.select.language')}</InputLabel>
       <Select
         variant="outlined"
         size="small"
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={lng}
+        value={locale}
         label={t('header.select.language')}
         onChange={handleChange}
       >
-        {LANGUAGES.map((l) => (
+        {locales.map((l) => (
           <MenuItem key={l} value={l}>
             {t(l)}
           </MenuItem>

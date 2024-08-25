@@ -1,17 +1,13 @@
 'use client';
 
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import React from 'react';
 import { Box, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
-import useTranslation from 'i18n/client';
-import { LanguageType } from 'i18n/settings';
 
-interface HistoryComponentProps {
-  lng: LanguageType;
-}
-
-const HistoryComponent: React.FC<HistoryComponentProps> = ({ lng }) => {
-  const { t } = useTranslation(lng);
+const HistoryComponent: React.FC = () => {
+  const t = useTranslations();
+  const locale = useLocale();
 
   // mock
   const historyItems = [
@@ -32,7 +28,7 @@ const HistoryComponent: React.FC<HistoryComponentProps> = ({ lng }) => {
               key={item.id}
               button
               component={Link}
-              href={`/${lng}/dashboard/${item.method === 'GRAPHQL' ? 'graphiql' : 'restful'}`}
+              href={`/${locale}/dashboard/${item.method === 'GRAPHQL' ? 'graphiql' : 'restful'}`}
             >
               <ListItemText primary={`${item.method} ${item.url}`} />
             </ListItem>
@@ -44,13 +40,13 @@ const HistoryComponent: React.FC<HistoryComponentProps> = ({ lng }) => {
           <Box sx={{ mt: 2 }}>
             <Button
               component={Link}
-              href={`/${lng}/dashboard/restful`}
+              href={`/${locale}/dashboard/restful`}
               variant="contained"
               sx={{ mr: 2 }}
             >
               {t('history.tryRESTful')}
             </Button>
-            <Button component={Link} href={`/${lng}/dashboard/graphiql`} variant="contained">
+            <Button component={Link} href={`/${locale}/dashboard/graphiql`} variant="contained">
               {t('history.tryGraphiQL')}
             </Button>
           </Box>
