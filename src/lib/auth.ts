@@ -80,15 +80,13 @@ export const signInUser = async (email: string, password: string) => {
   }
 };
 
-export const signOutUser = () => {
-  signOut(auth)
-    .then(() => {
-      // Sign-out successful.
-    })
-    .catch((err) => {
-      if (err instanceof Error) {
-        console.error(err);
-        // An error happened.
-      }
-    });
+export const signOutUser = async () => {
+  try {
+    await signOut(auth);
+    console.log('User signed out');
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error('Error signing out:', err);
+    }
+  }
 };

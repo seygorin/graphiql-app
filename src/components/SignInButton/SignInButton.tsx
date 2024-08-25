@@ -23,8 +23,8 @@ const SignInButton: FC<ISelectLanguageProps> = ({ lng }) => {
     name = user?.displayName ? user.displayName : user?.email;
   }
 
-  const signOut = () => {
-    signOutUser();
+  const signOut = async () => {
+    await signOutUser();
   };
 
   const handleSignIn = () => {

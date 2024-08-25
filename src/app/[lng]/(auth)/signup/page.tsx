@@ -21,6 +21,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import PasswordStrength from 'components/PasswordStrength/PasswordStrength';
+import { useAuth } from 'hooks/useAuth';
 import useTranslation from 'i18n/client';
 import { LanguageType } from 'i18n/settings';
 import { signUpUser } from '../../../../lib/auth';
@@ -34,6 +35,7 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [, setSignUpError] = useState<string | null>(null);
   const router = useRouter();
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,6 +48,7 @@ const SignUp = () => {
   const pathname = usePathname();
   const lng = pathname.split('/')[1] as LanguageType;
   const { t } = useTranslation(lng);
+  const { isLoggedIn } = useAuth();
 
   const {
     register,
@@ -58,17 +61,21 @@ const SignUp = () => {
     resolver: yupResolver(validateSignUpSchema(t)),
   });
 
-  const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
-    signUpUser(data.name, data.email, data.password);
-    router.push('/'); // Change
-    reset();
+  const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
+    try {
+      await signUpUser(data.name, data.email, data.password);
+      router.push('/'); // Change
+      reset();
+    } catch (error) {
+      console.error('Error signing up:', error);
+      setSignUpError(error.message);
+    }
   };
 
-  // const [user] = useAuthState(auth);
-  //
-  // useEffect(() => {
-  //   if (user) navigate(/);
-  // }, [user]);
+  if (isLoggedIn) {
+    router.push('/');
+    return null;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
