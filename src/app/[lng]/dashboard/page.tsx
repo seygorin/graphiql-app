@@ -4,9 +4,9 @@ import withAuth from 'utils/withAuth';
 
 const Dashboard = () => {
   return (
-    // <ProtectedRoute> // variant 2 using Protected Route
+    // <ProtectedAuthRoute> // variant 2 using Protected Route
     <>THIS ROUTE IS PROTECTED</>
-    // </ProtectedRoute> // variant 2 using Protected Route
+    // </ProtectedAuthRoute> // variant 2 using Protected Route
   );
 };
 

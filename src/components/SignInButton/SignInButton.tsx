@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LogoutIcon from '@mui/icons-material/Logout';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import { deepOrange } from '@mui/material/colors';
@@ -24,7 +25,11 @@ const SignInButton: FC<ISelectLanguageProps> = ({ lng }) => {
   };
 
   const handleSignIn = () => {
-    router.push('/signin');
+    router.push(`/${lng}/signin`);
+  };
+
+  const handleSignOut = () => {
+    router.push(`/${lng}/signup`);
   };
 
   return isLoggedIn ? (
@@ -42,15 +47,26 @@ const SignInButton: FC<ISelectLanguageProps> = ({ lng }) => {
       </Button>
     </>
   ) : (
-    <Button
-      size="medium"
-      variant="contained"
-      color="info"
-      onClick={handleSignIn}
-      endIcon={<ExitToAppIcon />}
-    >
-      {t('header.login')}
-    </Button>
+    <>
+      <Button
+        size="medium"
+        variant="contained"
+        color="info"
+        onClick={handleSignIn}
+        endIcon={<ExitToAppIcon />}
+      >
+        {t('header.login')}
+      </Button>
+      <Button
+        size="medium"
+        variant="contained"
+        color="error"
+        onClick={handleSignOut}
+        endIcon={<VpnKeyIcon />}
+      >
+        {t('header.signUp')}
+      </Button>
+    </>
   );
 };
 

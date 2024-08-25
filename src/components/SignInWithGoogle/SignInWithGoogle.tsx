@@ -22,13 +22,13 @@ const SignInWithGoogle: FC<ISelectLanguageProps> = ({ lng }) => {
   const signInGoogle = async () => {
     try {
       await signInWithGoogle();
-      router.push('/');
+      router.push(`/${lng}`);
       console.log('Sign in with Google account successful');
     } catch (err) {
       if (err instanceof Error) {
         console.error(err.message);
         // Show error
-        router.push('/signin'); // refactor later if needed
+        router.push(`/${lng}/signin`); // refactor later if needed
       }
     }
   };

@@ -1,17 +1,20 @@
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useAuth } from 'hooks/useAuth';
+import { LanguageType } from 'i18n/settings';
 
 const withAuth = (WrappedComponent) => {
   const ComponentWithAuth = (props) => {
     const { user } = useAuth();
     const router = useRouter();
+    const pathname = usePathname();
+    const lng = pathname.split('/')[1] as LanguageType;
 
     useEffect(() => {
       if (!user) {
-        router.replace('/'); // or change url
+        router.replace(`/${lng}`); // or change url
       }
-    }, [user, router]);
+    }, [user, lng, router]);
 
     if (!user) {
       return null; // or a loading spinner
