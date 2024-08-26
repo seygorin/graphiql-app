@@ -42,8 +42,8 @@ const SignInForm = () => {
     reset,
     formState: { errors, isValid },
   } = useForm<SignInFormData>({
-    // mode: 'all',
-    mode: 'onBlur',
+    mode: 'all',
+    // mode: 'onBlur',
     resolver: yupResolver(validateSignInSchema(t)),
   });
 

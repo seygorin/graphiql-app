@@ -1,20 +1,51 @@
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useAuth } from 'hooks/useAuth';
+import { useEffect, useRef } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { User, onIdTokenChanged } from 'firebase/auth';
+import { signOutUser } from '../lib/auth';
+import { auth } from '../lib/firebase';
 
 const withAuth = <T extends JSX.IntrinsicAttributes>(WrappedComponent: React.FC<T>) => {
   const ComponentWithAuth = (props: T) => {
-    const { user } = useAuth();
+    const [user, loading] = useAuthState(auth);
     const router = useRouter();
+    const tokenTimerIDRef = useRef<NodeJS.Timeout | number | undefined>();
 
     useEffect(() => {
-      if (!user) {
-        router.replace(`/`); // or change url
+      async function initializeUser(currentUser: User | null) {
+        if (currentUser) {
+          const { expirationTime } = await currentUser.getIdTokenResult();
+          const sessionDuration = new Date(expirationTime).getTime() - Date.now();
+
+          tokenTimerIDRef.current = setTimeout(() => {
+            signOutUser();
+            router.push(`/`);
+          }, sessionDuration) as NodeJS.Timeout;
+        }
       }
-    }, [user, router]);
+
+      // const unsubscribe = onAuthStateChanged(auth, initializeUser);
+      const unsubscribe = onIdTokenChanged(auth, initializeUser);
+      return () => {
+        unsubscribe();
+        if (tokenTimerIDRef.current) {
+          clearTimeout(tokenTimerIDRef.current);
+        }
+      };
+    }, [router]);
+
+    useEffect(() => {
+      if (!loading && !user) {
+        router.replace('/');
+      }
+    }, [user, loading, router]);
+
+    if (loading) {
+      return <div>Loading...</div>; // show a loader
+    }
 
     if (!user) {
-      return null; // or a loading spinner
+      return null; // return null or a placeholder if user is not authenticated
     }
 
     return <WrappedComponent {...props} />;

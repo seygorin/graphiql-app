@@ -1,18 +1,25 @@
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { useAuth } from 'hooks/useAuth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../lib/firebase';
 
 const ProtectedAuthRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const { isLoggedIn } = useAuth();
+  const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      router.push(`/`); // Main page
+    if (loading) {
+      // maybe trigger a loading screen
+      return;
     }
-  }, [router, isLoggedIn]);
+    if (user) router.push(`/`);
+  }, [user, loading, router]);
 
-  return <div>{!isLoggedIn ? children : null}</div>;
+  if (loading) {
+    return <div>Loading...</div>; // show a loader
+  }
+
+  return <div>{!user ? children : null}</div>;
 };
 
 export default ProtectedAuthRoute;

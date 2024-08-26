@@ -12,8 +12,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import withAuth from 'utils/withAuth';
 
-const RESTfulClient: React.FC = () => {
+const RESTfulClient: React.FC = withAuth(() => {
   const t = useTranslations();
 
   return (
@@ -70,6 +71,6 @@ const RESTfulClient: React.FC = () => {
       />
     </Box>
   );
-};
+});
 
-export default RESTfulClient;
+export default withAuth(RESTfulClient);

@@ -7,11 +7,12 @@ import SignUpButton from 'components/SignUpButton';
 import withUser from 'utils/withUser';
 
 interface IProps {
-  user?: User | null;
+  user: User | null;
+  name: string | null;
 }
 
-const Buttons: React.FC<IProps> = ({ user }) => {
-  if (user) return <SignOutButton user={user} />;
+const Buttons: React.FC<IProps> = ({ user, name }) => {
+  if (user) return <SignOutButton user={user} name={name} />;
 
   return (
     <>

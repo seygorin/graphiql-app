@@ -8,10 +8,11 @@ import SignUpButton from 'components/SignUpButton';
 import withUser from 'utils/withUser';
 
 interface IProps {
-  user?: User | null;
+  user: User | null;
+  name: string | null;
 }
 
-const Main: React.FC<IProps> = ({ user }) => {
+const Main: React.FC<IProps> = ({ user, name }) => {
   const t = useTranslations();
   const locale = useLocale();
 
@@ -19,7 +20,7 @@ const Main: React.FC<IProps> = ({ user }) => {
     return (
       <Box display="flex" paddingTop={16} gap={8} flexDirection="column">
         <Typography variant="h3" textAlign="center">
-          {t('main.welcomeUser', { user: user.displayName || user.email })}
+          {t('main.welcomeUser', { user: name || user.displayName || user.email })}
         </Typography>
         <Stack direction="row" gap={2} alignSelf="center" justifyContent="center">
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>

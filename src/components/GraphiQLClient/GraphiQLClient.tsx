@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
+import withAuth from 'utils/withAuth';
 
 const GraphiQLClient: React.FC = () => {
   const t = useTranslations();
@@ -65,4 +66,4 @@ const GraphiQLClient: React.FC = () => {
   );
 };
 
-export default GraphiQLClient;
+export default withAuth(GraphiQLClient);

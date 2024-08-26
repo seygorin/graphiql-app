@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import React from 'react';
 import { Box, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
+import withAuth from 'utils/withAuth';
 
 const HistoryComponent: React.FC = () => {
   const t = useTranslations();
@@ -56,4 +57,4 @@ const HistoryComponent: React.FC = () => {
   );
 };
 
-export default HistoryComponent;
+export default withAuth(HistoryComponent);

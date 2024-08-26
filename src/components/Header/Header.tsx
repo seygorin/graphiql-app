@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { Stack } from '@mui/material';
-import { AuthProvider } from 'hooks/useAuth';
 import logo from 'public/logo-rsschool3.png';
 import Buttons from './Buttons';
 import s from './Header.module.scss';
@@ -19,9 +18,7 @@ const Header: React.FC = () => {
           <SelectLanguage />
         </Stack>
         <Stack direction="row" gap={2}>
-          <AuthProvider>
-            <Buttons />
-          </AuthProvider>
+          <Buttons />
         </Stack>
       </div>
     </header>

@@ -1,25 +1,27 @@
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Stack } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
 import { User } from 'firebase/auth';
 import stringAvatar from 'utils/getStringAvatar';
 import { signOutUser } from '../../lib/auth';
 
 interface IProps {
-  user?: User;
+  user: User;
+  name: string | null;
 }
 
-const SignOutButton: React.FC<IProps> = ({ user }) => {
+const SignOutButton: React.FC<IProps> = ({ user, name }) => {
   const t = useTranslations();
 
   return (
-    <Stack direction="row">
+    <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
       <Avatar
-        {...stringAvatar(user?.displayName || user?.email)}
+        {...stringAvatar(name || user?.displayName || user?.email)}
         sx={{ bgcolor: deepOrange[500] }}
       />
       <Button
