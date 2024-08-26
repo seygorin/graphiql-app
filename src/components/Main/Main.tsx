@@ -8,8 +8,8 @@ import SignUpButton from 'components/SignUpButton';
 import withUser from 'utils/withUser';
 
 interface IProps {
-  user: User | null;
-  name: string | null;
+  user?: User | null;
+  name?: string | null;
 }
 
 const Main: React.FC<IProps> = ({ user, name }) => {

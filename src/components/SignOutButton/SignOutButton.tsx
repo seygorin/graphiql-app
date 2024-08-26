@@ -11,8 +11,8 @@ import stringAvatar from 'utils/getStringAvatar';
 import { signOutUser } from '../../lib/auth';
 
 interface IProps {
-  user: User;
-  name: string | null;
+  user?: User;
+  name?: string | null | undefined;
 }
 
 const SignOutButton: React.FC<IProps> = ({ user, name }) => {
