@@ -12,18 +12,18 @@ import ToastifyNotification from 'components/ToastifyNotification';
 import { locales } from 'i18n/config';
 import theme from '../../theme/theme';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-type Props = {
+interface IProps {
   children: ReactNode;
   params: { locale: string };
-};
+}
 
-export default async function LocaleLayout({ children, params: { locale } }: Props) {
+export default async function LocaleLayout({ children, params: { locale } }: IProps) {
   unstable_setRequestLocale(locale);
   const messages = await getMessages();
 

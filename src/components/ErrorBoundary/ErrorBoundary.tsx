@@ -3,22 +3,22 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import Error from '../ComponentError/ComponentError';
 
-interface Props {
+interface IProps {
   children: ReactNode;
   fallback: ReactNode;
 }
 
-interface State {
+interface IState {
   hasError: boolean;
 }
 
-class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+class ErrorBoundary extends Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(): State {
+  static getDerivedStateFromError(): IState {
     return { hasError: true };
   }
 
