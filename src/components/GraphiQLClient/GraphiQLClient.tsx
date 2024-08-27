@@ -1,16 +1,12 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import withAuth from 'utils/withAuth';
 
 const GraphiQLClient: React.FC = () => {
   const t = useTranslations();
-
-  useEffect(() => {
-    throw new Error();
-  }, []);
 
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', padding: 2 }}>
