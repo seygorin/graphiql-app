@@ -12,7 +12,7 @@
     "test": "vitest",
     "test:check": "vitest --run",
     "coverage": "vitest run --coverage",
-    "wip": "ts-node ./bin/flatToTree.js"
+    "flatToTree": "ts-node ./bin/flatToTree.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
