@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import ProtectedAuthRoute from 'components/ProtectedAuthRoute/ProtectedAuthRoute';
-import SignUpForm from 'components/SignUpForm/SignUpForm';
+import ProtectedAuthRoute from 'components/ProtectedAuthRoute';
+import SignUpForm from 'components/SignUpForm';
 
 const SignUpPage = () => {
   return (

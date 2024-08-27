@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Stack } from '@mui/material';
 import logo from 'public/logo-rsschool3.png';
+import ROUTES from '../../shared/types/types';
 import Buttons from './Buttons';
 import s from './Header.module.scss';
 import SelectLanguage from './SelectLanguage';
@@ -12,8 +13,8 @@ const Header: React.FC = () => {
     <header className={s.header_wrapper}>
       <div className={s.header}>
         <Stack direction="row" gap={2}>
-          <Link href="/">
-            <Image src={logo} width={110} height={110} alt="logoRsSchool" />
+          <Link href={ROUTES.MAIN_PAGE}>
+            <Image src={logo} width={110} style={{ height: 'auto' }} alt="logoRsSchool" />
           </Link>
           <SelectLanguage />
         </Stack>

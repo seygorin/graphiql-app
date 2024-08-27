@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,17 +20,17 @@ import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import PasswordStrength from 'components/PasswordStrength/PasswordStrength';
+import PasswordStrength from 'components/PasswordStrength';
+import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signUpUser } from '../../lib/auth';
-import { SignUpFormData, validateSignUpSchema } from '../../validations/signUpValidation.shema';
+import ROUTES from '../../shared/types/types';
+import { ISignUpFormData, validateSignUpSchema } from '../../validations/signUpValidation.shema';
 import s from './SignUpForm.module.css';
 
 const SignUpForm = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  // const [, setSignUpError] = useState<string | null>(null);
-  const router = useRouter();
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -47,21 +46,20 @@ const SignUpForm = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<SignUpFormData>({
+  } = useForm<ISignUpFormData>({
     mode: 'all',
     // mode: 'onBlur',
     resolver: yupResolver(validateSignUpSchema(t)),
   });
 
-  const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ISignUpFormData> = async (data) => {
     try {
-      await signUpUser(data.name, data.email, data.password);
-      router.push(`/`); // Main page
+      await signUpUser(data.name, data.email, data.password, t);
+      // router.push(ROUTES.MAIN_PAGE);
       reset();
     } catch (err) {
       if (err instanceof Error) {
-        console.error('Error logging in:', err);
-        // setloginError(err.message);
+        errorNotifyMessage(t(err.message));
       }
     }
   };
@@ -190,7 +188,7 @@ const SignUpForm = () => {
           </FormGroup>
           <Grid container>
             <Grid item>
-              <Link href="/signin" variant="subtitle2" underline="hover">
+              <Link href={ROUTES.SIGN_IN} variant="subtitle2" underline="hover">
                 {t('form.subtitle.signUp')}
               </Link>
             </Grid>

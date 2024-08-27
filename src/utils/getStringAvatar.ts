@@ -1,18 +1,9 @@
-const stringToColor = (string: string) => {
-  let color = '#';
-  let hash = 0;
-  let i;
-  for (i = 0; i < string.length; i += 1) {
-    // eslint-disable-next-line no-bitwise
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  for (i = 0; i < 3; i += 1) {
-    // eslint-disable-next-line no-bitwise
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  return color;
-};
+import PALETTE from '../shared/consts/palette';
+
+function stringToColor(string: string): string {
+  const colorIndex = string.length % PALETTE.length;
+  return PALETTE[colorIndex];
+}
 
 const stringAvatar = (name?: string | null) => {
   if (!name) return { sx: { bgcolor: stringToColor('Anonym') }, children: '' };

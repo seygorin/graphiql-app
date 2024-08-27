@@ -1,9 +1,9 @@
 // 'use client'
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { errorNotifyMessage } from 'utils/notifyMessage';
 import googleIcon from '../../assets/google.png';
 import { signInWithGoogle } from '../../lib/auth';
 
@@ -16,17 +16,14 @@ import { signInWithGoogle } from '../../lib/auth';
 const SignInWithGoogle: React.FC = () => {
   const t = useTranslations();
 
-  const router = useRouter();
+  // const router = useRouter();
   const signInGoogle = async () => {
     try {
-      await signInWithGoogle();
-      router.push(`/`);
-      console.log('Sign in with Google account successful');
+      await signInWithGoogle(t);
+      // router.push(ROUTES.MAIN_PAGE);
     } catch (err) {
       if (err instanceof Error) {
-        console.error(err.message);
-        // Show error
-        router.push(`/signin`); // refactor later if needed
+        errorNotifyMessage(t(err.message));
       }
     }
   };
@@ -47,7 +44,7 @@ const SignInWithGoogle: React.FC = () => {
         style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
         onClick={signInGoogle}
       >
-        <Image src={googleIcon.src} width={200} height={50} alt="google" />
+        <Image src={googleIcon} width={200} style={{ height: 'auto' }} alt="google" />
       </Box>
     </Box>
   );

@@ -1,8 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -21,15 +20,16 @@ import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import SignInWithGoogle from 'components/SignInWithGoogle/SignInWithGoogle';
+import SignInWithGoogle from 'components/SignInWithGoogle';
+import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signInUser } from '../../lib/auth';
-import { SignInFormData, validateSignInSchema } from '../../validations/signInValidation.schema';
+import ROUTES from '../../shared/types/types';
+import { ISignInFormData, validateSignInSchema } from '../../validations/signInValidation.schema';
 import s from './SignInForm.module.css';
 
 const SignInForm = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
-  const [, setloginError] = useState<string | null>(null);
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -41,21 +41,20 @@ const SignInForm = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<SignInFormData>({
+  } = useForm<ISignInFormData>({
     mode: 'all',
     // mode: 'onBlur',
     resolver: yupResolver(validateSignInSchema(t)),
   });
 
-  const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ISignInFormData> = async (data) => {
     try {
-      await signInUser(data.email, data.password);
-      router.push(`/`); // Main page
+      await signInUser(data.email, data.password, t);
+      // router.push(ROUTES.MAIN_PAGE);
       reset();
     } catch (err) {
       if (err instanceof Error) {
-        console.error('Error logging in:', err);
-        setloginError(err.message);
+        errorNotifyMessage(t(err.message));
       }
     }
   };
@@ -133,7 +132,7 @@ const SignInForm = () => {
           </FormGroup>
           <Grid container>
             <Grid item>
-              <Link href="/signup" variant="subtitle2" underline="hover">
+              <Link href={ROUTES.SIGN_UP} variant="subtitle2" underline="hover">
                 {t('form.subtitle.signIn')}
               </Link>
             </Grid>

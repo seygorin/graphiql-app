@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import ProtectedAuthRoute from 'components/ProtectedAuthRoute/ProtectedAuthRoute';
-import SignInForm from 'components/SigInForm/SigInForm';
+import ProtectedAuthRoute from 'components/ProtectedAuthRoute';
+import SignInForm from 'components/SigInForm';
 
 const SignInPage = () => {
   return (

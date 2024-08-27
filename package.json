@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint && eslint . --ext .js,.jsx,.ts,.tsx",
-    "format:fix": "prettier --write 'src/**/*.{js,jsx,ts,tsx}|bin'",
+    "format:fix": "prettier --write 'src//**/*.{js,jsx,ts,tsx}' 'bin//*.{js,jsx,ts,tsx}'",
     "test": "vitest",
     "test:check": "vitest --run",
     "coverage": "vitest run --coverage",
@@ -41,6 +41,7 @@
     "react-dom": "^18",
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.52.2",
+    "react-toastify": "^10.0.5",
     "sass": "^1.77.8",
     "sharp": "^0.33.5",
     "yup": "^1.4.0"

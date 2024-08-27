@@ -5,7 +5,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import { deepOrange } from '@mui/material/colors';
 import { User } from 'firebase/auth';
 import stringAvatar from 'utils/getStringAvatar';
 import { signOutUser } from '../../lib/auth';
@@ -18,17 +17,18 @@ interface IProps {
 const SignOutButton: React.FC<IProps> = ({ user, name }) => {
   const t = useTranslations();
 
+  const onClickSignOut = () => {
+    signOutUser(t);
+  };
+
   return (
     <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
-      <Avatar
-        {...stringAvatar(name || user?.displayName || user?.email)}
-        sx={{ bgcolor: deepOrange[500] }}
-      />
+      <Avatar {...stringAvatar(name || user?.displayName || user?.email)} />
       <Button
         size="medium"
         variant="contained"
         color="secondary"
-        onClick={signOutUser}
+        onClick={onClickSignOut}
         endIcon={<LogoutIcon />}
       >
         {t('header.logout')}

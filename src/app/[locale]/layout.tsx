@@ -6,6 +6,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import Footer from 'components/Footer';
 import Header from 'components/Header';
+import ToastifyNotification from 'components/ToastifyNotification';
 import { locales } from 'i18n/config';
 import theme from '../../theme/theme';
 
@@ -32,6 +33,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
             <ThemeProvider theme={theme}>
               <Header />
               {children}
+              <ToastifyNotification />
               <Footer />
             </ThemeProvider>
           </AppRouterCacheProvider>

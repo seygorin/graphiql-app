@@ -1,7 +1,7 @@
-import { useTranslations } from 'next-intl';
 import * as yup from 'yup';
+import { TFunction } from './signInValidation.schema';
 
-export const validateSignUpSchema = (t: ReturnType<typeof useTranslations>) => {
+export const validateSignUpSchema = (t: TFunction) => {
   return yup.object().shape({
     name: yup
       .string()
@@ -31,9 +31,9 @@ export const validateSignUpSchema = (t: ReturnType<typeof useTranslations>) => {
   });
 };
 
-export type SignUpFormData = {
+export interface ISignUpFormData {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
-};
+}

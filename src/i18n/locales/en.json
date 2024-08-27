@@ -12,6 +12,9 @@
     "logout": "Sign out",
     "signUp": "Sign up"
   },
+  "loader": {
+    "message": "Loading..."
+  },
   "main": {
     "welcomeUser": "Welcome back, {user}!",
     "welcome": "Welcome!"
@@ -73,5 +76,24 @@
     "response": "Response",
     "status": "Status",
     "responseBody": "Response Body"
+  },
+  "auth": {
+    "success": {
+      "signin": "Successful sign in",
+      "signup": "Successful sign up",
+      "signinGoogle": "Successful login via Google account",
+      "signout": "You signed out. See you soon!"
+    },
+    "error": {
+      "signin": "Invalid email or password, please try again",
+      "signup": {
+        "failed": "Registration failed, please try again later",
+        "userExists": "An account with the same email already exists"
+      },
+      "database": "An error occurred while retrieving information from the database",
+      "google": "Google sign in failed",
+      "unknown": "An unknown error occurred",
+      "token": "Firebase session token expired"
+    }
   }
 }

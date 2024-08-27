@@ -1,3 +1,4 @@
+import { FirebaseError } from 'firebase/app';
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -6,59 +7,45 @@ import {
   signOut,
 } from 'firebase/auth';
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import {
+  errorNotifyMessage,
+  successNotifyMessage,
+  warningNotifyMessage,
+} from 'utils/notifyMessage';
+import { TFunction } from '../validations/signInValidation.schema';
 import { auth, db } from './firebase';
 
 const googleProvider = new GoogleAuthProvider();
 
-/**
- * signInWithGoogle c try catch пока оставлен. Блок try/catch перенесен в комоненту SignInWithGoogle
- */
+export const signInWithGoogle = async (t: TFunction) => {
+  try {
+    const res = await signInWithPopup(auth, googleProvider);
+    const { user } = res;
+    if (!res || !user) {
+      throw new Error(t('auth.error.google'));
+    }
+    const q = query(collection(db, 'users'), where('uid', '==', user.uid));
+    const docs = await getDocs(q);
 
-// export const signInWithGoogle = async () => {
-//   try {
-//     const res = await signInWithPopup(auth, googleProvider);
-//     const user = res.user;
-//     const q = query(collection(db, "users"), where("uid", "==", user.uid));
-//     const docs = await getDocs(q);
-//     if (docs.docs.length === 0) {
-//       await addDoc(collection(db, "users"), {
-//         uid: user.uid,
-//         name: user.displayName,
-//         authProvider: "google",
-//         email: user.email,
-//       });
-//     }
-//   } catch (err) {
-//     if (err instanceof Error) {
-//       console.error(err.message);
-//     }
-//   }
-// };
-
-export const signInWithGoogle = async () => {
-  const res = await signInWithPopup(auth, googleProvider);
-  const { user } = res;
-  const q = query(collection(db, 'users'), where('uid', '==', user.uid));
-  const docs = await getDocs(q);
-  // in process
-  if (!res || !user) {
-    throw new Error('Google sign in failed');
+    if (docs.docs.length === 0) {
+      await addDoc(collection(db, 'users'), {
+        uid: user.uid,
+        name: user.displayName,
+        authProvider: 'google',
+        email: user.email,
+      });
+    }
+    successNotifyMessage(t('auth.success.signinGoogle'));
+  } catch (err) {
+    if (err instanceof Error) {
+      errorNotifyMessage(t(err.message));
+    } else {
+      errorNotifyMessage(t('auth.error.unknown'));
+    }
   }
-  //
-  if (docs.docs.length === 0) {
-    await addDoc(collection(db, 'users'), {
-      uid: user.uid,
-      name: user.displayName,
-      authProvider: 'google',
-      email: user.email,
-    });
-  }
-  // in process
-  return user.uid;
-  //
 };
 
-export const signUpUser = async (name: string, email: string, password: string) => {
+export const signUpUser = async (name: string, email: string, password: string, t: TFunction) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const { user } = res;
@@ -68,38 +55,46 @@ export const signUpUser = async (name: string, email: string, password: string) 
       authProvider: 'local',
       email,
     });
+    successNotifyMessage(t('auth.success.signup'));
   } catch (err) {
-    if (err instanceof Error) {
-      console.error(err);
+    if (err instanceof FirebaseError && err.code === 'auth/email-already-in-use') {
+      warningNotifyMessage(t('auth.error.signup.userExists'));
+    } else if (err instanceof Error) {
+      errorNotifyMessage(t(err.message));
+    } else {
+      errorNotifyMessage(t('auth.error.signup.failed'));
     }
   }
 };
 
-export const signInUser = async (email: string, password: string) => {
+export const signInUser = async (email: string, password: string, t: TFunction) => {
   try {
-    const user = await signInWithEmailAndPassword(auth, email, password);
-    console.log('signInUser', user);
-    // await signInWithEmailAndPassword(auth, email, password);
+    await signInWithEmailAndPassword(auth, email, password);
+    successNotifyMessage(t('auth.success.signin'));
   } catch (err) {
-    if (err instanceof Error) {
-      console.error(err);
-      //       // Set Error!!! "No such account found"
-      //       console.log("No such account found")
+    if (err instanceof FirebaseError && err.code === 'auth/invalid-credential') {
+      warningNotifyMessage(t('auth.error.signin'));
+    } else if (err instanceof Error) {
+      errorNotifyMessage(t(err.message));
+    } else {
+      errorNotifyMessage(t('auth.error.unknown'));
     }
   }
 };
 
-export const signOutUser = async () => {
+export const signOutUser = async (t: TFunction, extraMsg?: string) => {
   try {
     await signOut(auth);
-    console.log('User signed out');
+    if (extraMsg) {
+      warningNotifyMessage(extraMsg);
+    } else {
+      warningNotifyMessage(t('auth.success.signout'));
+    }
   } catch (err) {
     if (err instanceof Error) {
-      console.error('Error signing out:', err);
+      errorNotifyMessage(t(err.message));
+    } else {
+      errorNotifyMessage(t('auth.error.unknown'));
     }
   }
 };
-
-// export function onAuthStateChanged(callback: (authUser: User | null) => void) {
-//   return _onAuthStateChanged(auth, callback);
-// }

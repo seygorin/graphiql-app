@@ -1,7 +1,9 @@
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Loader from 'components/Loader';
 import { auth } from '../../lib/firebase';
+import ROUTES from '../../shared/types/types';
 
 const ProtectedAuthRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -9,14 +11,13 @@ const ProtectedAuthRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (loading) {
-      // maybe trigger a loading screen
       return;
     }
-    if (user) router.push(`/`);
+    if (user) router.push(ROUTES.MAIN_PAGE);
   }, [user, loading, router]);
 
   if (loading) {
-    return <div>Loading...</div>; // show a loader
+    return <Loader />;
   }
 
   return <div>{!user ? children : null}</div>;

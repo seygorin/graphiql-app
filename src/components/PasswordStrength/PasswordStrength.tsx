@@ -1,11 +1,11 @@
 import { FC, useEffect, useRef } from 'react';
 import s from './PasswordStrength.module.css';
 
-type PasswordStrengthProps = {
+interface IPasswordStrengthProps {
   password: string;
-};
+}
 
-const PasswordStrength: FC<PasswordStrengthProps> = ({ password }) => {
+const PasswordStrength: FC<IPasswordStrengthProps> = ({ password }) => {
   const passStrengthMeterRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
