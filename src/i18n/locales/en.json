@@ -6,6 +6,7 @@
     "description": "Could not find requested resource",
     "link": "Return Home"
   },
+  "error": { "message": "Oops!", "link": "Return Home", "description": "Something went wrong..." },
   "header": {
     "select": { "language": "Language" },
     "login": "Sign in",

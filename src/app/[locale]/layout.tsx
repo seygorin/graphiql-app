@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
+import ComponentError from 'components/ComponentError/ComponentError';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import Footer from 'components/Footer';
 import Header from 'components/Header';
 import ToastifyNotification from 'components/ToastifyNotification';
@@ -32,9 +34,9 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
               <Header />
-              {children}
-              <ToastifyNotification />
+              <ErrorBoundary fallback={<ComponentError />}>{children}</ErrorBoundary>
               <Footer />
+              <ToastifyNotification />
             </ThemeProvider>
           </AppRouterCacheProvider>
         </NextIntlClientProvider>

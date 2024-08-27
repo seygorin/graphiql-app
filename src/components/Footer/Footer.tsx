@@ -13,13 +13,19 @@ const Footer: React.FC = () => {
       <div className={s.footer}>
         <div className={s.footer_links}>
           <p>
-            <Link href="https://github.com/intrstng">Intrstng</Link>
+            <Link variant="body2" href="https://github.com/intrstng">
+              Intrstng
+            </Link>
           </p>
           <p>
-            <Link href="https://github.com/seygorin">seygorin</Link>
+            <Link variant="body2" href="https://github.com/seygorin">
+              seygorin
+            </Link>
           </p>
           <p>
-            <Link href="https://github.com/ksushasher">KsushaSher</Link>
+            <Link variant="body2" href="https://github.com/ksushasher">
+              KsushaSher
+            </Link>
           </p>
         </div>
         <div className={s.year}>2024 {t('footer.year')}</div>
