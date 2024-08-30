@@ -24,24 +24,6 @@
   --footer-height: 100px;
 }
 
-:root {
-  --primary-color: #1a1d5b;
-  --secondary-color: #6c717d;
-  --background-color: #efefef;
-  --background-color-header: #dad6d5;
-  --background-color-footer: #eaeaea;
-  --background-color-power-meter: rgba(201, 201, 201, 0.5);
-  --border-color-footer: #e5e4e4;
-  --text-color: #2f2f2f;
-  --text-color-footer: #777777;
-  --error-color: #ca4b3f;
-  --link-color: #0000ee;
-  --light-color: #ffffff;
-  --loader-text: #6b6b6b;
-  --header-height: 80px;
-  --footer-height: 100px;
-}
-
 html {
   font-size: 100%;
   box-sizing: border-box;
@@ -92,7 +74,6 @@ ol {
 // Стили для изображений
 img {
   max-width: 100%;
-  height: auto;
 }
 
 // Глобальные классы

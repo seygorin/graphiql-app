@@ -34,7 +34,7 @@ const theme = createTheme({
     },
     background: {
       default: '#fffefe',
-      paper: '#fffcfc', //
+      paper: '#efefef', //
     },
     text: {
       primary: '#333', // основной цвет текста
