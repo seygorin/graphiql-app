@@ -6,6 +6,7 @@
     "description": "Could not find requested resource",
     "link": "Return Home"
   },
+  "error": { "message": "Oops!", "link": "Return Home", "description": "Something went wrong..." },
   "header": {
     "select": { "language": "Language" },
     "login": "Sign in",
@@ -95,5 +96,15 @@
       "unknown": "An unknown error occurred",
       "token": "Firebase session token expired"
     }
+  },
+  "aboutUs": {
+    "titleTeam": "Our team:",
+    "dev1": "Intrstng - an ambitious developer who strives to grow and improve his skills with each project.",
+    "dev2": "seygorin - talented developer with an eye for detail and a passion for creating quality code.",
+    "dev3": "KsushaSher - a beginner developer with a great desire to learn and develop.",
+    "titleProject": "About the project:",
+    "project": "This project required the development of a simplified API application that combines Postman and GraphiQL functionality. It should allow making requests to RESTful and GraphQL APIs, support authentication and authorization, and store request history.",
+    "titleCourse": "About the course:",
+    "course": "The current course is designed to deepen knowledge and acquire practical skills in working with React."
   }
 }

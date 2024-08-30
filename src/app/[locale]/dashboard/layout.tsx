@@ -16,9 +16,9 @@ const DashboardLayout = ({ children, params: { locale } }: DashboardLayoutProps)
   const pathname = usePathname();
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth='lg'>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-        <Tabs value={pathname} aria-label="dashboard tabs">
+        <Tabs value={pathname} aria-label='dashboard tabs'>
           <Tab
             label={t('dashboard.restful')}
             value={`/${locale}/dashboard/restful`}

@@ -22,14 +22,19 @@ const SignOutButton: React.FC<IProps> = ({ user, name }) => {
   };
 
   return (
-    <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
+    <Stack direction='row' spacing={2} divider={<Divider orientation='vertical' flexItem />}>
       <Avatar {...stringAvatar(name || user?.displayName || user?.email)} />
       <Button
-        size="medium"
-        variant="contained"
-        color="secondary"
+        size='medium'
+        variant='contained'
+        color='secondary'
         onClick={onClickSignOut}
         endIcon={<LogoutIcon />}
+        sx={{
+          ':hover': {
+            color: 'white',
+          },
+        }}
       >
         {t('header.logout')}
       </Button>
