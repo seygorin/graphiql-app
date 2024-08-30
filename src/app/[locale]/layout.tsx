@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
+import { Container } from '@mui/material';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import ComponentError from 'components/ComponentError/ComponentError';
@@ -34,7 +35,9 @@ export default async function LocaleLayout({ children, params: { locale } }: IPr
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
               <Header />
-              <ErrorBoundary fallback={<ComponentError />}>{children}</ErrorBoundary>
+              <Container component='main' disableGutters>
+                <ErrorBoundary fallback={<ComponentError />}>{children}</ErrorBoundary>
+              </Container>
               <Footer />
               <ToastifyNotification />
             </ThemeProvider>

@@ -7,15 +7,15 @@ function Error({ error }: { error?: Error }): JSX.Element {
   const t = useTranslations();
 
   return (
-    <Container component="main" maxWidth="md">
-      <Box padding={8} textAlign="center" display="flex" flexDirection="column">
-        <Typography variant="h5" color="secondary.main">
+    <Container component='main' maxWidth='md'>
+      <Box padding={16} textAlign='center' display='flex' flexDirection='column'>
+        <Typography variant='h2' color='error'>
           {t('error.message')}
         </Typography>
-        <Typography variant="h5" color="secondary.main">
+        <Typography variant='h4' color='error'>
           {error?.message ? error.message : t('error.description')}
         </Typography>
-        <Link color="secondary.main" variant="h5" href="/" sx={{ paddingTop: 10 }}>
+        <Link href='/' variant='h4' marginTop={8}>
           {t('error.link')}
         </Link>
       </Box>

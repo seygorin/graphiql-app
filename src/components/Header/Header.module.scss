@@ -16,17 +16,21 @@
 }
 
 .fixed {
-  background-color: $background-color-header-sticky;
+  background-color: $background-color-footer;
   height: $header-height-fixed;
   border-bottom: 2px solid $border-color-footer;
   box-shadow: none;
 }
 
 .header {
-  width: 990px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 0 auto;
   gap: 30px;
-  padding: 16px 0px;
+  padding: 16px 14px;
+}
+.header_image {
+  // width: auto;
+  height: auto;
 }

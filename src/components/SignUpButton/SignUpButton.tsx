@@ -9,10 +9,15 @@ const SignUpButton: React.FC = () => {
 
   return (
     <Button
-      variant="contained"
+      variant='contained'
       href={ROUTES.SIGN_UP}
-      color="error"
-      size="medium"
+      color='secondary'
+      size='medium'
+      sx={{
+        ':hover': {
+          color: 'white',
+        },
+      }}
       endIcon={<VpnKeyIcon />}
     >
       {t('header.signUp')}

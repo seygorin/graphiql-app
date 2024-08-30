@@ -1,6 +1,5 @@
 @import './vars';
 
-// Миксины
 @mixin flex-center {
   display: flex;
   justify-content: center;
@@ -18,23 +17,37 @@
   --text-color: #2f2f2f;
   --text-color-footer: #777777;
   --error-color: #ca4b3f;
-  --link-color: #0000EE;
-  --light-color: #FFFFFF;
+  --link-color: #0000ee;
+  --light-color: #ffffff;
   --loader-text: #6b6b6b;
   --header-height: 80px;
   --footer-height: 100px;
 }
 
-// Базовые стили для html и body
+:root {
+  --primary-color: #1a1d5b;
+  --secondary-color: #6c717d;
+  --background-color: #efefef;
+  --background-color-header: #dad6d5;
+  --background-color-footer: #eaeaea;
+  --background-color-power-meter: rgba(201, 201, 201, 0.5);
+  --border-color-footer: #e5e4e4;
+  --text-color: #2f2f2f;
+  --text-color-footer: #777777;
+  --error-color: #ca4b3f;
+  --link-color: #0000ee;
+  --light-color: #ffffff;
+  --loader-text: #6b6b6b;
+  --header-height: 80px;
+  --footer-height: 100px;
+}
+
 html {
   font-size: 100%;
   box-sizing: border-box;
 }
 
 body {
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
   color: var(--$text-color);
   background-color: var(--$background-color);
   margin: 0;
@@ -87,8 +100,8 @@ img {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-  padding-right: $padding-base;
-  padding-left: $padding-base;
+  padding-left: 0;
+  padding-right: 0;
 
   @media (min-width: 576px) {
     max-width: 540px;
@@ -102,6 +115,12 @@ img {
   @media (min-width: 1200px) {
     max-width: 1140px;
   }
+}
+
+ul,
+ol {
+  margin: 0;
+  padding-left: 1.5rem;
 }
 
 .error_form {
