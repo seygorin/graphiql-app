@@ -81,7 +81,9 @@
     "sendRequest": "Отправить запрос",
     "response": "Ответ",
     "status": "Статус",
-    "responseBody": "Тело ответа"
+    "responseBody": "Тело ответа",
+    "variables": "Переменные",
+    "requestSuccess": "Запрос удачен"
   },
   "auth": {
     "success": {

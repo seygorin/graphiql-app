@@ -75,7 +75,9 @@
     "sendRequest": "Send Request",
     "response": "Response",
     "status": "Status",
-    "responseBody": "Response Body"
+    "responseBody": "Response Body",
+    "variables": "Variables",
+    "requestSuccess": "Request was success"
   },
   "auth": {
     "success": {

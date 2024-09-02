@@ -6,36 +6,36 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 import { Box, Container, Tab, Tabs } from '@mui/material';
 
-export type DashboardLayoutProps = Readonly<{
+export type RestfulLayoutProps = Readonly<{
   children: React.ReactNode;
   params: { locale: string };
 }>;
 
-const DashboardLayout = ({ children, params: { locale } }: DashboardLayoutProps) => {
+const RestfulLayout = ({ children, params: { locale } }: RestfulLayoutProps) => {
   const t = useTranslations();
   const pathname = usePathname();
 
   return (
     <Container maxWidth="lg">
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-        <Tabs value={pathname} aria-label="dashboard tabs">
+        <Tabs value={pathname} aria-label="restful tabs">
           <Tab
             label={t('dashboard.restful')}
-            value={`/${locale}/dashboard/restful`}
+            value={`/${locale}/restful`}
             component={Link}
-            href={`/${locale}/dashboard/restful`}
+            href={`/${locale}/restful`}
           />
           <Tab
             label={t('dashboard.graphiql')}
-            value={`/${locale}/dashboard/graphiql`}
+            value={`/${locale}/graphiql`}
             component={Link}
-            href={`/${locale}/dashboard/graphiql`}
+            href={`/${locale}/graphiql`}
           />
           <Tab
             label={t('dashboard.history')}
-            value={`/${locale}/dashboard/history`}
+            value={`/${locale}/history`}
             component={Link}
-            href={`/${locale}/dashboard/history`}
+            href={`/${locale}/history`}
           />
         </Tabs>
       </Box>
@@ -44,4 +44,4 @@ const DashboardLayout = ({ children, params: { locale } }: DashboardLayoutProps)
   );
 };
 
-export default DashboardLayout;
+export default RestfulLayout;
