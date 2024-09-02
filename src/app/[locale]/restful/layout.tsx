@@ -16,9 +16,9 @@ const RestfulLayout = ({ children, params: { locale } }: RestfulLayoutProps) => 
   const pathname = usePathname();
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth='lg'>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-        <Tabs value={pathname} aria-label="restful tabs">
+        <Tabs value={pathname} aria-label='dashboard tabs'>
           <Tab
             label={t('dashboard.restful')}
             value={`/${locale}/restful`}

@@ -9,9 +9,14 @@ const SignInButton: React.FC = () => {
 
   return (
     <Button
-      size="medium"
-      variant="contained"
-      color="info"
+      size='medium'
+      variant='contained'
+      color='primary'
+      sx={{
+        ':hover': {
+          color: 'white',
+        },
+      }}
       endIcon={<ExitToAppIcon />}
       href={ROUTES.SIGN_IN}
     >

@@ -36,6 +36,7 @@
     "@uiw/codemirror-theme-basic": "^4.23.0",
     "@uiw/codemirror-theme-tokyo-night-storm": "^4.23.0",
     "@uiw/react-codemirror": "^4.23.0",
+    "clsx": "^2.1.1",
     "firebase": "^10.13.0",
     "firebase-admin": "^12.4.0",
     "js-base64": "^3.7.7",

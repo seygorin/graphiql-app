@@ -1,16 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import ErrorMessage from '../../components/ComponentError/ComponentError';
 
-type Props = {
-  error: Error;
-  // reset(): void;
-};
-
-export default function Error({ error /* , reset */ }: Props) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
-
-  return <div>asdasdasdasd</div>;
+export default function ErrorError({ error }: { error: Error }) {
+  return <ErrorMessage error={error} />;
 }
