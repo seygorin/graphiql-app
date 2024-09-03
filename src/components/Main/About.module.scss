@@ -1,0 +1,31 @@
+@import '../../styles/vars.module.scss';
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+.devs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 0 1 25%;
+  border-radius: 6px;
+  text-align: left;
+  background-color: $secondary-main;
+  overflow: hidden;
+}
+.img {
+  width: 100%;
+  height: auto;
+}
+.cards_info {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

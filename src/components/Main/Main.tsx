@@ -1,14 +1,20 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Container, Stack, Typography } from '@mui/material';
+import clsx from 'clsx';
 import { User } from 'firebase/auth';
 import CustomDashboardTabs from 'components/CustomDashboardTabs';
 import SignInButton from 'components/SignInButton';
 import SignUpButton from 'components/SignUpButton';
+import screenshot1 from 'public/screenshot_1.png';
+import screenshot2 from 'public/screenshot_2.png';
+import screenshot3 from 'public/screenshot_3.png';
 import withUser from 'utils/withUser';
 import AboutUs from './AboutUs';
+import s from './Main.module.scss';
 
 interface IProps {
   user?: User | null;
@@ -20,25 +26,43 @@ const Main: React.FC<IProps> = ({ user, name }) => {
 
   if (user) {
     return (
-      <Box display='flex' pt={10} flexDirection='column'>
-        <Box
-          bgcolor='background.paper'
-          borderRadius={1.5}
-          py={11}
-          sx={{ boxShadow: '0px 5px 7px 5px rgba(68, 68, 68, 0.04)' }}
-        >
-          <Typography variant='h2' textAlign='center' pb={3}>
-            {t('main.welcomeUser', { user: name || user.displayName || user.email })}
-          </Typography>
-          <CustomDashboardTabs size='large' />
+      <Container maxWidth={false} disableGutters>
+        <Box className={s.accent_background}>
+          <Box className={s.main_info}>
+            <Box className={s.main_info_content}>
+              <Typography variant='h1' className={s.main_info_title}>
+                {t('main.welcomeUser', { user: name || user.displayName || user.email })}
+              </Typography>
+
+              <Typography variant='h6'>{t('main.text')}</Typography>
+              <CustomDashboardTabs size='large' />
+            </Box>
+            <Box className={s.main_info_img}>
+              <Image
+                src={screenshot1}
+                className={clsx(s.main_img_screenshot, s.main_img_screenshot3)}
+                alt='screenshot1'
+              />
+              <Image
+                src={screenshot2}
+                className={clsx(s.main_img_screenshot, s.main_img_screenshot2)}
+                alt='screenshot2'
+              />
+              <Image
+                src={screenshot3}
+                className={clsx(s.main_img_screenshot, s.main_img_screenshot1)}
+                alt='screenshot3'
+              />
+            </Box>
+          </Box>
         </Box>
         <AboutUs />
-      </Box>
+      </Container>
     );
   }
 
   return (
-    <Box display='flex' gap={8} pt={18} flexDirection='column'>
+    <Box className={s.main_not_auth}>
       <Typography variant='h1' textAlign='center'>
         {t('main.welcome')}
       </Typography>

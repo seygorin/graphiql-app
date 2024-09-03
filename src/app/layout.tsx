@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import '../styles/_reset.css';
 import '../styles/globals.scss';
+import '../styles/reset.css';
 
 interface IProps {
   children: ReactNode;

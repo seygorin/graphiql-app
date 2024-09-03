@@ -1,59 +1,73 @@
 'use client';
 
+import { Roboto } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
+import vars from '../styles/vars.module.scss';
+
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+export const ADDITION_COLOR = {
+  backgroundMain: vars.backgroundMain,
+  backgroundFooter: vars.backgroundFooter,
+  shadowMain: vars.shadowMain,
+  borderFooter: vars.borderColorFooter,
+  textFoo: vars.textFoo,
+};
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#286af2',
-      light: '#588cf7',
-      dark: '#124fcb',
-      contrastText: '#fff',
+      main: vars.primaryMain,
+      light: vars.primaryLight,
+      dark: vars.primaryDark,
+      contrastText: vars.primaryContrastText,
     },
     secondary: {
-      main: '#1f43a0',
-      light: '#355bbd',
-      dark: '#193889',
-      contrastText: '#fff',
+      main: vars.secondaryMain,
+      light: vars.secondaryLight,
+      dark: vars.secondaryDark,
+      contrastText: vars.secondaryContrastText,
     },
     error: {
-      main: '#e23023',
+      main: vars.errorMain,
     },
     warning: {
-      main: '#f09713',
+      main: vars.warningMain,
     },
     info: {
-      main: '#286af2',
-      light: '#588cf7',
-      dark: '#124fcb',
-      contrastText: '#fff',
+      main: vars.infoMain,
     },
     success: {
-      main: '#8f8b88',
-      light: '#e5e3e1',
+      main: vars.successMain,
+      light: vars.successLight,
     },
     background: {
-      default: '#fffefe',
-      paper: '#efefef', //
+      default: vars.backgroundDefault,
+      paper: vars.backgroundPaper,
     },
     text: {
-      primary: '#333', // основной цвет текста
-      secondary: '#6c6c6c', // цвет вторичного текста
-      disabled: '#a5a4a4', // цвет текста при отключенном состоянии
+      primary: vars.textPrimary,
+      secondary: vars.textSecondary,
+      disabled: vars.textDisabled,
     },
   },
+
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: roboto.style.fontFamily,
     h1: {
-      fontSize: '5rem',
-      fontWeight: 400,
+      fontSize: '4.8rem',
+      fontWeight: 500,
     },
     h2: {
-      fontSize: '3rem',
+      fontSize: '4rem',
       fontWeight: 400,
     },
     h3: {
-      fontSize: '1.75rem',
+      fontSize: '2.1rem',
       fontWeight: 400,
     },
     h4: {
@@ -61,16 +75,16 @@ const theme = createTheme({
       fontWeight: 400,
     },
     h5: {
-      fontSize: '1.25rem',
+      fontSize: '1.3rem',
       fontWeight: 400,
     },
     h6: {
-      fontSize: '1rem',
-      fontWeight: 400,
+      fontSize: '1.25rem',
+      fontWeight: 300,
     },
     body1: {
-      fontSize: '1rem',
-      fontWeight: 400,
+      fontSize: '1.1rem',
+      fontWeight: 300,
       lineHeight: 1.5,
     },
     body2: {
@@ -89,22 +103,22 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none', // отмена преобразования текста в верхний регистр
+          // textTransform: 'none',
         },
       },
     },
-    MuiContainer: {},
     MuiLink: {
+      variants: [],
       styleOverrides: {
         root: {
-          color: '#286af2',
+          color: vars.primaryMain,
           textDecoration: 'none',
           '&:hover': {
-            textDecoration: 'underline',
-            color: '#124fcb',
+            // textDecoration: 'underline',
+            color: vars.primaryLight,
           },
           '&.active': {
-            color: '#124fcb',
+            color: vars.primaryLight,
           },
         },
       },

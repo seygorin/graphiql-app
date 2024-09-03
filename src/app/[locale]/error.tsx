@@ -1,7 +1,7 @@
 'use client';
 
-import ErrorMessage from 'components/ComponentError';
+import ComponentError from '../../components/ComponentError';
 
 export default function ErrorError({ error }: { error: Error }) {
-  return <ErrorMessage error={error} />;
+  return <ComponentError error={error} />;
 }
