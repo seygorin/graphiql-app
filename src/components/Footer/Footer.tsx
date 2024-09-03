@@ -9,28 +9,28 @@ const Footer: React.FC = () => {
   const t = useTranslations();
 
   return (
-    <Container component="footer" className={s.footer_wrapper} disableGutters maxWidth={false}>
-      <Box maxWidth="lg" className={s.footer}>
+    <Container component='footer' className={s.footer_wrapper} disableGutters maxWidth={false}>
+      <Box maxWidth='lg' className={s.footer}>
         <div className={s.footer_links}>
           <p>
-            <Link variant="body1" href="https://github.com/intrstng">
+            <Link variant='body1' href='https://github.com/intrstng'>
               Intrstng
             </Link>
           </p>
           <p>
-            <Link variant="body1" href="https://github.com/seygorin">
+            <Link variant='body1' href='https://github.com/seygorin'>
               seygorin
             </Link>
           </p>
           <p>
-            <Link variant="body1" href="https://github.com/ksushasher">
+            <Link variant='body1' href='https://github.com/ksushasher'>
               KsushaSher
             </Link>
           </p>
         </div>
         <div className={s.year}>2024 {t('footer.year')}</div>
-        <Link href="https://rs.school/">
-          <Image src={courseLogo} width={40} height={40} alt="courseLogo" />
+        <Link href='https://rs.school/'>
+          <Image src={courseLogo} width={40} height={40} alt='courseLogo' />
         </Link>
       </Box>
     </Container>

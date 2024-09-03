@@ -9,10 +9,10 @@ const SignUpButton: React.FC = () => {
 
   return (
     <Button
-      variant="contained"
+      variant='contained'
       href={ROUTES.SIGN_UP}
-      color="secondary"
-      size="medium"
+      color='secondary'
+      size='medium'
       sx={{
         ':hover': {
           color: 'white',

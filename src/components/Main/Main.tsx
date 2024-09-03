@@ -2,12 +2,12 @@
 
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { User } from 'firebase/auth';
+import CustomDashboardTabs from 'components/CustomDashboardTabs';
 import SignInButton from 'components/SignInButton';
 import SignUpButton from 'components/SignUpButton';
 import withUser from 'utils/withUser';
-import ROUTES from '../../shared/types/types';
 import AboutUs from './AboutUs';
 
 interface IProps {
@@ -30,34 +30,7 @@ const Main: React.FC<IProps> = ({ user, name }) => {
           <Typography variant='h2' textAlign='center' pb={3}>
             {t('main.welcomeUser', { user: name || user.displayName || user.email })}
           </Typography>
-
-          <Stack direction='row' gap={5} alignSelf='center' justifyContent='center'>
-            <Box
-              sx={{
-                borderBottom: 1,
-                borderColor: 'info.main',
-                pt: 6,
-                p: '30px',
-                display: 'flex',
-                gap: 11,
-              }}
-            >
-              <Link
-                variant='h3'
-                sx={{ '&:hover': { color: 'primary.main' } }}
-                href={ROUTES.RESTFUL}
-              >
-                {t('dashboard.restful')}
-              </Link>
-
-              <Link variant='h3' href={ROUTES.GRAPHIQL}>
-                {t('dashboard.graphiql')}
-              </Link>
-              <Link variant='h3' href={ROUTES.HISTORY}>
-                {t('dashboard.history')}
-              </Link>
-            </Box>
-          </Stack>
+          <CustomDashboardTabs size='large' />
         </Box>
         <AboutUs />
       </Box>

@@ -9,9 +9,9 @@ const SignInButton: React.FC = () => {
 
   return (
     <Button
-      size="medium"
-      variant="contained"
-      color="primary"
+      size='medium'
+      variant='contained'
+      color='primary'
       sx={{
         ':hover': {
           color: 'white',
