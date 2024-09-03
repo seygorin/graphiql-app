@@ -20,8 +20,8 @@ const SelectLanguage: React.FC = () => {
     <FormControl>
       <InputLabel>{t('header.select.language')}</InputLabel>
       <Select
-        variant='outlined'
-        size='small'
+        variant="outlined"
+        size="small"
         value={locale}
         label={t('header.select.language')}
         onChange={handleChange}

@@ -19,7 +19,7 @@ const HistoryComponent: React.FC = () => {
 
   return (
     <Box sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>
-      <Typography variant='h4' gutterBottom>
+      <Typography variant="h4" gutterBottom>
         {t('history.title')}
       </Typography>
       {historyItems.length > 0 ? (
@@ -42,12 +42,12 @@ const HistoryComponent: React.FC = () => {
             <Button
               component={Link}
               href={`/${locale}/dashboard/restful`}
-              variant='contained'
+              variant="contained"
               sx={{ mr: 2 }}
             >
               {t('history.tryRESTful')}
             </Button>
-            <Button component={Link} href={`/${locale}/dashboard/graphiql`} variant='contained'>
+            <Button component={Link} href={`/${locale}/dashboard/graphiql`} variant="contained">
               {t('history.tryGraphiQL')}
             </Button>
           </Box>

@@ -9,7 +9,7 @@ const Loader = () => {
 
   return (
     <div className={s.loader}>
-      <Image src={loadSpinner} alt='loading' width={230} height={230} unoptimized />
+      <Image src={loadSpinner} alt="loading" width={230} height={230} unoptimized />
       <p className={s.loading}>{t('loader.message')}</p>
     </div>
   );
