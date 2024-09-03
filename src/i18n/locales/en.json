@@ -62,10 +62,11 @@
     "documentationPlaceholder": "Documentation will be displayed here when available"
   },
   "history": {
-    "title": "Request History",
     "noRequests": "You haven't executed any requests yet",
-    "tryRESTful": "Try RESTful Client",
-    "tryGraphiQL": "Try GraphiQL Client"
+    "errorParsingHistory": "Error parsing history",
+    "errorParsingHeaders": "Error parsing headers",
+    "historyCleared": "History cleared",
+    "clearHistory": "Clear history"
   },
   "restful": {
     "title": "RESTful Client",

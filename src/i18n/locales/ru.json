@@ -72,10 +72,12 @@
     "documentationPlaceholder": "Документация будет отображена здесь, когда она станет доступна"
   },
   "history": {
-    "title": "История запросов",
     "noRequests": "Вы еще не выполнили ни одного запроса",
     "tryRESTful": "Попробовать RESTful клиент",
-    "tryGraphiQL": "Попробовать GraphiQL клиент"
+    "errorParsingHistory": "Ошибка получения данных об истории",
+    "errorParsingHeaders": "Ошибка получения данных о заголовках",
+    "historyCleared": "История очищена",
+    "clearHistory": "Очистить историю"
   },
   "restful": {
     "title": "RESTful клиент",

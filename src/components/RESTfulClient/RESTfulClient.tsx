@@ -7,9 +7,11 @@ import { Box, Paper } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import withAuth from 'utils/withAuth';
 import { useResizablePanes } from '../../hooks/useResizablePanes';
-import { decodeBase64Url, encodeRequestParams } from '../../utils/encodeBase64Url';
+import { encodeRequestParams } from '../../utils/encodeBase64Url';
 import { fetchQuery } from '../../utils/fetchQuery';
+import { HttpMethod, initializeFromUrl } from '../../utils/initializeFromUrl';
 import { errorNotifyMessage } from '../../utils/notifyMessage';
+import { saveToHistory } from '../../utils/saveToHistory';
 import HeadersEditor from './HeadersEditor';
 import RequestBodyEditor from './RequestBodyEditor';
 import RequestForm from './RequestForm/RequestForm';
@@ -18,7 +20,6 @@ import ResponseViewer from './ResponseViewer/ResponseViewer';
 import VariablesEditor from './VariablesEditor/VariablesEditor';
 
 type ResponseType = Record<string, unknown> | { error: string } | null;
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 const RESTfulClient: React.FC = () => {
   const t = useTranslations();
@@ -28,7 +29,7 @@ const RESTfulClient: React.FC = () => {
   const effectRan = useRef(false);
 
   const [method, setMethod] = useState<HttpMethod>('GET');
-  const [url, setUrl] = useState('https://jsonplaceholder.typicode.com/posts/1');
+  const [url, setUrl] = useState('https://jsonplaceholder.typicode.com/posts');
   const [requestBody, setRequestBody] = useState(
     '{\n  "title": "foo",\n  "body": "bar",\n  "userId": 1\n}',
   );
@@ -61,6 +62,14 @@ const RESTfulClient: React.FC = () => {
 
       setResponse(responseData);
       setStatus('200');
+
+      saveToHistory({
+        method,
+        url,
+        requestBody,
+        headers: JSON.stringify(headerObj),
+        variables,
+      });
     } catch (error) {
       if (error instanceof SyntaxError) {
         errorNotifyMessage(t('restful.invalidJson'));
@@ -81,40 +90,22 @@ const RESTfulClient: React.FC = () => {
       setIsLoading(false);
     }
   }, [method, url, headers, requestBody, variables, t]);
-  const initializeFromUrl = useCallback(() => {
-    const parts = pathname.split('/');
-    if (parts.length >= 4 && parts[2] === 'restful') {
-      const decodedMethod = parts[3] as HttpMethod;
-      setMethod(decodedMethod);
-      if (parts.length >= 5) {
-        const decodedUrl = decodeBase64Url(parts[4]);
-        setUrl(decodedUrl);
-      }
-      if (parts.length >= 6) {
-        const decodedBody = decodeBase64Url(parts[5]);
-        setRequestBody(decodedBody);
-      }
-
-      const headerObj: Record<string, string> = {};
-      searchParams.forEach((value, key) => {
-        headerObj[key] = decodeURIComponent(value);
-      });
-      setHeaders(
-        Object.entries(headerObj)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join('\n'),
-      );
-
-      sendRequest();
-    }
-  }, [pathname, searchParams, sendRequest, setMethod, setUrl, setRequestBody, setHeaders]);
 
   useEffect(() => {
     if (effectRan.current === false) {
-      initializeFromUrl();
+      const {
+        method: initialMethod,
+        url: initialUrl,
+        requestBody: initialBody,
+        headers: initialHeaders,
+      } = initializeFromUrl(pathname, searchParams);
+      setMethod(initialMethod);
+      setUrl(initialUrl);
+      setRequestBody(initialBody);
+      setHeaders(initialHeaders);
       effectRan.current = true;
     }
-  }, [initializeFromUrl]);
+  }, [pathname, searchParams]);
 
   const handleMethodChange = (event: SelectChangeEvent<HttpMethod>) => {
     setMethod(event.target.value as HttpMethod);

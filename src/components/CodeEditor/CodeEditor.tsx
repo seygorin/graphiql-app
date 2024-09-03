@@ -6,10 +6,9 @@ import CodeMirror from '@uiw/react-codemirror';
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
-  placeholder?: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, placeholder }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
   return (
     <CodeMirror
       value={value}
@@ -21,7 +20,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, placeholder })
       })}
       extensions={[json()]}
       onChange={onChange}
-      placeholder={placeholder}
     />
   );
 };
