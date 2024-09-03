@@ -1,1 +1,1 @@
-export { default as RESTfulClient } from './RESTfulClient';
+export { default } from './RESTfulClient';
