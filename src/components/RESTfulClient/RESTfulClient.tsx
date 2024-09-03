@@ -9,7 +9,7 @@ import withAuth from 'utils/withAuth';
 import { useResizablePanes } from '../../hooks/useResizablePanes';
 import { decodeBase64Url, encodeRequestParams } from '../../utils/encodeBase64Url';
 import { fetchQuery } from '../../utils/fetchQuery';
-import { errorNotifyMessage, successNotifyMessage } from '../../utils/notifyMessage';
+import { errorNotifyMessage } from '../../utils/notifyMessage';
 import HeadersEditor from './HeadersEditor';
 import RequestBodyEditor from './RequestBodyEditor';
 import RequestForm from './RequestForm/RequestForm';
@@ -29,9 +29,11 @@ const RESTfulClient: React.FC = () => {
 
   const [method, setMethod] = useState<HttpMethod>('GET');
   const [url, setUrl] = useState('https://jsonplaceholder.typicode.com/posts/1');
-  const [requestBody, setRequestBody] = useState('');
-  const [headers, setHeaders] = useState('Content-Type: application/json');
-  const [variables, setVariables] = useState('');
+  const [requestBody, setRequestBody] = useState(
+    '{\n  "title": "foo",\n  "body": "bar",\n  "userId": 1\n}',
+  );
+  const [headers, setHeaders] = useState('{\n  "Content-Type": "application/json"\n}');
+  const [variables, setVariables] = useState('{\n  "id": 1\n}');
   const [response, setResponse] = useState<ResponseType>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,29 +47,24 @@ const RESTfulClient: React.FC = () => {
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
     try {
-      const headerObj = headers.split('\n').reduce(
-        (acc, line) => {
-          const [key, value] = line.split(':');
-          if (key && value) {
-            acc[key.trim()] = value.trim();
-          }
-          return acc;
-        },
-        {} as Record<string, string>,
-      );
+      const headerObj = JSON.parse(headers);
+      const variablesObj = JSON.parse(variables);
+      const bodyObj = method !== 'GET' && method !== 'DELETE' ? JSON.parse(requestBody) : undefined;
 
       const responseData = await fetchQuery({
         url,
         method,
         headers: headerObj,
-        body: method !== 'GET' && method !== 'DELETE' ? requestBody : undefined,
+        body: bodyObj,
+        variables: variablesObj,
       });
 
       setResponse(responseData);
       setStatus('200');
-      successNotifyMessage(t('restful.requestSuccess'));
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof SyntaxError) {
+        errorNotifyMessage(t('restful.invalidJson'));
+      } else if (error instanceof Error) {
         const statusMatch = error.message.match(/status: (\d+)/);
         if (statusMatch) {
           setStatus(statusMatch[1]);
@@ -78,13 +75,12 @@ const RESTfulClient: React.FC = () => {
       } else {
         setStatus('Unknown Error');
         setResponse({ error: 'An unknown error occurred' });
+        errorNotifyMessage(t('restful.unknownError'));
       }
-      errorNotifyMessage(t('restful.requestError'));
     } finally {
       setIsLoading(false);
     }
-  }, [method, url, headers, requestBody, t]);
-
+  }, [method, url, headers, requestBody, variables, t]);
   const initializeFromUrl = useCallback(() => {
     const parts = pathname.split('/');
     if (parts.length >= 4 && parts[2] === 'restful') {
@@ -146,7 +142,13 @@ const RESTfulClient: React.FC = () => {
 
   return (
     <Box
-      sx={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 100px)', padding: 2 }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'calc(100vh - 270px)',
+        padding: 2,
+        overflow: 'hidden',
+      }}
     >
       <Paper elevation={3} sx={{ mb: 2, p: 2 }}>
         <RequestForm
@@ -160,25 +162,27 @@ const RESTfulClient: React.FC = () => {
         />
       </Paper>
 
-      <Box sx={{ display: 'flex', flex: 1, gap: 2 }}>
+      <Box sx={{ display: 'flex', flex: 1, gap: 2, overflow: 'hidden' }}>
         <Paper
           elevation={3}
           sx={{
             width: `${leftPaneWidth}%`,
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'auto',
+            overflow: 'hidden',
           }}
         >
-          <HeadersEditor headers={headers} onHeadersChange={setHeaders} t={t} />
-          <VariablesEditor variables={variables} onVariablesChange={setVariables} t={t} />
-          {method !== 'GET' && method !== 'DELETE' && (
-            <RequestBodyEditor
-              requestBody={requestBody}
-              onRequestBodyChange={setRequestBody}
-              t={t}
-            />
-          )}
+          <Box sx={{ flex: 1, overflow: 'auto' }}>
+            <HeadersEditor headers={headers} onHeadersChange={setHeaders} t={t} />
+            <VariablesEditor variables={variables} onVariablesChange={setVariables} t={t} />
+            {method !== 'GET' && method !== 'DELETE' && (
+              <RequestBodyEditor
+                requestBody={requestBody}
+                onRequestBodyChange={setRequestBody}
+                t={t}
+              />
+            )}
+          </Box>
         </Paper>
 
         <Resizer onMouseDown={handleMouseDown} />

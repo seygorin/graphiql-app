@@ -88,7 +88,8 @@
     "status": "Статус",
     "responseBody": "Тело ответа",
     "variables": "Переменные",
-    "requestSuccess": "Запрос удачен"
+    "invalidJson": "Неверный формат JSON",
+    "unknownError": "Произошла неизвестная ошибка"
   },
   "auth": {
     "success": {

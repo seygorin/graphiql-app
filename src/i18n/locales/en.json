@@ -78,7 +78,8 @@
     "status": "Status",
     "responseBody": "Response Body",
     "variables": "Variables",
-    "requestSuccess": "Request was success"
+    "invalidJson": "Infalid JSON format",
+    "unknownError": "Unknown Error"
   },
   "auth": {
     "success": {

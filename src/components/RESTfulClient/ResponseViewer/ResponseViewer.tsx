@@ -38,9 +38,6 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
             '&': {
               height: '100%',
             },
-            '.cm-scroller': {
-              overflow: 'auto',
-            },
           })}
           extensions={[json(), EditorView.lineWrapping]}
           editable={false}

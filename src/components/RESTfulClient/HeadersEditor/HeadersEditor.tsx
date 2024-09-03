@@ -7,13 +7,14 @@ interface HeadersEditorProps {
   t: (key: string) => string;
 }
 
-const HeadersEditor: React.FC<HeadersEditorProps> = ({ headers, onHeadersChange, t }) => (
-  <CollapsibleCodeEditor
-    title={t('restful.headers')}
-    value={headers}
-    onChange={onHeadersChange}
-    language="plaintext"
-  />
-);
+const HeadersEditor: React.FC<HeadersEditorProps> = ({ headers, onHeadersChange, t }) => {
+  return (
+    <CollapsibleCodeEditor
+      title={t('restful.headers')}
+      value={headers}
+      onChange={onHeadersChange}
+    />
+  );
+};
 
 export default HeadersEditor;

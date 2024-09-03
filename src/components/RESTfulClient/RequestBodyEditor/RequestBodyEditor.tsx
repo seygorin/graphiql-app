@@ -11,13 +11,14 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
   requestBody,
   onRequestBodyChange,
   t,
-}) => (
-  <CollapsibleCodeEditor
-    title={t('restful.requestBody')}
-    value={requestBody}
-    onChange={onRequestBodyChange}
-    language="json"
-  />
-);
+}) => {
+  return (
+    <CollapsibleCodeEditor
+      title={t('restful.requestBody')}
+      value={requestBody}
+      onChange={onRequestBodyChange}
+    />
+  );
+};
 
 export default RequestBodyEditor;
