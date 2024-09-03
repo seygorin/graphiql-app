@@ -35,7 +35,7 @@ export default async function LocaleLayout({ children, params: { locale } }: IPr
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
               <Header />
-              <Container component="main" disableGutters>
+              <Container component='main' disableGutters>
                 <ErrorBoundary fallback={<ComponentError />}>{children}</ErrorBoundary>
               </Container>
               <Footer />
