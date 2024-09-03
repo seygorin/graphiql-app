@@ -5,7 +5,7 @@ interface ResizerProps {
   onMouseDown: () => void;
 }
 
-export const Resizer: React.FC<ResizerProps> = ({ onMouseDown }) => {
+const Resizer: React.FC<ResizerProps> = ({ onMouseDown }) => {
   const theme = useTheme();
 
   return (
@@ -23,3 +23,5 @@ export const Resizer: React.FC<ResizerProps> = ({ onMouseDown }) => {
     />
   );
 };
+
+export default Resizer;

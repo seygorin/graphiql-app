@@ -37,14 +37,14 @@ const SignInWithGoogle: React.FC = () => {
         flexDirection: 'column',
       }}
     >
-      <Typography sx={{ mt: 1 }} component='h2' variant='body2' color='textSecondary'>
+      <Typography sx={{ mt: 1 }} component="h2" variant="body2" color="textSecondary">
         {t('form.subtitle.google')}
       </Typography>
       <Box
         style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
         onClick={signInGoogle}
       >
-        <Image src={googleIcon} width={200} style={{ height: 'auto' }} alt='google' />
+        <Image src={googleIcon} width={200} style={{ height: 'auto' }} alt="google" />
       </Box>
     </Box>
   );

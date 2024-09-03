@@ -14,7 +14,7 @@ export default function DynamicRESTfulClientPage({ params: { locale } }: Props) 
 
 export function generateStaticParams() {
   const locales = ['en', 'ru'];
-  const methods = ['GET', 'POST'];
+  const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
   return locales.flatMap((locale) =>
     methods.map((method) => ({
