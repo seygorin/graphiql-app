@@ -76,7 +76,10 @@
     "sendRequest": "Send Request",
     "response": "Response",
     "status": "Status",
-    "responseBody": "Response Body"
+    "responseBody": "Response Body",
+    "variables": "Variables",
+    "invalidJson": "Infalid JSON format",
+    "unknownError": "Unknown Error"
   },
   "auth": {
     "success": {
