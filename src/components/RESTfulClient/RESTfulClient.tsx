@@ -5,19 +5,19 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Paper } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
+import { useResizablePanes } from 'hooks/useResizablePanes';
+import { encodeRequestParams } from 'utils/encodeBase64Url';
+import { fetchQuery } from 'utils/fetchQuery';
+import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
+import { errorNotifyMessage } from 'utils/notifyMessage';
+import { saveToHistory } from 'utils/saveToHistory';
 import withAuth from 'utils/withAuth';
-import { useResizablePanes } from '../../hooks/useResizablePanes';
-import { encodeRequestParams } from '../../utils/encodeBase64Url';
-import { fetchQuery } from '../../utils/fetchQuery';
-import { HttpMethod, initializeFromUrl } from '../../utils/initializeFromUrl';
-import { errorNotifyMessage } from '../../utils/notifyMessage';
-import { saveToHistory } from '../../utils/saveToHistory';
 import HeadersEditor from './HeadersEditor';
 import RequestBodyEditor from './RequestBodyEditor';
-import RequestForm from './RequestForm/RequestForm';
+import RequestForm from './RequestForm';
 import Resizer from './Resizer';
-import ResponseViewer from './ResponseViewer/ResponseViewer';
-import VariablesEditor from './VariablesEditor/VariablesEditor';
+import ResponseViewer from './ResponseViewer';
+import VariablesEditor from './VariablesEditor';
 
 type ResponseType = Record<string, unknown> | { error: string } | null;
 
