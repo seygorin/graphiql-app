@@ -1,7 +1,6 @@
 'use client';
 
 import { Component, ErrorInfo, ReactNode } from 'react';
-import Error from '../ComponentError/ComponentError';
 
 interface IProps {
   children: ReactNode;

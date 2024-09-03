@@ -29,19 +29,19 @@ const Header: React.FC = () => {
 
   return (
     <Container
-      component='header'
+      component="header"
       className={clsx(s.header_wrapper, fix && s.fixed)}
       disableGutters
       maxWidth={false}
     >
-      <Box className={s.header} maxWidth='lg'>
-        <Stack direction='row' alignItems='center' gap={2}>
+      <Box className={s.header} maxWidth="lg">
+        <Stack direction="row" alignItems="center" gap={2}>
           <Link href={ROUTES.MAIN_PAGE}>
-            <Image src={logo} alt='logoRsSchool' className={s.header_image} width={110} priority />
+            <Image src={logo} alt="logoRsSchool" className={s.header_image} width={110} priority />
           </Link>
           <SelectLanguage />
         </Stack>
-        <Stack direction='row' gap={2}>
+        <Stack direction="row" gap={2}>
           <Buttons />
         </Stack>
       </Box>
