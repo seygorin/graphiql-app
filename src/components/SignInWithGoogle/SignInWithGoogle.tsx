@@ -44,7 +44,8 @@ const SignInWithGoogle: React.FC = () => {
         style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
         onClick={signInGoogle}
       >
-        <Image src={googleIcon} width={200} style={{ height: 'auto' }} alt="google" />
+        {/* <Image src={googleIcon} width={200} style={{ height: 'auto' }} alt="google" /> */}
+        <Image src={googleIcon} width={200} height={50} alt="google" />
       </Box>
     </Box>
   );

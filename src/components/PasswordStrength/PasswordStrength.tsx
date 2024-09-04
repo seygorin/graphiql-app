@@ -50,7 +50,7 @@ const PasswordStrength: FC<IPasswordStrengthProps> = ({ password }) => {
 
   return (
     <div className={s.power_meter}>
-      <div className={s.power_scale} ref={passStrengthMeterRef}></div>
+      <div className={s.power_scale} ref={passStrengthMeterRef} data-testid="meter"></div>
     </div>
   );
 };

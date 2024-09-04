@@ -18,8 +18,9 @@ const SelectLanguage: React.FC = () => {
 
   return (
     <FormControl>
-      <InputLabel>{t('header.select.language')}</InputLabel>
+      <InputLabel htmlFor="select-language">{t('header.select.language')}</InputLabel>
       <Select
+        id="select-language"
         variant="outlined"
         size="small"
         value={locale}

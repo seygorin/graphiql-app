@@ -24,4 +24,5 @@ dist-ssr
 next-env.d.ts
 package.json
 package-lock.json
-vitest.config.ts
+vitest.config.mts
+vitest.setup.ts

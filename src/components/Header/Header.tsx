@@ -14,7 +14,8 @@ const Header: React.FC = () => {
       <div className={s.header}>
         <Stack direction="row" gap={2}>
           <Link href={ROUTES.MAIN_PAGE}>
-            <Image src={logo} width={110} style={{ height: 'auto' }} alt="logoRsSchool" />
+            {/* <Image src={logo} width={110} style={{ height: 'auto' }} alt="logoRsSchool" /> */}
+            <Image src={logo} width={110} height={40} alt="logoRsSchool" />
           </Link>
           <SelectLanguage />
         </Stack>
