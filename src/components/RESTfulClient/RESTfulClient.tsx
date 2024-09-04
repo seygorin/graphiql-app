@@ -14,12 +14,18 @@ import { saveToHistory } from 'utils/saveToHistory';
 import withAuth from 'utils/withAuth';
 import HeadersEditor from './HeadersEditor';
 import RequestBodyEditor from './RequestBodyEditor';
-import RequestForm from './RequestForm';
+import RequestForm from './RequestForm/RequestForm';
 import Resizer from './Resizer';
-import ResponseViewer from './ResponseViewer';
-import VariablesEditor from './VariablesEditor';
+import ResponseViewer from './ResponseViewer/ResponseViewer';
+import VariablesEditor from './VariablesEditor/VariablesEditor';
 
 type ResponseType = Record<string, unknown> | { error: string } | null;
+
+const DEFAULT_METHOD: HttpMethod = 'GET';
+const DEFAULT_URL = 'https://jsonplaceholder.typicode.com/posts';
+const DEFAULT_REQUEST_BODY = '{\n  "title": "foo",\n  "body": "bar",\n  "userId": 1\n}';
+const DEFAULT_HEADERS = '{\n  "Content-Type": "application/json"\n}';
+const DEFAULT_VARIABLES = '{\n  "id": 1\n}';
 
 const RESTfulClient: React.FC = () => {
   const t = useTranslations();
@@ -28,13 +34,11 @@ const RESTfulClient: React.FC = () => {
   const searchParams = useSearchParams();
   const effectRan = useRef(false);
 
-  const [method, setMethod] = useState<HttpMethod>('GET');
-  const [url, setUrl] = useState('https://jsonplaceholder.typicode.com/posts');
-  const [requestBody, setRequestBody] = useState(
-    '{\n  "title": "foo",\n  "body": "bar",\n  "userId": 1\n}',
-  );
-  const [headers, setHeaders] = useState('{\n  "Content-Type": "application/json"\n}');
-  const [variables, setVariables] = useState('{\n  "id": 1\n}');
+  const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD);
+  const [url, setUrl] = useState(DEFAULT_URL);
+  const [requestBody, setRequestBody] = useState(DEFAULT_REQUEST_BODY);
+  const [headers, setHeaders] = useState(DEFAULT_HEADERS);
+  const [variables, setVariables] = useState(DEFAULT_VARIABLES);
   const [response, setResponse] = useState<ResponseType>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +48,22 @@ const RESTfulClient: React.FC = () => {
   const updateURLWithoutNavigation = useCallback((newPath: string) => {
     window.history.pushState(null, '', newPath);
   }, []);
+
+  useEffect(() => {
+    if (effectRan.current === false) {
+      const {
+        method: initialMethod,
+        url: initialUrl,
+        requestBody: initialBody,
+        headers: initialHeaders,
+      } = initializeFromUrl(pathname, searchParams);
+      setMethod(initialMethod || DEFAULT_METHOD);
+      setUrl(initialUrl || DEFAULT_URL);
+      setRequestBody(initialBody || DEFAULT_REQUEST_BODY);
+      setHeaders(initialHeaders || DEFAULT_HEADERS);
+      effectRan.current = true;
+    }
+  }, [pathname, searchParams]);
 
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
@@ -91,22 +111,6 @@ const RESTfulClient: React.FC = () => {
     }
   }, [method, url, headers, requestBody, variables, t]);
 
-  useEffect(() => {
-    if (effectRan.current === false) {
-      const {
-        method: initialMethod,
-        url: initialUrl,
-        requestBody: initialBody,
-        headers: initialHeaders,
-      } = initializeFromUrl(pathname, searchParams);
-      setMethod(initialMethod);
-      setUrl(initialUrl);
-      setRequestBody(initialBody);
-      setHeaders(initialHeaders);
-      effectRan.current = true;
-    }
-  }, [pathname, searchParams]);
-
   const handleMethodChange = (event: SelectChangeEvent<HttpMethod>) => {
     setMethod(event.target.value as HttpMethod);
   };
@@ -116,16 +120,7 @@ const RESTfulClient: React.FC = () => {
       method,
       url,
       method !== 'GET' && method !== 'DELETE' ? requestBody : '',
-      headers.split('\n').reduce(
-        (acc, line) => {
-          const [key, value] = line.split(':');
-          if (key && value) {
-            acc[key.trim()] = value.trim();
-          }
-          return acc;
-        },
-        {} as Record<string, string>,
-      ),
+      JSON.parse(headers),
     );
     updateURLWithoutNavigation(`/${locale}/restful${newPath}`);
     sendRequest();
