@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
-import { Bounce } from 'react-toastify';
+import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ToastifyNotification = () => {

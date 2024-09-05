@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Paper } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useResizablePanes } from 'hooks/useResizablePanes';
-import { encodeRequestParams } from 'utils/encodeBase64Url';
+import { encodeRestRequestParams } from 'utils/encodeBase64Url';
 import { fetchQuery } from 'utils/fetchQuery';
 import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
@@ -57,7 +57,17 @@ const RESTfulClient: React.FC = () => {
         requestBody: initialBody,
         headers: initialHeaders,
       } = initializeFromUrl(pathname, searchParams);
-      setMethod(initialMethod || DEFAULT_METHOD);
+
+      const isValidHttpMethod = (methodToCheck: string | undefined): methodToCheck is HttpMethod =>
+        methodToCheck !== undefined &&
+        ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(methodToCheck);
+
+      if (isValidHttpMethod(initialMethod)) {
+        setMethod(initialMethod);
+      } else {
+        setMethod(DEFAULT_METHOD);
+      }
+
       setUrl(initialUrl || DEFAULT_URL);
       setRequestBody(initialBody || DEFAULT_REQUEST_BODY);
       setHeaders(initialHeaders || DEFAULT_HEADERS);
@@ -116,13 +126,13 @@ const RESTfulClient: React.FC = () => {
   };
 
   const handleSendRequest = () => {
-    const newPath = encodeRequestParams(
+    const newPath = encodeRestRequestParams(
       method,
       url,
       method !== 'GET' && method !== 'DELETE' ? requestBody : '',
       JSON.parse(headers),
     );
-    updateURLWithoutNavigation(`/${locale}/restful${newPath}`);
+    updateURLWithoutNavigation(`/${locale}${newPath}`);
     sendRequest();
   };
 
@@ -131,9 +141,8 @@ const RESTfulClient: React.FC = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: 'calc(100vh - 270px)',
+        height: 'calc(100vh - 250px)',
         padding: 2,
-        overflow: 'hidden',
       }}
     >
       <Paper elevation={3} sx={{ mb: 2, p: 2 }}>
@@ -148,14 +157,13 @@ const RESTfulClient: React.FC = () => {
         />
       </Paper>
 
-      <Box sx={{ display: 'flex', flex: 1, gap: 2, overflow: 'hidden' }}>
+      <Box sx={{ display: 'flex', flex: 1, gap: 2, minHeight: '10vh' }}>
         <Paper
           elevation={3}
           sx={{
             width: `${leftPaneWidth}%`,
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden',
           }}
         >
           <Box sx={{ flex: 1, overflow: 'auto' }}>

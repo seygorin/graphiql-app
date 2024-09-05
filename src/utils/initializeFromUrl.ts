@@ -1,12 +1,16 @@
 import { decodeBase64Url } from './encodeBase64Url';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type GraphQLMethod = 'GRAPHQL';
+export type AllMethods = HttpMethod | GraphQLMethod;
 
 interface InitializeFromUrlResult {
-  method?: HttpMethod;
+  method?: AllMethods;
   url?: string;
   requestBody?: string;
   headers?: string;
+  query?: string;
+  variables?: string;
 }
 
 export const initializeFromUrl = (
@@ -16,19 +20,25 @@ export const initializeFromUrl = (
   const parts = pathname.split('/');
   const result: InitializeFromUrlResult = {};
 
-  if (parts.length >= 4 && parts[2] === 'restful') {
-    result.method = parts[3] as HttpMethod;
+  if (parts.length >= 3) {
+    result.method = parts[2] as AllMethods;
 
-    if (parts.length >= 5) {
-      result.url = decodeBase64Url(parts[4]);
+    if (parts.length >= 4) {
+      result.url = decodeBase64Url(parts[3]);
     }
 
-    if (parts.length >= 6) {
-      result.requestBody = decodeBase64Url(parts[5]);
+    if (parts.length >= 5) {
+      if (result.method === 'GRAPHQL') {
+        result.query = decodeBase64Url(parts[4]);
+      } else {
+        result.requestBody = decodeBase64Url(parts[4]);
+      }
     }
 
     if (searchParams.size > 0) {
       const headerObj: Record<string, string> = {};
+      const variablesObj: Record<string, unknown> = {};
+
       searchParams.forEach((value, key) => {
         const decodedKey = decodeURIComponent(key);
         const decodedValue = decodeURIComponent(value);
@@ -36,10 +46,22 @@ export const initializeFromUrl = (
         const cleanKey = decodedKey.replace(/^["']|["']$/g, '');
         const cleanValue = decodedValue.replace(/^["']|["']$/g, '');
 
-        headerObj[cleanKey] = cleanValue;
+        if (cleanKey === 'variables' && result.method === 'GRAPHQL') {
+          try {
+            variablesObj[cleanKey] = JSON.parse(cleanValue);
+          } catch (e) {
+            variablesObj[cleanKey] = cleanValue;
+          }
+        } else {
+          headerObj[cleanKey] = cleanValue;
+        }
       });
 
       result.headers = JSON.stringify(headerObj, null, 2);
+
+      if (Object.keys(variablesObj).length > 0) {
+        result.variables = JSON.stringify(variablesObj, null, 2);
+      }
     }
   }
 
