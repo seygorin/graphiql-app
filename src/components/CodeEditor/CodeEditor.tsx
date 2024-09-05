@@ -1,14 +1,15 @@
 import React from 'react';
-import { json } from '@codemirror/lang-json';
 import { EditorView } from '@codemirror/view';
+import { langs } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, placeholder }) => {
   return (
     <CodeMirror
       value={value}
@@ -18,8 +19,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
           height: '100%',
         },
       })}
-      extensions={[json()]}
+      extensions={[langs.json()]}
       onChange={onChange}
+      placeholder={placeholder}
     />
   );
 };

@@ -70,7 +70,17 @@
     "executeQuery": "Выполнить запрос",
     "response": "Ответ",
     "documentation": "Документация",
-    "documentationPlaceholder": "Документация будет отображена здесь, когда она станет доступна"
+    "documentationPlaceholder": "Документация будет отображена здесь, когда она станет доступна",
+    "queryPlaceholder": "Введите ваш GraphQL запрос здесь",
+    "formatQuery": "Формат запроса",
+    "endpointLabel": "URL конечной точки",
+    "sdlEndpointLabel": "URL конечной точки SDL",
+    "sendRequest": "Отправить запрос",
+    "fetchSchema": "Получить схему",
+    "noDocumentation": "Документация отсутствует",
+    "loadingDocumentation": "Загрузка документации...",
+    "schemaFetchError": "Ошибка при получении схемы",
+    "unknownError": "Неизвестная ошибка"
   },
   "history": {
     "noRequests": "Вы еще не выполнили ни одного запроса",
