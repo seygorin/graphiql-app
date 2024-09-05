@@ -57,20 +57,32 @@ const HistoryComponent: React.FC = () => {
   }, [t]);
 
   const generateLink = (item: HistoryItem) => {
-    const isGraphQL = item.method === 'GRAPHQL';
-    const basePath = `/${locale}/${isGraphQL ? 'graphiql' : 'restful'}`;
+    const basePath = `/${locale}`;
 
-    if (isGraphQL) {
-      const params = new URLSearchParams({
-        url: item.url,
-        sdlUrl: item.sdlUrl || '',
-        query: item.requestBody || '',
-        variables: item.variables || '',
-        headers: item.headers || '',
-      });
-      return `${basePath}?${params.toString()}`;
+    if (item.method === 'GRAPHQL') {
+      const encodedEndpoint = Base64.encodeURI(item.url);
+      const encodedQuery = item.requestBody ? Base64.encodeURI(item.requestBody) : '';
+      const headerParams = new URLSearchParams();
+
+      if (item.headers) {
+        try {
+          const parsedHeaders = JSON.parse(item.headers);
+          if (typeof parsedHeaders === 'object' && parsedHeaders !== null) {
+            Object.entries(parsedHeaders).forEach(([key, value]) => {
+              headerParams.append(key, encodeURIComponent(String(value)));
+            });
+          }
+        } catch (error) {
+          errorNotifyMessage(t('history.errorParsingHeaders'));
+        }
+      }
+
+      if (item.variables) {
+        headerParams.append('variables', encodeURIComponent(item.variables));
+      }
+
+      return `${basePath}/GRAPHQL/${encodedEndpoint}/${encodedQuery}?${headerParams.toString()}`;
     }
-
     const encodedUrl = Base64.encodeURI(item.url);
     const encodedBody = item.requestBody ? `/${Base64.encodeURI(item.requestBody)}` : '';
     const headerParams = new URLSearchParams();
@@ -111,7 +123,7 @@ const HistoryComponent: React.FC = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, margin: 'auto', padding: 2 }}>
+    <Box sx={{ padding: 2 }}>
       <Box display='flex' justifyContent='flex-end' alignItems='center' mb={2}>
         {historyItems.length > 0 && (
           <Button variant='outlined' color='secondary' onClick={clearHistory}>

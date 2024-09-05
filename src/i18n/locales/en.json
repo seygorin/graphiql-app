@@ -60,7 +60,17 @@
     "executeQuery": "Execute Query",
     "response": "Response",
     "documentation": "Documentation",
-    "documentationPlaceholder": "Documentation will be displayed here when available"
+    "documentationPlaceholder": "Documentation will be displayed here when available",
+    "queryPlaceholder": "Enter your GraphQL query here",
+    "formatQuery": "Format Query",
+    "endpointLabel": "Endpoint URL",
+    "sdlEndpointLabel": "SDL Endpoint URL",
+    "sendRequest": "Send Request",
+    "fetchSchema": "Fetch Schema",
+    "noDocumentation": "No Documentation Available",
+    "loadingDocumentation": "Loading Documentation...",
+    "schemaFetchError": "Error Fetching Schema",
+    "unknownError": "Unknown Error"
   },
   "history": {
     "noRequests": "You haven't executed any requests yet",

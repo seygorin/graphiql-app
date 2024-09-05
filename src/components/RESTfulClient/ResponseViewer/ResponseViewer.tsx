@@ -1,6 +1,7 @@
-import { json } from '@codemirror/lang-json';
+import React from 'react';
 import { EditorView } from '@codemirror/view';
 import { Box, CircularProgress } from '@mui/material';
+import { langs } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 
 interface ResponseViewerProps {
@@ -39,7 +40,7 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
               height: '100%',
             },
           })}
-          extensions={[json(), EditorView.lineWrapping]}
+          extensions={[langs.json(), EditorView.lineWrapping]}
           editable={false}
           basicSetup={{
             lineNumbers: true,
