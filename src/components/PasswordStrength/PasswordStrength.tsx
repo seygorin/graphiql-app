@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import s from './PasswordStrength.module.css';
+import s from './PasswordStrength.module.scss';
 
 interface IPasswordStrengthProps {
   password: string;
@@ -50,7 +50,7 @@ const PasswordStrength: FC<IPasswordStrengthProps> = ({ password }) => {
 
   return (
     <div className={s.power_meter}>
-      <div className={s.power_scale} ref={passStrengthMeterRef} data-testid="meter"></div>
+      <div className={s.power_scale} ref={passStrengthMeterRef} data-testid='meter'></div>
     </div>
   );
 };

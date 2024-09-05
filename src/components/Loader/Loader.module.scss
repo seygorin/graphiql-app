@@ -7,10 +7,12 @@
     text-align: center;
 }
 
-.loader img {
-    display: inline-block;
-    width: 100px;
-    height: 100px;
+.loader {
+    & img {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+    }
 }
 
 .loading {

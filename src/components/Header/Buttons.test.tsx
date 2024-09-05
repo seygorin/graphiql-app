@@ -46,7 +46,7 @@ describe('Buttons', () => {
     user = { uid: '123' } as User;
     name = 'John Doe';
     render(
-      <NextIntlClientProvider locale="en" messages={messages}>
+      <NextIntlClientProvider locale='en' messages={messages}>
         <Buttons user={user} name={name} />
       </NextIntlClientProvider>,
     );

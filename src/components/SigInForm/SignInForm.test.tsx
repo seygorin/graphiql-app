@@ -2,7 +2,7 @@ import { NextIntlClientProvider, useTranslations } from 'next-intl';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signInUser } from '../../lib/auth';
@@ -67,7 +67,7 @@ describe('SignInForm', () => {
 
   it('renders the sign-in form', () => {
     render(
-      <NextIntlClientProvider locale="en" messages={messages}>
+      <NextIntlClientProvider locale='en' messages={messages}>
         <SignInForm />
       </NextIntlClientProvider>,
     );
@@ -88,16 +88,18 @@ describe('SignInForm', () => {
     expect(screen.getByText('form.button.signIn')).toBeInTheDocument();
   });
 
-  it('shows password visibility toggle functionality', () => {
+  it('shows password visibility toggle functionality', async () => {
     render(
-      <NextIntlClientProvider locale="en" messages={messages}>
+      <NextIntlClientProvider locale='en' messages={messages}>
         <SignInForm />
       </NextIntlClientProvider>,
     );
     const passwordInput = screen.getByLabelText('form.password');
     const visibilityButton = screen.getByRole('button', { name: /toggle password visibility/i });
     expect(passwordInput).toHaveAttribute('type', 'password');
-    fireEvent.click(visibilityButton);
+    await act(async () => {
+      fireEvent.click(visibilityButton);
+    });
     expect(passwordInput).toHaveAttribute('type', 'text');
   });
 
@@ -115,22 +117,20 @@ describe('SignInForm', () => {
       },
     });
     render(
-      <NextIntlClientProvider locale="en" messages={messages}>
+      <NextIntlClientProvider locale='en' messages={messages}>
         <SignInForm />
       </NextIntlClientProvider>,
     );
-
     fireEvent.click(screen.getByText('form.button.signIn'));
-
     await waitFor(() => {
       expect(screen.getByText('email error')).toBeInTheDocument();
       expect(screen.getByText('password error')).toBeInTheDocument();
     });
   });
 
-  it('should prevent default action on mouse down for password visibility toggle', () => {
+  it('should prevent default action on mouse down for password visibility toggle', async () => {
     render(
-      <NextIntlClientProvider locale="en" messages={messages}>
+      <NextIntlClientProvider locale='en' messages={messages}>
         <SignInForm />
       </NextIntlClientProvider>,
     );
@@ -147,8 +147,9 @@ describe('SignInForm', () => {
       value: preventDefaultMock,
       writable: false,
     });
-
-    passwordToggleButton.dispatchEvent(event);
+    await act(async () => {
+      passwordToggleButton.dispatchEvent(event);
+    });
     expect(preventDefaultMock).toHaveBeenCalled();
   });
 
@@ -156,31 +157,33 @@ describe('SignInForm', () => {
     const mockError = new Error('Sign in failed');
     signInUser.mockRejectedValue(mockError);
     render(
-      <NextIntlClientProvider locale="en" messages={messages}>
+      <NextIntlClientProvider locale='en' messages={messages}>
         <SignInForm />
       </NextIntlClientProvider>,
     );
-
-    fireEvent.change(screen.getByRole('textbox', { name: /email/i }), {
-      target: { value: 'test@example.com' },
+    await act(async () => {
+      fireEvent.change(screen.getByRole('textbox', { name: /email/i }), {
+        target: { value: 'test@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText(/form.password/i), { target: { value: 'Qw!2qwer' } });
+      fireEvent.click(screen.getByRole('button', { name: /form.button.signIn/i }));
+      await waitFor(() => expect(errorNotifyMessage).toHaveBeenCalledWith('Sign in failed'));
     });
-    fireEvent.change(screen.getByLabelText(/form.password/i), { target: { value: 'Qw!2qwer' } });
-    fireEvent.click(screen.getByRole('button', { name: /form.button.signIn/i }));
-    await waitFor(() => expect(errorNotifyMessage).toHaveBeenCalledWith('Sign in failed'));
   });
 
   it('submits the form with valid data', async () => {
     render(
-      <NextIntlClientProvider locale="en" messages={messages}>
+      <NextIntlClientProvider locale='en' messages={messages}>
         <SignInForm />
       </NextIntlClientProvider>,
     );
-    fireEvent.change(screen.getByLabelText('form.email'), {
-      target: { value: 'test@example.com' },
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText('form.email'), {
+        target: { value: 'test@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText('form.password'), { target: { value: 'Qw!2qwer' } });
+      fireEvent.click(screen.getByRole('button', { name: /form.button.signIn/i }));
     });
-    fireEvent.change(screen.getByLabelText('form.password'), { target: { value: 'Qw!2qwer' } });
-    fireEvent.click(screen.getByRole('button', { name: /form.button.signIn/i }));
-
     await waitFor(() => {
       expect(signInUser).toHaveBeenCalledWith('test@example.com', 'Qw!2qwer', expect.any(Function));
     });

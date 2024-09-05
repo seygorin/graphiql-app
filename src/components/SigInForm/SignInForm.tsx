@@ -25,7 +25,7 @@ import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signInUser } from '../../lib/auth';
 import ROUTES from '../../shared/types/types';
 import { ISignInFormData, validateSignInSchema } from '../../validations/signInValidation.schema';
-import s from './SignInForm.module.css';
+import s from './SignInForm.module.scss';
 
 const SignInForm = () => {
   // const router = useRouter();
@@ -60,7 +60,7 @@ const SignInForm = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component='main' maxWidth='xs'>
       <Box
         sx={{
           paddingTop: 6,
@@ -69,45 +69,46 @@ const SignInForm = () => {
           flexDirection: 'column',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOpenIcon />
         </Avatar>
-        <Typography component="h2" variant="h5">
+        <Typography component='h2' variant='h5'>
           {t('form.title.signIn')}
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Box component='form' onSubmit={handleSubmit(onSubmit)} noValidate>
           <FormGroup>
-            <FormControl fullWidth sx={{ position: 'relative' }}>
+            <FormControl fullWidth>
               <TextField
                 label={t('form.email')}
-                type="email"
-                margin="normal"
+                type='email'
+                margin='normal'
                 fullWidth
-                id="email"
-                variant="outlined"
+                id='email'
+                error={!!errors?.email}
+                variant='outlined'
                 sx={{ mb: 3 }}
                 {...register('email')}
-                autoComplete="email"
-                size="small"
+                autoComplete='email'
+                size='small'
               />
               {errors?.email && (
                 <p className={`error_form ${s.error_mail}`}>{errors.email.message}</p>
               )}
             </FormControl>
-            <FormControl sx={{ position: 'relative' }} variant="outlined" size="small">
-              <InputLabel htmlFor="password">{t('form.password')}</InputLabel>
+            <FormControl variant='outlined' size='small' error={!!errors?.password}>
+              <InputLabel htmlFor='password'>{t('form.password')}</InputLabel>
               <OutlinedInput
-                id="password"
+                id='password'
                 type={showPassword ? 'text' : 'password'}
                 {...register('password')}
-                autoComplete="current-password"
+                autoComplete='current-password'
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment position='end'>
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-label='toggle password visibility'
                       onClick={onClickShowPassword}
                       onMouseDown={onMouseDownPassword}
-                      edge="end"
+                      edge='end'
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -121,18 +122,18 @@ const SignInForm = () => {
             </FormControl>
             <Button
               sx={{ mt: 4, mb: 1 }}
-              type="submit"
-              variant="contained"
+              type='submit'
+              variant='contained'
               fullWidth
               disabled={!isValid}
-              color="info"
+              color='info'
             >
               {t('form.button.signIn')}
             </Button>
           </FormGroup>
           <Grid container>
             <Grid item>
-              <Link href={ROUTES.SIGN_UP} variant="subtitle2" underline="hover">
+              <Link href={ROUTES.SIGN_UP} variant='subtitle2' underline='hover' color='info.main'>
                 {t('form.subtitle.signIn')}
               </Link>
             </Grid>

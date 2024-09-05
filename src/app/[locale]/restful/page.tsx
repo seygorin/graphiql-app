@@ -1,13 +1,14 @@
 import { unstable_setRequestLocale } from 'next-intl/server';
 import React from 'react';
-import RESTfulClient from 'components/RESTfulClient';
+import RESTfulClient from 'components/RESTfulClient/RESTfulClient';
 
-type Props = {
+interface IProps {
   params: { locale: string };
-};
+}
 
-const RESTfulPage: React.FC<Props> = ({ params: { locale } }) => {
+const RESTfulPage: React.FC<IProps> = ({ params: { locale } }) => {
   unstable_setRequestLocale(locale);
+
   return <RESTfulClient />;
 };
 

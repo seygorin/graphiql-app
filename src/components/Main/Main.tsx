@@ -1,13 +1,20 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
-import React, { useState } from 'react';
-import { Box, Link, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import React from 'react';
+import { Box, Container, Stack, Typography } from '@mui/material';
+import clsx from 'clsx';
 import { User } from 'firebase/auth';
+import CustomDashboardTabs from 'components/CustomDashboardTabs';
 import SignInButton from 'components/SignInButton';
 import SignUpButton from 'components/SignUpButton';
+import screenshot1 from 'public/screenshot_1.png';
+import screenshot2 from 'public/screenshot_2.png';
+import screenshot3 from 'public/screenshot_3.png';
 import withUser from 'utils/withUser';
-import ROUTES from '../../shared/types/types';
+import AboutUs from './AboutUs';
+import s from './Main.module.scss';
 
 interface IProps {
   user?: User | null;
@@ -16,53 +23,50 @@ interface IProps {
 
 const Main: React.FC<IProps> = ({ user, name }) => {
   const t = useTranslations();
-  const locale = useLocale();
-  const [value, setValue] = useState(`/${locale}${ROUTES.RESTFUL}`);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
 
   if (user) {
     return (
-      <Box display="flex" paddingTop={16} gap={8} flexDirection="column">
-        <Typography variant="h3" textAlign="center">
-          {t('main.welcomeUser', { user: name || user.displayName || user.email })}
-        </Typography>
-        <Stack direction="row" gap={2} alignSelf="center" justifyContent="center">
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-            <Tabs value={value} onChange={handleChange} aria-label="dashboard tabs">
-              <Tab
-                label={t('dashboard.restful')}
-                value={`/${locale}${ROUTES.RESTFUL}`}
-                component={Link}
-                href={`/${locale}${ROUTES.RESTFUL}`}
+      <Container maxWidth={false} disableGutters>
+        <Box className={s.accent_background}>
+          <Box className={s.main_info}>
+            <Box className={s.main_info_content}>
+              <Typography variant='h1' className={s.main_info_title}>
+                {t('main.welcomeUser', { user: name || user.displayName || user.email })}
+              </Typography>
+
+              <Typography variant='h6'>{t('main.text')}</Typography>
+              <CustomDashboardTabs size='large' />
+            </Box>
+            <Box className={s.main_info_img}>
+              <Image
+                src={screenshot1}
+                className={clsx(s.main_img_screenshot, s.main_img_screenshot3)}
+                alt='screenshot1'
               />
-              <Tab
-                label={t('dashboard.graphiql')}
-                value={`/${locale}${ROUTES.GRAPHIQL}`}
-                component={Link}
-                href={`/${locale}${ROUTES.GRAPHIQL}`}
+              <Image
+                src={screenshot2}
+                className={clsx(s.main_img_screenshot, s.main_img_screenshot2)}
+                alt='screenshot2'
               />
-              <Tab
-                label={t('dashboard.history')}
-                value={`/${locale}${ROUTES.HISTORY}`}
-                component={Link}
-                href={`/${locale}${ROUTES.HISTORY}`}
+              <Image
+                src={screenshot3}
+                className={clsx(s.main_img_screenshot, s.main_img_screenshot1)}
+                alt='screenshot3'
               />
-            </Tabs>
+            </Box>
           </Box>
-        </Stack>
-      </Box>
+        </Box>
+        <AboutUs />
+      </Container>
     );
   }
 
   return (
-    <Box display="flex" paddingTop={16} gap={8} flexDirection="column">
-      <Typography variant="h1" textAlign="center">
+    <Box className={s.main_not_auth}>
+      <Typography variant='h1' textAlign='center'>
         {t('main.welcome')}
       </Typography>
-      <Stack direction="row" gap={2} alignSelf="center" justifyContent="center">
+      <Stack direction='row' gap={2} alignSelf='center' justifyContent='center'>
         <SignInButton />
         <SignUpButton />
       </Stack>

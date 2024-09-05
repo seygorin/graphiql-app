@@ -10,21 +10,23 @@ const Footer: React.FC = () => {
 
   return (
     <footer className={s.footer_wrapper}>
-      <div className={s.footer}>
+      <div className={s.footer_info}>
         <div className={s.footer_links}>
-          <p>
-            <Link href="https://github.com/intrstng">Intrstng</Link>
-          </p>
-          <p>
-            <Link href="https://github.com/seygorin">seygorin</Link>
-          </p>
-          <p>
-            <Link href="https://github.com/ksushasher">KsushaSher</Link>
-          </p>
+          <Link variant='body1' className={s.link} href='https://github.com/intrstng'>
+            Intrstng
+          </Link>
+
+          <Link variant='body1' className={s.link} href='https://github.com/seygorin'>
+            seygorin
+          </Link>
+
+          <Link variant='body1' className={s.link} href='https://github.com/ksushasher'>
+            KsushaSher
+          </Link>
         </div>
         <div className={s.year}>2024 {t('footer.year')}</div>
-        <Link href="https://rs.school/">
-          <Image src={courseLogo} width={40} height={40} alt="courseLogo" />
+        <Link href='https://rs.school/' width={50} height={50}>
+          <Image src={courseLogo} width={50} height={50} alt='courseLogo' />
         </Link>
       </div>
     </footer>

@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { render, screen } from '@testing-library/react';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import ROUTES from '../../shared/types/types';
 import SignUpButton from './SignUpButton';
 
@@ -36,13 +36,13 @@ vi.mock('@mui/material/Button', () => ({
 }));
 
 describe('SignUpButton', () => {
-  test('renders the sign-up button with correct attributes', () => {
+  it('renders the sign-up button with correct attributes', () => {
     (useTranslations as vi.Mock).mockReturnValue((key: string) => key);
     render(<SignUpButton />);
     const button = screen.getByText('header.signUp');
     expect(button).toBeInTheDocument();
     expect(button).toHaveAttribute('href', ROUTES.SIGN_UP);
-    expect(button).toHaveAttribute('data-color', 'error');
+    expect(button).toHaveAttribute('data-color', 'secondary');
     expect(button).toHaveAttribute('data-size', 'medium');
     expect(button).toHaveAttribute('data-variant', 'contained');
     const icon = screen.getByText('VpnKeyIcon');

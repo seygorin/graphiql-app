@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import React, { ChangeEvent, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
@@ -25,12 +25,20 @@ import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signUpUser } from '../../lib/auth';
 import ROUTES from '../../shared/types/types';
 import { ISignUpFormData, validateSignUpSchema } from '../../validations/signUpValidation.shema';
-import s from './SignUpForm.module.css';
+import s from './SignUpForm.module.scss';
 
 const SignUpForm = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const passwordInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (passwordInputRef.current) {
+      setPassword(passwordInputRef.current!.value);
+    }
+  }, [passwordInputRef.current?.value]);
+
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -65,7 +73,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component='main' maxWidth='xs'>
       <Box
         sx={{
           paddingTop: 6,
@@ -74,66 +82,69 @@ const SignUpForm = () => {
           flexDirection: 'column',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'success.main' }} variant="rounded">
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} variant='rounded'>
           <HowToRegIcon />
         </Avatar>
-        <Typography component="h2" variant="h5">
+        <Typography component='h2' variant='h5'>
           {t('form.title.signUp')}
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Box component='form' onSubmit={handleSubmit(onSubmit)} noValidate>
           <FormGroup>
-            <FormControl fullWidth sx={{ position: 'relative' }}>
+            <FormControl fullWidth>
               <TextField
                 label={t('form.name')}
-                type="text"
-                margin="normal"
+                type='text'
+                margin='normal'
                 fullWidth
-                id="name"
-                variant="outlined"
+                id='name'
+                error={!!errors?.name}
+                variant='outlined'
                 {...register('name')}
-                autoComplete="name"
-                size="small"
+                autoComplete='name'
+                size='small'
               />
               {errors?.name && (
                 <p className={`error_form ${s.error_name}`}>{errors.name.message}</p>
               )}
             </FormControl>
-            <FormControl fullWidth sx={{ position: 'relative' }}>
+            <FormControl fullWidth>
               <TextField
                 label={t('form.email')}
-                type="email"
-                margin="normal"
+                type='email'
+                margin='normal'
                 fullWidth
-                id="emailSignUp"
-                variant="outlined"
+                id='emailSignUp'
+                error={!!errors?.email}
+                variant='outlined'
                 sx={{ mb: 3 }}
                 {...register('email')}
-                autoComplete="email"
-                size="small"
+                autoComplete='email'
+                size='small'
               />
               {errors?.email && (
                 <p className={`error_form ${s.error_mail}`}>{errors.email.message}</p>
               )}
             </FormControl>
             <FormControl
-              sx={{ mb: '0.4rem', position: 'relative' }}
-              variant="outlined"
-              size="small"
+              sx={{ mb: '0.4rem' }}
+              variant='outlined'
+              size='small'
+              error={!!errors?.password}
             >
-              <InputLabel htmlFor="passwordSignUp">{t('form.password')}</InputLabel>
+              <InputLabel htmlFor='passwordSignUp'>{t('form.password')}</InputLabel>
               <OutlinedInput
-                id="passwordSignUp"
+                id='passwordSignUp'
                 type={showPassword ? 'text' : 'password'}
                 {...register('password')}
-                autoComplete="current-password"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                autoComplete='current-password'
+                inputRef={passwordInputRef}
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment position='end'>
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-label='toggle password visibility'
                       onClick={onClickShowPassword}
                       onMouseDown={onMouseDownPassword}
-                      edge="end"
+                      edge='end'
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -148,20 +159,25 @@ const SignUpForm = () => {
 
             <PasswordStrength password={password} />
 
-            <FormControl sx={{ mt: '2rem', position: 'relative' }} variant="outlined" size="small">
-              <InputLabel htmlFor="confirmPassword">{t('form.confirmPassword')}</InputLabel>
+            <FormControl
+              sx={{ mt: '2rem' }}
+              variant='outlined'
+              size='small'
+              error={!!errors?.confirmPassword}
+            >
+              <InputLabel htmlFor='confirmPassword'>{t('form.confirmPassword')}</InputLabel>
               <OutlinedInput
-                id="confirmPassword"
+                id='confirmPassword'
                 type={showConfirmPassword ? 'text' : 'password'}
                 {...register('confirmPassword')}
-                autoComplete="current-password"
+                autoComplete='current-password'
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment position='end'>
                     <IconButton
-                      aria-label="toggle confirmPassword visibility"
+                      aria-label='toggle confirmPassword visibility'
                       onClick={onClickShowConfirmPassword}
                       onMouseDown={onMouseDownConfirmPassword}
-                      edge="end"
+                      edge='end'
                     >
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -177,18 +193,18 @@ const SignUpForm = () => {
             </FormControl>
             <Button
               sx={{ mt: 3, mb: 1 }}
-              type="submit"
-              variant="contained"
+              type='submit'
+              variant='contained'
               fullWidth
               disabled={!isValid}
-              color="info"
+              color='info'
             >
               {t('form.button.signUp')}
             </Button>
           </FormGroup>
           <Grid container>
             <Grid item>
-              <Link href={ROUTES.SIGN_IN} variant="subtitle2" underline="hover">
+              <Link href={ROUTES.SIGN_IN} variant='subtitle2' underline='hover' color='info.main'>
                 {t('form.subtitle.signUp')}
               </Link>
             </Grid>

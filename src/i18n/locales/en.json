@@ -2,10 +2,11 @@
   "ru": "Русский",
   "en": "English",
   "notfound": {
-    "title": "Not Found :(",
-    "description": "Could not find requested resource",
+    "messageNotFound": "Sorry, but page was not found",
+    "message": "You may have mistyped the address or the page may have moved",
     "link": "Return Home"
   },
+  "error": { "message": "Oops!", "link": "Return Home", "description": "Something went wrong..." },
   "header": {
     "select": { "language": "Language" },
     "login": "Sign in",
@@ -17,7 +18,8 @@
   },
   "main": {
     "welcomeUser": "Welcome back, {user}!",
-    "welcome": "Welcome!"
+    "welcome": "Welcome!",
+    "text": "Please select the desired section:"
   },
   "footer": { "year": "year" },
   "component": { "input": "Input" },
@@ -61,10 +63,11 @@
     "documentationPlaceholder": "Documentation will be displayed here when available"
   },
   "history": {
-    "title": "Request History",
     "noRequests": "You haven't executed any requests yet",
-    "tryRESTful": "Try RESTful Client",
-    "tryGraphiQL": "Try GraphiQL Client"
+    "errorParsingHistory": "Error parsing history",
+    "errorParsingHeaders": "Error parsing headers",
+    "historyCleared": "History cleared",
+    "clearHistory": "Clear history"
   },
   "restful": {
     "title": "RESTful Client",
@@ -75,7 +78,10 @@
     "sendRequest": "Send Request",
     "response": "Response",
     "status": "Status",
-    "responseBody": "Response Body"
+    "responseBody": "Response Body",
+    "variables": "Variables",
+    "invalidJson": "Infalid JSON format",
+    "unknownError": "Unknown Error"
   },
   "auth": {
     "success": {
@@ -95,5 +101,18 @@
       "unknown": "An unknown error occurred",
       "token": "Firebase session token expired"
     }
+  },
+  "aboutUs": {
+    "titleTeam": "Our team",
+    "name1": "Intrstng",
+    "dev1": "An ambitious developer who strives to grow and improve his skills with each project.",
+    "name2": "seygorin",
+    "dev2": "Talented developer with an eye for detail and a passion for creating quality code.",
+    "name3": "KsushaSher",
+    "dev3": "A beginner developer with a great desire to learn and develop.",
+    "titleProject": "About the project",
+    "project": "This project required the development of a simplified API application that combines Postman and GraphiQL functionality. It should allow making requests to RESTful and GraphQL APIs, support authentication and authorization, and store request history.",
+    "titleCourse": "About the course",
+    "course": "The current course is designed to deepen knowledge and acquire practical skills in working with React."
   }
 }

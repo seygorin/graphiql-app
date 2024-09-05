@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signUpUser } from '../../lib/auth';
@@ -122,7 +122,7 @@ describe('SignUpForm', () => {
     });
   });
 
-  it('should prevent default action on mouse down for password visibility toggle', () => {
+  it('should prevent default action on mouse down for password visibility toggle', async () => {
     render(<SignUpForm />);
 
     const passwordToggleButton = screen.getByLabelText('toggle password visibility');
@@ -137,12 +137,13 @@ describe('SignUpForm', () => {
       value: preventDefaultMock,
       writable: false,
     });
-
-    passwordToggleButton.dispatchEvent(event);
+    await act(async () => {
+      passwordToggleButton.dispatchEvent(event);
+    });
     expect(preventDefaultMock).toHaveBeenCalled();
   });
 
-  it('should prevent default action on mouse down for confirm password visibility toggle', () => {
+  it('should prevent default action on mouse down for confirm password visibility toggle', async () => {
     render(<SignUpForm />);
 
     const confirmPasswordToggleButton = screen.getByLabelText('toggle confirmPassword visibility');
@@ -157,8 +158,9 @@ describe('SignUpForm', () => {
       value: preventDefaultMock,
       writable: false,
     });
-
-    confirmPasswordToggleButton.dispatchEvent(event);
+    await act(async () => {
+      confirmPasswordToggleButton.dispatchEvent(event);
+    });
     expect(preventDefaultMock).toHaveBeenCalled();
   });
 

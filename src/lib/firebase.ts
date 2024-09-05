@@ -1,18 +1,3 @@
-/**
- * https://github.com/firebase/firebase-js-sdk/issues/8436
- */
-// // Save the original console.log function
-// const originalConsoleLog = console.log;
-//
-// console.log = function(...args) {
-// // Check if the log message contains the word "heartbeats"
-//   if (args.some(arg => typeof arg === 'string' && arg.includes('heartbeats'))) {
-//     return; // Skip the log message
-//   }
-//
-// // Otherwise, use the original console.log
-//   originalConsoleLog.apply(console, args);
-// };
 import { getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
