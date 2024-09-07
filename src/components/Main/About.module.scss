@@ -8,17 +8,25 @@
   display: flex;
   justify-content: center;
   gap: 50px;
+
+  .devs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 0 1 25%;
+    border-radius: 6px;
+    text-align: left;
+    background-color: $secondary-main;
+    overflow: hidden;
+    color: $text-footer;
+    // text-shadow: 0 0 0.15em #b4d5d2;
+  }
+
+  // .dev_text {
+  //   font-weight: 600;
+  // }
 }
-.devs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 0 1 25%;
-  border-radius: 6px;
-  text-align: left;
-  background-color: $secondary-main;
-  overflow: hidden;
-}
+
 .img {
   width: 100%;
   height: auto;

@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { FormControl, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { locales } from 'i18n/config';
 
 const SelectLanguage: React.FC = () => {
@@ -12,27 +12,26 @@ const SelectLanguage: React.FC = () => {
   const locale = useLocale();
   const pathname = usePathname();
 
-  const handleChange = ({ target }: SelectChangeEvent) => {
-    router.replace(`/${target.value}/${pathname.split('/').slice(2).join('/')}`);
+  const handleChange = (_: React.MouseEvent, value: string) => {
+    router.replace(`/${value}/${pathname.split('/').slice(2).join('/')}`);
   };
 
   return (
     <FormControl>
-      <InputLabel htmlFor='select-language'>{t('header.select.language')}</InputLabel>
-      <Select
-        variant='outlined'
+      <ToggleButtonGroup
         size='small'
-        id='select-language'
+        aria-label='Small sizes'
+        color='primary'
         value={locale}
-        label={t('header.select.language')}
+        exclusive
         onChange={handleChange}
       >
         {locales.map((l) => (
-          <MenuItem key={l} value={l}>
+          <ToggleButton key={l} value={l}>
             {t(l)}
-          </MenuItem>
+          </ToggleButton>
         ))}
-      </Select>
+      </ToggleButtonGroup>
     </FormControl>
   );
 };

@@ -1,6 +1,6 @@
 {
-  "ru": "Русский",
-  "en": "English",
+  "ru": "ru",
+  "en": "en",
   "header": {
     "select": { "language": "Язык" },
     "login": "Войти",
@@ -21,7 +21,7 @@
     "description": "Что-то пошло не так..."
   },
   "main": {
-    "welcomeUser": "Снова здравствуйте, {user}!",
+    "welcomeUser": "Снова здравствуйте",
     "welcome": "Здравствуйте!",
     "text": "Пожалуйста выберите желаемый раздел:"
   },
@@ -59,7 +59,11 @@
       }
     }
   },
-  "dashboard": { "restful": "RESTful клиент", "graphiql": "GraphiQL клиент", "history": "История" },
+  "dashboard": {
+    "restful": "RESTful клиент",
+    "graphiql": "GraphiQL клиент",
+    "history": "История запросов"
+  },
   "graphiql": {
     "title": "GraphiQL клиент",
     "endpoint": "URL эндпоинта",

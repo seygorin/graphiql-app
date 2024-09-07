@@ -39,9 +39,9 @@ const Header: React.FC = () => {
           <Link href={ROUTES.MAIN_PAGE}>
             <Image src={logo} width={110} height={40} alt='logoRsSchool' priority />
           </Link>
-          <SelectLanguage />
         </Stack>
         <Stack direction='row' gap={2}>
+          <SelectLanguage />
           <Buttons />
         </Stack>
       </Box>

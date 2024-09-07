@@ -3,8 +3,8 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Box, Typography } from '@mui/material';
 import clsx from 'clsx';
+import avatarOne from 'public/ava1.jpg';
 import avatarThree from 'public/ava3.jpg';
-import avatarOne from 'public/avatar_two.jpg';
 import avatarTwo from 'public/avatar_two.jpg';
 import s from './About.module.scss';
 
@@ -21,22 +21,34 @@ const AboutUs: React.FC = () => {
         <Box className={clsx(s.devs, s.dev1)}>
           <Image src={avatarOne} alt='developer avatar' className={s.img} />
           <Box className={s.cards_info}>
-            <Typography variant='h4'>{t('aboutUs.name1')}</Typography>
-            <Typography variant='body1'>{t('aboutUs.dev1')}</Typography>
+            <Typography variant='h4' className={s.dev_name}>
+              {t('aboutUs.name1')}
+            </Typography>
+            <Typography variant='body1' className={s.dev_text}>
+              {t('aboutUs.dev1')}
+            </Typography>
           </Box>
         </Box>
         <Box className={clsx(s.devs, s.dev2)}>
           <Image src={avatarTwo} alt='developer avatar' className={s.img} />
           <Box className={s.cards_info}>
-            <Typography variant='h4'>{t('aboutUs.name2')}</Typography>
-            <Typography variant='body1'>{t('aboutUs.dev2')}</Typography>
+            <Typography variant='h4' className={s.dev_name}>
+              {t('aboutUs.name2')}
+            </Typography>
+            <Typography variant='body1' className={s.dev_text}>
+              {t('aboutUs.dev2')}
+            </Typography>
           </Box>
         </Box>
         <Box className={clsx(s.devs, s.dev3)}>
           <Image src={avatarThree} alt='developer avatar' className={s.img} />
           <Box className={s.cards_info}>
-            <Typography variant='h4'>{t('aboutUs.name3')}</Typography>
-            <Typography variant='body1'>{t('aboutUs.dev3')}</Typography>
+            <Typography variant='h4' className={s.dev_name}>
+              {t('aboutUs.name3')}
+            </Typography>
+            <Typography variant='body1' className={s.dev_text}>
+              {t('aboutUs.dev3')}
+            </Typography>
           </Box>
         </Box>
       </Box>

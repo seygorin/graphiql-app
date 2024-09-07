@@ -1,6 +1,6 @@
 {
-  "ru": "Русский",
-  "en": "English",
+  "ru": "ru",
+  "en": "en",
   "notfound": {
     "messageNotFound": "Sorry, but page was not found",
     "message": "You may have mistyped the address or the page may have moved",
@@ -17,7 +17,7 @@
     "message": "Loading..."
   },
   "main": {
-    "welcomeUser": "Welcome back, {user}!",
+    "welcomeUser": "Welcome back",
     "welcome": "Welcome!",
     "text": "Please select the desired section:"
   },
@@ -49,7 +49,11 @@
       "confirmPassword": { "required": "Password is required", "match": "Passwords do not match" }
     }
   },
-  "dashboard": { "restful": "RESTful Client", "graphiql": "GraphiQL Client", "history": "History" },
+  "dashboard": {
+    "restful": "RESTful Client",
+    "graphiql": "GraphiQL Client",
+    "history": "Query history"
+  },
   "graphiql": {
     "title": "GraphiQL Client",
     "endpoint": "Endpoint URL",
