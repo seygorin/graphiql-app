@@ -20,7 +20,6 @@ const SelectLanguage: React.FC = () => {
     <FormControl>
       <ToggleButtonGroup
         size='small'
-        aria-label='Small sizes'
         color='primary'
         value={locale}
         exclusive
