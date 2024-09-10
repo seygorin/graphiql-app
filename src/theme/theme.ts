@@ -11,12 +11,15 @@ const roboto = Roboto({
 });
 
 export const ADDITION_COLOR = {
+  headerHeight: vars.headerHeight,
+  footerHeight: vars.footerHeight,
+
   backgroundMain: vars.backgroundMain,
   backgroundFooter: vars.backgroundFooter,
   textGoogle: vars.textGoogle,
   backgroundGoogle: vars.backgroundGoogle,
   shadowMain: vars.shadowMain,
-  borderFooter: vars.borderColorFooter,
+  borderFooter: vars.borderFooter,
   textFoo: vars.textFoo,
   info: vars.infoMain,
 };
@@ -58,11 +61,23 @@ const theme = createTheme({
       disabled: vars.textDisabled,
     },
   },
+
+  breakpoints: {
+    values: {
+      xs: 300,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+  spacing: 4,
+
   typography: {
     fontFamily: roboto.style.fontFamily,
     h1: {
-      fontSize: '4.8rem',
-      fontWeight: 500,
+      fontSize: '4.5rem',
+      fontWeight: 700,
     },
     h2: {
       fontSize: '4rem',
@@ -105,7 +120,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          // textTransform: 'none',
+          fontWeight: 400,
         },
       },
     },
@@ -116,7 +131,7 @@ const theme = createTheme({
           color: vars.primaryMain,
           textDecoration: 'none',
           '&:hover': {
-            // textDecoration: 'underline',
+            textDecoration: 'underline',
             color: vars.primaryLight,
           },
           '&.active': {

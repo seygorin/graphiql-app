@@ -2,54 +2,73 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Box, Typography } from '@mui/material';
-import clsx from 'clsx';
+import avatarOne from 'public/ava1.jpg';
+import avatarTwo from 'public/ava2.jpg';
 import avatarThree from 'public/ava3.jpg';
-import avatarOne from 'public/avatar_two.jpg';
-import avatarTwo from 'public/avatar_two.jpg';
-import s from './About.module.scss';
+import { STYLES } from './styles.aboutUs';
 
 const AboutUs: React.FC = () => {
   const t = useTranslations();
 
   return (
-    <Box className={s.wrapper} textAlign='center'>
-      <Typography variant='h3' pt='110px' pb='28px'>
+    <Box sx={STYLES.wrapper}>
+      <Typography variant='h3' sx={STYLES.title}>
         {t('aboutUs.titleTeam')}
       </Typography>
 
-      <Box className={s.cards}>
-        <Box className={clsx(s.devs, s.dev1)}>
-          <Image src={avatarOne} alt='developer avatar' className={s.img} />
-          <Box className={s.cards_info}>
-            <Typography variant='h4'>{t('aboutUs.name1')}</Typography>
-            <Typography variant='body1'>{t('aboutUs.dev1')}</Typography>
+      <Box sx={STYLES.cards}>
+        <Box sx={STYLES.card}>
+          <Box sx={STYLES.img}>
+            <Image src={avatarOne} alt='developer avatar' width={300} />
+          </Box>
+          <Box sx={STYLES.cardsInfo}>
+            <Typography variant='h4' sx={STYLES.devName}>
+              {t('aboutUs.name1')}
+            </Typography>
+            <Typography variant='body1' sx={STYLES.devText}>
+              {t('aboutUs.dev1')}
+            </Typography>
           </Box>
         </Box>
-        <Box className={clsx(s.devs, s.dev2)}>
-          <Image src={avatarTwo} alt='developer avatar' className={s.img} />
-          <Box className={s.cards_info}>
-            <Typography variant='h4'>{t('aboutUs.name2')}</Typography>
-            <Typography variant='body1'>{t('aboutUs.dev2')}</Typography>
+
+        <Box sx={STYLES.card}>
+          <Box sx={STYLES.img}>
+            <Image src={avatarTwo} alt='developer avatar' width={300} />
+          </Box>
+          <Box sx={STYLES.cardsInfo}>
+            <Typography variant='h4' sx={STYLES.devName}>
+              {t('aboutUs.name2')}
+            </Typography>
+            <Typography variant='body1' sx={STYLES.devText}>
+              {t('aboutUs.dev2')}
+            </Typography>
           </Box>
         </Box>
-        <Box className={clsx(s.devs, s.dev3)}>
-          <Image src={avatarThree} alt='developer avatar' className={s.img} />
-          <Box className={s.cards_info}>
-            <Typography variant='h4'>{t('aboutUs.name3')}</Typography>
-            <Typography variant='body1'>{t('aboutUs.dev3')}</Typography>
+
+        <Box sx={STYLES.card}>
+          <Box sx={STYLES.img}>
+            <Image src={avatarThree} alt='developer avatar' width={300} />
+          </Box>
+          <Box sx={STYLES.cardsInfo}>
+            <Typography variant='h4' sx={STYLES.devName}>
+              {t('aboutUs.name3')}
+            </Typography>
+            <Typography variant='body1' sx={STYLES.devText}>
+              {t('aboutUs.dev3')}
+            </Typography>
           </Box>
         </Box>
       </Box>
-      <Typography variant='h3' pt='110px' pb='28px'>
+      <Typography variant='h3' sx={STYLES.title}>
         {t('aboutUs.titleProject')}
       </Typography>
-      <Typography variant='body1' px='14px' color='text.secondary'>
+      <Typography variant='body1' px={4} color='text.secondary'>
         {t('aboutUs.project')}
       </Typography>
-      <Typography variant='h3' pt='110px' pb='28px'>
+      <Typography variant='h3' sx={STYLES.title}>
         {t('aboutUs.titleCourse')}
       </Typography>
-      <Typography variant='body1' pb='110px' px='14px' color='text.secondary'>
+      <Typography variant='body1' pb='110px' px={4} color='text.secondary'>
         {t('aboutUs.course')}
       </Typography>
     </Box>

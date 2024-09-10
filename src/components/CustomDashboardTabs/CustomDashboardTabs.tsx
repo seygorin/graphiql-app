@@ -1,55 +1,50 @@
 import { useLocale, useTranslations } from 'next-intl';
-import React from 'react';
-import { Box, Link, Stack } from '@mui/material';
+import { usePathname } from 'next/navigation';
+import * as React from 'react';
+import { useMemo } from 'react';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { VALID_GRAPHQL, VALID_REST } from '../../shared/consts/paths';
 import ROUTES from '../../shared/types/types';
+import { genStyles } from '../../styles/genStyles';
 
-interface CustomDashboardTabsProps {
-  size?: 'small' | 'large';
-}
+const STYLES = genStyles({
+  wrapper: {
+    width: '1200px',
+    m: '0 auto',
+  },
+});
 
-const CustomDashboardTabs: React.FC<CustomDashboardTabsProps> = ({ size = 'large' }) => {
+export default function NavTabs() {
   const t = useTranslations();
   const locale = useLocale();
+  const pathname = usePathname();
 
-  const tabStyle =
-    size === 'large'
-      ? { variant: 'h3' as const, pt: 6, p: '30px', gap: 11 }
-      : { variant: 'h6' as const, pt: 2, p: '10px', gap: 4 };
+  const value = useMemo(() => {
+    if (VALID_REST.some((method) => pathname.includes(method)))
+      return `/${locale}${ROUTES.RESTFUL}`;
+    if (VALID_GRAPHQL.some((method) => pathname.includes(method)))
+      return `/${locale}${ROUTES.GRAPHIQL}`;
+    return pathname;
+  }, [locale, pathname]);
+
+  const tabs = React.useMemo(
+    () => [
+      { label: t('dashboard.restful'), href: `/${locale}${ROUTES.RESTFUL}` },
+      { label: t('dashboard.graphiql'), href: `/${locale}${ROUTES.GRAPHIQL}` },
+      { label: t('dashboard.history'), href: `/${locale}${ROUTES.HISTORY}` },
+    ],
+    [t, locale],
+  );
 
   return (
-    <Stack direction='row' alignSelf='center' justifyContent='center'>
-      <Box
-        sx={{
-          borderBottom: 1,
-          borderColor: 'info.main',
-          display: 'flex',
-          ...tabStyle,
-        }}
-      >
-        <Link
-          variant={tabStyle.variant}
-          sx={{ '&:hover': { color: 'primary.main' } }}
-          href={`/${locale}${ROUTES.RESTFUL}`}
-        >
-          {t('dashboard.restful')}
-        </Link>
-        <Link
-          variant={tabStyle.variant}
-          sx={{ '&:hover': { color: 'primary.main' } }}
-          href={`/${locale}${ROUTES.GRAPHIQL}`}
-        >
-          {t('dashboard.graphiql')}
-        </Link>
-        <Link
-          variant={tabStyle.variant}
-          sx={{ '&:hover': { color: 'primary.main' } }}
-          href={`/${locale}${ROUTES.HISTORY}`}
-        >
-          {t('dashboard.history')}
-        </Link>
-      </Box>
-    </Stack>
+    <Box sx={STYLES.wrapper}>
+      <Tabs value={value} role='navigation'>
+        {tabs.map((tab) => (
+          <Tab key={tab.href} component='a' label={tab.label} href={tab.href} value={tab.href} />
+        ))}
+      </Tabs>
+    </Box>
   );
-};
-
-export default CustomDashboardTabs;
+}

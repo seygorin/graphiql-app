@@ -30,6 +30,9 @@ export default async function LocaleLayout({ children, params: { locale } }: IPr
 
   return (
     <html lang={locale}>
+      <head>
+        <title>EST/GraphiQL Client</title>
+      </head>
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
           <AppRouterCacheProvider>
