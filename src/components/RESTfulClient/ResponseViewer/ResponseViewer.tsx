@@ -33,7 +33,6 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
           height: '100%',
         }}
       >
-        {/* <CircularProgress /> */}
         <Loader />
       </Box>
     );
@@ -41,7 +40,7 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
 
   if (response) {
     return (
-      <Box sx={{ height: '100%', overflow: 'hidden', position: 'relative' }}>
+      <Box sx={{ height: '100%', overflow: 'auto', position: 'relative' }}>
         <IconButton
           onClick={handleFormat}
           sx={{
