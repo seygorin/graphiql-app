@@ -13,9 +13,12 @@ const roboto = Roboto({
 export const ADDITION_COLOR = {
   backgroundMain: vars.backgroundMain,
   backgroundFooter: vars.backgroundFooter,
+  textGoogle: vars.textGoogle,
+  backgroundGoogle: vars.backgroundGoogle,
   shadowMain: vars.shadowMain,
   borderFooter: vars.borderColorFooter,
   textFoo: vars.textFoo,
+  info: vars.infoMain,
 };
 
 const theme = createTheme({
@@ -55,7 +58,6 @@ const theme = createTheme({
       disabled: vars.textDisabled,
     },
   },
-
   typography: {
     fontFamily: roboto.style.fontFamily,
     h1: {
@@ -128,6 +130,71 @@ const theme = createTheme({
         root: {
           color: '#fff',
           backgroundColor: '#FF9C00',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputBase-root': {
+            color: vars.textSecondary,
+            '&.Mui-error': {
+              color: vars.primaryLight,
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: vars.secondaryDark,
+            '&.Mui-error': {
+              color: vars.primaryLight,
+            },
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: vars.secondaryDark,
+            },
+            '&:hover fieldset': {
+              borderColor: vars.textPrimary,
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: vars.infoMain,
+            },
+            '&.Mui-error fieldset': {
+              borderColor: vars.primaryLight,
+            },
+          },
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          position: 'relative',
+          '& .MuiInputBase-root': {
+            color: vars.textSecondary,
+            '&.Mui-error': {
+              color: vars.primaryLight,
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: vars.secondaryDark,
+            '&.Mui-error': {
+              color: vars.primaryLight,
+            },
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: vars.secondaryDark,
+            },
+            '&:hover fieldset': {
+              borderColor: vars.textPrimary,
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: vars.infoMain,
+            },
+            '&.Mui-error fieldset': {
+              borderColor: vars.primaryLight,
+            },
+          },
         },
       },
     },

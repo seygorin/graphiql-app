@@ -25,10 +25,9 @@ import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signInUser } from '../../lib/auth';
 import ROUTES from '../../shared/types/types';
 import { ISignInFormData, validateSignInSchema } from '../../validations/signInValidation.schema';
-import s from './SignInForm.module.css';
+import s from './SignInForm.module.scss';
 
 const SignInForm = () => {
-  // const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,14 +42,12 @@ const SignInForm = () => {
     formState: { errors, isValid },
   } = useForm<ISignInFormData>({
     mode: 'all',
-    // mode: 'onBlur',
     resolver: yupResolver(validateSignInSchema(t)),
   });
 
   const onSubmit: SubmitHandler<ISignInFormData> = async (data) => {
     try {
       await signInUser(data.email, data.password, t);
-      // router.push(ROUTES.MAIN_PAGE);
       reset();
     } catch (err) {
       if (err instanceof Error) {
@@ -69,7 +66,7 @@ const SignInForm = () => {
           flexDirection: 'column',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'success.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOpenIcon />
         </Avatar>
         <Typography component='h2' variant='h5'>
@@ -77,13 +74,14 @@ const SignInForm = () => {
         </Typography>
         <Box component='form' onSubmit={handleSubmit(onSubmit)} noValidate>
           <FormGroup>
-            <FormControl fullWidth sx={{ position: 'relative' }}>
+            <FormControl fullWidth>
               <TextField
                 label={t('form.email')}
                 type='email'
                 margin='normal'
                 fullWidth
                 id='email'
+                error={!!errors?.email}
                 variant='outlined'
                 sx={{ mb: 3 }}
                 {...register('email')}
@@ -94,7 +92,7 @@ const SignInForm = () => {
                 <p className={`error_form ${s.error_mail}`}>{errors.email.message}</p>
               )}
             </FormControl>
-            <FormControl sx={{ position: 'relative' }} variant='outlined' size='small'>
+            <FormControl variant='outlined' size='small' error={!!errors?.password}>
               <InputLabel htmlFor='password'>{t('form.password')}</InputLabel>
               <OutlinedInput
                 id='password'
@@ -131,8 +129,8 @@ const SignInForm = () => {
             </Button>
           </FormGroup>
           <Grid container>
-            <Grid item>
-              <Link href={ROUTES.SIGN_UP} variant='subtitle2' underline='hover'>
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Link href={ROUTES.SIGN_UP} variant='subtitle2' underline='hover' color='info.main'>
                 {t('form.subtitle.signIn')}
               </Link>
             </Grid>

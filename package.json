@@ -32,11 +32,13 @@
     "@mui/lab": "^5.0.0-alpha.173",
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.16.6",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/user-event": "^14.5.2",
     "@uiw/codemirror-extensions-langs": "^4.21.21",
     "@uiw/react-codemirror": "^4.21.21",
     "clsx": "^2.1.1",
     "cm6-graphql": "^0.1.1",
-    "firebase": "^10.13.0",
+    "firebase": "^10.13.1",
     "firebase-admin": "^12.4.0",
     "js-base64": "^3.7.7",
     "next": "14.2.5",
@@ -49,6 +51,7 @@
     "react-toastify": "^10.0.5",
     "sass": "^1.77.8",
     "sharp": "^0.33.5",
+    "vite-tsconfig-paths": "^5.0.1",
     "yup": "^1.4.0"
   },
   "overrides": {

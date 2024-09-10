@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { EditorView } from '@codemirror/view';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import { Box, CircularProgress, IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
+import Loader from 'components/Loader';
 
 interface ResponseViewerProps {
   isLoading: boolean;
@@ -32,7 +33,8 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
           height: '100%',
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
+        <Loader />
       </Box>
     );
   }

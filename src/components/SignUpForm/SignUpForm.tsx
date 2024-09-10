@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import React, { ChangeEvent, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
@@ -25,12 +25,20 @@ import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signUpUser } from '../../lib/auth';
 import ROUTES from '../../shared/types/types';
 import { ISignUpFormData, validateSignUpSchema } from '../../validations/signUpValidation.shema';
-import s from './SignUpForm.module.css';
+import s from './SignUpForm.module.scss';
 
 const SignUpForm = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const passwordInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (passwordInputRef.current) {
+      setPassword(passwordInputRef.current!.value);
+    }
+  }, [passwordInputRef.current?.value]);
+
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -48,14 +56,12 @@ const SignUpForm = () => {
     formState: { errors, isValid },
   } = useForm<ISignUpFormData>({
     mode: 'all',
-    // mode: 'onBlur',
     resolver: yupResolver(validateSignUpSchema(t)),
   });
 
   const onSubmit: SubmitHandler<ISignUpFormData> = async (data) => {
     try {
       await signUpUser(data.name, data.email, data.password, t);
-      // router.push(ROUTES.MAIN_PAGE);
       reset();
     } catch (err) {
       if (err instanceof Error) {
@@ -74,7 +80,7 @@ const SignUpForm = () => {
           flexDirection: 'column',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'success.main' }} variant='rounded'>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} variant='rounded'>
           <HowToRegIcon />
         </Avatar>
         <Typography component='h2' variant='h5'>
@@ -82,13 +88,14 @@ const SignUpForm = () => {
         </Typography>
         <Box component='form' onSubmit={handleSubmit(onSubmit)} noValidate>
           <FormGroup>
-            <FormControl fullWidth sx={{ position: 'relative' }}>
+            <FormControl fullWidth>
               <TextField
                 label={t('form.name')}
                 type='text'
                 margin='normal'
                 fullWidth
                 id='name'
+                error={!!errors?.name}
                 variant='outlined'
                 {...register('name')}
                 autoComplete='name'
@@ -98,13 +105,14 @@ const SignUpForm = () => {
                 <p className={`error_form ${s.error_name}`}>{errors.name.message}</p>
               )}
             </FormControl>
-            <FormControl fullWidth sx={{ position: 'relative' }}>
+            <FormControl fullWidth>
               <TextField
                 label={t('form.email')}
                 type='email'
                 margin='normal'
                 fullWidth
                 id='emailSignUp'
+                error={!!errors?.email}
                 variant='outlined'
                 sx={{ mb: 3 }}
                 {...register('email')}
@@ -116,9 +124,10 @@ const SignUpForm = () => {
               )}
             </FormControl>
             <FormControl
-              sx={{ mb: '0.4rem', position: 'relative' }}
+              sx={{ mb: '0.4rem' }}
               variant='outlined'
               size='small'
+              error={!!errors?.password}
             >
               <InputLabel htmlFor='passwordSignUp'>{t('form.password')}</InputLabel>
               <OutlinedInput
@@ -126,7 +135,7 @@ const SignUpForm = () => {
                 type={showPassword ? 'text' : 'password'}
                 {...register('password')}
                 autoComplete='current-password'
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                inputRef={passwordInputRef}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -148,7 +157,12 @@ const SignUpForm = () => {
 
             <PasswordStrength password={password} />
 
-            <FormControl sx={{ mt: '2rem', position: 'relative' }} variant='outlined' size='small'>
+            <FormControl
+              sx={{ mt: '2rem' }}
+              variant='outlined'
+              size='small'
+              error={!!errors?.confirmPassword}
+            >
               <InputLabel htmlFor='confirmPassword'>{t('form.confirmPassword')}</InputLabel>
               <OutlinedInput
                 id='confirmPassword'
@@ -187,8 +201,8 @@ const SignUpForm = () => {
             </Button>
           </FormGroup>
           <Grid container>
-            <Grid item>
-              <Link href={ROUTES.SIGN_IN} variant='subtitle2' underline='hover'>
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Link href={ROUTES.SIGN_IN} variant='subtitle2' underline='hover' color='info.main'>
                 {t('form.subtitle.signUp')}
               </Link>
             </Grid>

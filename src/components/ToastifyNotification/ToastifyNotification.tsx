@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const ToastifyNotification = () => {
   return (
     <ToastContainer
-      // position="bottom-left"
       autoClose={3000}
       hideProgressBar={false}
       newestOnTop={false}
@@ -16,7 +15,7 @@ const ToastifyNotification = () => {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme='colored'
+      theme='dark'
       transition={Bounce}
     />
   );

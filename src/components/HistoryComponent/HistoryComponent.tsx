@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import { Base64 } from 'js-base64';
 import { errorNotifyMessage, warningNotifyMessage } from 'utils/notifyMessage';
-import withAuth from 'utils/withAuth';
 
 interface HistoryItem {
   id: string;
@@ -170,4 +169,4 @@ const HistoryComponent: React.FC = () => {
   );
 };
 
-export default withAuth(HistoryComponent);
+export default HistoryComponent;

@@ -64,7 +64,7 @@ module.exports = {
         patterns: ['@mui/*/*/*'],
       },
     ],
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^(auth|db)$' }],
     'jsx-a11y/anchor-is-valid': [
       'error',
       {

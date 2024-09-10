@@ -6,7 +6,7 @@ import SignOutButton from 'components/SignOutButton';
 import SignUpButton from 'components/SignUpButton';
 import withUser from 'utils/withUser';
 
-interface IProps {
+export interface IProps {
   user?: User | null;
   name?: string | null;
 }
@@ -22,4 +22,4 @@ const Buttons: React.FC<IProps> = ({ user, name }) => {
   );
 };
 
-export default withUser(Buttons);
+export default withUser(Buttons, false);

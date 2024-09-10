@@ -22,13 +22,16 @@ $secondary-light: #b7cac8;
 $secondary-dark: #697c7a;
 $secondary-contrastText: #fff;
 
+$text-google: #757575;
+$background-google: #f8f9fa;
+
 $error-main: #222;
 
 $warning-main: #e8b86d;
 
-$info-main: #842106;
+$info-main: #296CEB;
 
-$success-main: #8f8b88;
+$success-main: rgba(136, 137, 143, 0.57);
 $success-light: #e5e3e1;
 
 $background-default: #ffffff;
@@ -38,12 +41,19 @@ $text-primary: #222;
 $text-secondary: #333;
 $text-disabled: #a5a4a4;
 
+
+// Fonts
+$font-family-message: 'Arial', serif;
+
 :export {
   backgroundMain: $background-main;
   backgroundFooter: $background-footer;
   shadow-main: $shadow-main;
   borderFooter: $border-footer;
   textFoo: $text-footer;
+
+  textGoogle: $text-google;
+  backgroundGoogle: $background-google;
 
   primaryMain: $primary-main;
   primaryLight: $primary-light;
