@@ -37,7 +37,9 @@ const Main: React.FC<IProps> = ({ user, name }) => {
                 </Box>
               </Typography>
 
-              <Typography variant='h6'>{t('main.text')}</Typography>
+              <Typography variant='h6' sx={STYLES.infoText}>
+                {t('main.text')}
+              </Typography>
               <CustomDashboardTabsMain />
             </Box>
 

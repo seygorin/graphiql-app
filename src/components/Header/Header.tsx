@@ -77,8 +77,6 @@ const Header: React.FC = () => {
                 style={{ width: '100%', height: 'auto' }}
                 alt='logoRsSchool'
               />
-              {/* <Image src={logo} width={110} style={{ height: 'auto' }} alt='logoRsSchool' /> */}
-              {/* <Image src={logo} width={110} height={40} alt='logoRsSchool' priority /> */}
             </Box>
           </Link>
         </Stack>

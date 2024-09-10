@@ -19,7 +19,7 @@ const STYLES = genStyles({
   },
   link: {
     margin: '0 auto',
-    border: 1,
+    border: 1.5,
     borderRadius: 10,
     py: { md: 2.5, sm: 2, xs: 2 },
     px: { md: 6, sm: 4, xs: 5 },

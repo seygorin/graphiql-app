@@ -15,29 +15,6 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
-// vi.mock('@mui/material', () => ({
-//   FormControl: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-//   InputLabel: ({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) => (
-//     <label htmlFor={htmlFor}>{children}</label>
-//   ),
-//   Select: ({
-//     value,
-//     onChange,
-//     children,
-//   }: {
-//     value: string;
-//     onChange: (e: SelectChangeEvent) => void;
-//     children: React.ReactNode;
-//   }) => (
-//     <select value={value} onChange={(e) => onChange({ target: { value: e.target.value } })}>
-//       {children}
-//     </select>
-//   ),
-//   MenuItem: ({ value, children }: { value: string; children: React.ReactNode }) => (
-//     <option value={value}>{children}</option>
-//   ),
-// }));
-
 vi.mock('i18n/config', () => ({
   locales: ['en', 'ru'],
 }));

@@ -1,9 +1,11 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
+import { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import { VALID_GRAPHQL, VALID_REST } from '../../shared/consts/paths';
 import ROUTES from '../../shared/types/types';
 import { genStyles } from '../../styles/genStyles';
 
@@ -19,6 +21,14 @@ export default function NavTabs() {
   const locale = useLocale();
   const pathname = usePathname();
 
+  const value = useMemo(() => {
+    if (VALID_REST.some((method) => pathname.includes(method)))
+      return `/${locale}${ROUTES.RESTFUL}`;
+    if (VALID_GRAPHQL.some((method) => pathname.includes(method)))
+      return `/${locale}${ROUTES.GRAPHIQL}`;
+    return pathname;
+  }, [locale, pathname]);
+
   const tabs = React.useMemo(
     () => [
       { label: t('dashboard.restful'), href: `/${locale}${ROUTES.RESTFUL}` },
@@ -30,7 +40,7 @@ export default function NavTabs() {
 
   return (
     <Box sx={STYLES.wrapper}>
-      <Tabs value={pathname} role='navigation'>
+      <Tabs value={value} role='navigation'>
         {tabs.map((tab) => (
           <Tab key={tab.href} component='a' label={tab.label} href={tab.href} value={tab.href} />
         ))}

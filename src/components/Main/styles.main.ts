@@ -29,13 +29,17 @@ export const STYLES = genStyles({
     [theme.breakpoints.down(1020)]: { width: '100%', textAlign: 'center' },
   },
   infoTitle: {
-    pb: { xl: 8, md: 6, sm: 6, xs: 0 },
+    px: { xl: 3, lg: 3, md: 3, sm: 1, xs: 1 },
+    pb: { xl: 8, lg: 8, md: 6, sm: 6, xs: 0 },
     textTransform: 'uppercase',
-    fontSize: { md: '3.7rem', sm: '3.1rem', xs: '2.3rem' },
+    fontSize: { md: '3.7rem', sm: '3.1rem', xs: '2.2rem' },
   },
   infoTitleName: {
     fontStyle: 'italic',
     textTransform: 'none',
+  },
+  infoText: {
+    px: 3,
   },
   infoImgWrapper: {
     width: '50%',
@@ -53,7 +57,7 @@ export const STYLES = genStyles({
   img: {
     position: 'absolute',
     display: 'flex',
-    boxShadow: '3px 5px 10px 3px rgba(200, 200, 200, 1)',
+    boxShadow: '7px 7px 16px 8px rgba(50, 50, 50, 0.5)',
     img: {
       [theme.breakpoints.down(1020)]: {
         width: 300,

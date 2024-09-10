@@ -14,51 +14,6 @@ main {
   min-height: calc(100dvh - $header-height - $footer-height);
 }
 
-// // Стили ссылок
-// a {
-//   color: $primary-color;
-//   text-decoration: none;
-
-//   &:hover {
-//     color: darken($primary-color, 10%);
-//     text-decoration: underline;
-//   }
-// }
-
-// // Стили для списков
-// ul,
-// ol {
-//   margin: 0;
-//   padding-left: 1.5rem;
-// }
-
-// // Стили для изображений
-// img {
-//   max-width: 100%;
-// }
-
-// // Глобальные классы
-// .container {
-//   width: 100%;
-//   margin-right: auto;
-//   margin-left: auto;
-//   padding-left: 0;
-//   padding-right: 0;
-
-// @media (min-width: 576px) {
-//   max-width: 540px;
-// }
-// @media (min-width: 768px) {
-//   max-width: 720px;
-// }
-// @media (min-width: 992px) {
-//   max-width: 960px;
-// }
-// @media (min-width: 1200px) {
-//   max-width: 1140px;
-// }
-// }
-
 ul,
 ol {
   margin: 0;

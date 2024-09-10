@@ -3,8 +3,8 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Box, Typography } from '@mui/material';
 import avatarOne from 'public/ava1.jpg';
+import avatarTwo from 'public/ava2.jpg';
 import avatarThree from 'public/ava3.jpg';
-import avatarTwo from 'public/ava22.jpg';
 import { STYLES } from './styles.aboutUs';
 
 const AboutUs: React.FC = () => {
