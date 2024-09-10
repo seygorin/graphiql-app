@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
-import ErrorBoundary from './ErrorBoundary';
+import ErrorBoundary from 'components/ErrorBoundary/index';
 
 const MESSAGE_OK = 'No errors occurred';
 const MESSAGE_ERROR = 'Some error occurred...';
