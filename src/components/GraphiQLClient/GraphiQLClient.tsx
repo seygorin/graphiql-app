@@ -6,14 +6,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SchemaIcon from '@mui/icons-material/Schema';
+import SendIcon from '@mui/icons-material/Send';
 import {
   Box,
-  Button,
   Collapse,
   IconButton,
   InputAdornment,
   Paper,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import HeadersEditor from 'components/RESTfulClient/HeadersEditor';
@@ -240,7 +242,7 @@ const GraphiQLClient: React.FC = () => {
       }}
     >
       <Paper elevation={3} sx={{ mb: 2, p: 2 }}>
-        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center' }}>
           <TextField
             fullWidth
             label={t('graphiql.endpointLabel')}
@@ -254,9 +256,22 @@ const GraphiQLClient: React.FC = () => {
               ),
             }}
           />
-          <Button variant='contained' onClick={handleSendRequest} disabled={isLoading}>
-            {t('graphiql.sendRequest')}
-          </Button>
+          <Tooltip title={t('graphiql.sendRequest')}>
+            <IconButton
+              onClick={handleSendRequest}
+              disabled={isLoading}
+              color='primary'
+              sx={{
+                width: 48,
+                height: 48,
+                '& .MuiSvgIcon-root': {
+                  fontSize: 24,
+                },
+              }}
+            >
+              <SendIcon />
+            </IconButton>
+          </Tooltip>
 
           <TextField
             fullWidth
@@ -265,16 +280,25 @@ const GraphiQLClient: React.FC = () => {
             onChange={(e) => setSdlEndpoint(e.target.value)}
           />
 
-          <Button
-            variant='outlined'
-            onClick={() => {
-              fetchSchema();
-              setShowDocumentation(true);
-            }}
-            disabled={isLoading}
-          >
-            {t('graphiql.fetchSchema')}
-          </Button>
+          <Tooltip title={t('graphiql.fetchSchema')}>
+            <IconButton
+              onClick={() => {
+                fetchSchema();
+                setShowDocumentation(true);
+              }}
+              disabled={isLoading}
+              color='primary'
+              sx={{
+                width: 48,
+                height: 48,
+                '& .MuiSvgIcon-root': {
+                  fontSize: 24,
+                },
+              }}
+            >
+              <SchemaIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Paper>
 

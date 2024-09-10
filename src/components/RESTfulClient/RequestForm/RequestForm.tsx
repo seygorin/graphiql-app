@@ -1,14 +1,16 @@
 import React from 'react';
+import SendIcon from '@mui/icons-material/Send';
 import {
   Box,
-  Button,
   Chip,
   FormControl,
+  IconButton,
   InputAdornment,
   InputLabel,
   MenuItem,
   Select,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 
@@ -68,9 +70,21 @@ const RequestForm: React.FC<RequestFormProps> = ({
           ),
         }}
       />
-      <Button variant='contained' color='primary' onClick={onSendRequest}>
-        {t('restful.sendRequest')}
-      </Button>
+      <Tooltip title={t('restful.sendRequest')}>
+        <IconButton
+          color='primary'
+          onClick={onSendRequest}
+          sx={{
+            width: 48,
+            height: 48,
+            '& .MuiSvgIcon-root': {
+              fontSize: 24,
+            },
+          }}
+        >
+          <SendIcon />
+        </IconButton>
+      </Tooltip>
     </Box>
   );
 };
