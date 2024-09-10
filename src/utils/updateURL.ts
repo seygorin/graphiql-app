@@ -9,18 +9,16 @@ export const updateURL = (
 ) => {
   const encodedUrl = Base64.encodeURI(url);
   const encodedBody = method !== 'GET' ? Base64.encodeURI(requestBody) : '';
-  const headerParams = new URLSearchParams(
-    headers.split('\n').reduce(
-      (acc, line) => {
-        const [key, value] = line.split(':');
-        if (key && value) {
-          acc[key.trim()] = encodeURIComponent(value.trim());
-        }
-        return acc;
-      },
-      {} as Record<string, string>,
-    ),
-  );
+  const headerParams = headers
+    .split('\n')
+    .reduce((acc, line) => {
+      const [key, value] = line.split(':');
+      if (key && value) {
+        acc.push(`${key.trim()}=${encodeURIComponent(value.trim())}`);
+      }
+      return acc;
+    }, [] as string[])
+    .join('&');
 
-  return `/${locale}/restful/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}?${headerParams}`;
+  return `/${locale}/restful/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${headerParams ? `?${headerParams}` : ''}`;
 };

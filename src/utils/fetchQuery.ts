@@ -1,4 +1,4 @@
-import { errorNotifyMessage } from 'utils/notifyMessage';
+import { errorNotifyMessage } from './notifyMessage';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 

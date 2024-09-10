@@ -8,26 +8,49 @@ export function decodeBase64Url(encodedUrl: string): string {
   return Base64.decode(encodedUrl);
 }
 
-export function encodeGraphQLRequestParams(
-  endpoint: string,
-  query: string,
-  headers: Record<string, string>,
-  variables: string,
-): string {
-  const encodedEndpoint = encodeBase64Url(endpoint);
-  const encodedQuery = encodeBase64Url(query.trim());
-  const headerParams = new URLSearchParams(headers).toString();
-  return `/GRAPHQL/${encodedEndpoint}/${encodedQuery}?${headerParams}&variables=${encodeURIComponent(variables)}`;
-}
-
 export function encodeRestRequestParams(
   method: string,
   url: string,
-  body: string,
-  headers: Record<string, string>,
+  body?: string,
+  headers?: Record<string, string>,
 ): string {
   const encodedUrl = encodeBase64Url(url);
-  const encodedBody = body ? `/${encodeBase64Url(body.trim())}` : '';
-  const headerParams = new URLSearchParams(headers).toString();
-  return `/${method}/${encodedUrl}${encodedBody}?${headerParams}`;
+  const encodedBody =
+    body && method !== 'GET' && method !== 'DELETE' ? `/${encodeBase64Url(body)}` : '';
+
+  let encodedHeaders = '';
+  if (headers) {
+    const headerPairs: string[] = Object.entries(headers).map(
+      ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+    );
+    encodedHeaders = headerPairs.length > 0 ? `?${headerPairs.join('&')}` : '';
+  }
+
+  return `/${method}/${encodedUrl}${encodedBody}${encodedHeaders}`;
+}
+
+export function encodeGraphQLRequestParams(
+  endpoint: string,
+  query: string,
+  headers?: Record<string, string>,
+  variables?: string,
+): string {
+  const encodedEndpoint = encodeBase64Url(endpoint);
+  const encodedQuery = encodeBase64Url(query);
+
+  let params: string[] = [];
+  if (headers) {
+    params = params.concat(
+      Object.entries(headers).map(
+        ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+      ),
+    );
+  }
+  if (variables) {
+    params.push(`variables=${encodeURIComponent(variables)}`);
+  }
+
+  const encodedParams = params.length > 0 ? `?${params.join('&')}` : '';
+
+  return `/GRAPHQL/${encodedEndpoint}/${encodedQuery}${encodedParams}`;
 }
