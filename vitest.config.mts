@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
-import path from 'path'
+import path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
@@ -10,20 +10,24 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',
     coverage: {
-      provider: 'v8',
+      provider: 'v8',	
       enabled: true,
       all: true,
-      reporter: ['text'],
-      include: ['src/**/*.tsx', 'src/**/*.ts'],
-      exclude: [''],
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'node_modules',
+        'src/**/*.d.ts',
+        'src/**/*.test.{ts,tsx}',
+        'src/types',
+				'src/middleware.ts',
+        'src/i18n/**',
+      ],
     },
-    // exclude: ['./next.config.mjs']
-  //   alias: {
-  //   "public": path.resolve(__dirname, "./public/"),
-  //   "components": path.resolve(__dirname, "./src/components/"),
-  //   "hooks": path.resolve(__dirname, "./src/hooks/"),
-  //   "utils": path.resolve(__dirname, "./src/utils/"),
-  //   "i18n": path.resolve(__dirname, "./src/i18n/")
-  // }
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
 });
