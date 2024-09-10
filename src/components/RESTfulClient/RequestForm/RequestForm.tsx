@@ -20,6 +20,7 @@ interface RequestFormProps {
   method: HttpMethod;
   url: string;
   status: string;
+  isLoading: boolean;
   onMethodChange: (event: SelectChangeEvent<HttpMethod>) => void;
   onUrlChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSendRequest: () => void;
@@ -30,6 +31,7 @@ const RequestForm: React.FC<RequestFormProps> = ({
   method,
   url,
   status,
+  isLoading,
   onMethodChange,
   onUrlChange,
   onSendRequest,
@@ -73,6 +75,7 @@ const RequestForm: React.FC<RequestFormProps> = ({
       <Tooltip title={t('restful.sendRequest')}>
         <IconButton
           color='primary'
+          disabled={isLoading}
           onClick={onSendRequest}
           sx={{
             width: 48,

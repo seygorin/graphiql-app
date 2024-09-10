@@ -154,10 +154,9 @@ const GraphiQLClient: React.FC = () => {
         throw new Error('Invalid schema data');
       }
     } catch (error) {
-      console.error('Failed to fetch schema:', error);
+      errorNotifyMessage(t('graphiql.schemaFetchError'));
       setDocumentation(null);
       setStatus('Error');
-      errorNotifyMessage(t('graphiql.schemaFetchError'));
     } finally {
       setIsLoading(false);
     }

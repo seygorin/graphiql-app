@@ -1,5 +1,5 @@
 import React from 'react';
-import CollapsibleCodeEditor from 'components/CollapsibleCodeEditor';
+import CollapsibleCodeEditor from '../../CollapsibleCodeEditor';
 
 interface VariablesEditorProps {
   variables: string;
