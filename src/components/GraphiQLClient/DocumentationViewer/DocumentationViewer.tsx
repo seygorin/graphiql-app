@@ -1,13 +1,16 @@
 import React, { useMemo, useState } from 'react';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Box,
   Breadcrumbs,
   Button,
+  Collapse,
   Divider,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
+  ListSubheader,
   Typography,
 } from '@mui/material';
 
@@ -15,6 +18,7 @@ interface SchemaType {
   name: string;
   description?: string;
   fields?: SchemaField[];
+  inputFields?: SchemaField[];
   interfaces?: SchemaType[];
   possibleTypes?: SchemaType[];
   enumValues?: SchemaEnumValue[];
@@ -52,132 +56,188 @@ interface SchemaInputValue {
   };
 }
 
+interface SchemaStackItem {
+  type: string;
+  name: string;
+  args?: SchemaInputValue[];
+  text?: string;
+}
+
 interface DocumentationViewerProps {
   schema: {
     types: SchemaType[];
+    queryType?: { name: string };
+    mutationType?: { name: string };
+    subscriptionType?: { name: string };
   };
 }
 
 const DocumentationViewer: React.FC<DocumentationViewerProps> = ({ schema }) => {
-  const [currentPath, setCurrentPath] = useState<string[]>([]);
+  const [currentPath, setCurrentPath] = useState<SchemaStackItem[]>([]);
+  const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
 
-  const currentType = useMemo(() => {
-    return currentPath.reduce(
-      (acc: SchemaType | { types: SchemaType[] }, curr) => {
-        if ('fields' in acc && acc.fields) {
-          return acc.fields.find((field: SchemaField) => field.name === curr) || acc;
-        }
-        return acc;
-      },
-      schema.types.find((type) => type.name === currentPath[0]) || schema,
-    );
-  }, [schema, currentPath]);
+  const handleFieldClick = (item: SchemaStackItem) => {
+    setCurrentPath([...currentPath, item]);
+  };
 
-  const handleClick = (index: number) => {
-    setCurrentPath((prev) => prev.slice(0, index + 1));
+  const handleBreadcrumbClick = (index: number) => {
+    setCurrentPath(currentPath.slice(0, index));
+  };
+
+  const toggleSection = (section: string) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   const renderBreadcrumbs = () => (
-    <Breadcrumbs separator={<NavigateNextIcon fontSize='small' />} aria-label='breadcrumb'>
-      <Button color='inherit' onClick={() => setCurrentPath([])}>
-        Schema
-      </Button>
-      {currentPath.map((path, index) => (
-        <Button key={path} color='inherit' onClick={() => handleClick(index)}>
-          {path}
+    <Breadcrumbs separator={<ChevronRight fontSize='small' />} aria-label='breadcrumb'>
+      <Button onClick={() => setCurrentPath([])}>Root</Button>
+      {currentPath.map((item, index) => (
+        <Button
+          key={item.name}
+          onClick={() => handleBreadcrumbClick(index + 1)}
+          disabled={index + 1 === currentPath.length}
+        >
+          {item.name}
         </Button>
       ))}
     </Breadcrumbs>
   );
 
+  const renderFields = (fields: SchemaField[] | undefined, title: string) => {
+    if (!fields || fields.length === 0) return null;
+
+    return (
+      <>
+        <ListSubheader component='div'>
+          <ListItemButton onClick={() => toggleSection(title)}>
+            <ListItemText primary={title} />
+            {openSections[title] ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListSubheader>
+        <Collapse in={openSections[title]} timeout='auto' unmountOnExit>
+          <List component='div' disablePadding>
+            {fields.map((field) => (
+              <ListItem key={field.name} disablePadding>
+                <ListItemButton
+                  onClick={() =>
+                    handleFieldClick({
+                      type: field.type.name || field.type.kind,
+                      name: field.name,
+                      args: field.args,
+                      text: `${field.name}: ${field.type.name || field.type.kind}${field.type.ofType ? ` of ${field.type.ofType.name || field.type.ofType.kind}` : ''}`,
+                    })
+                  }
+                >
+                  <ListItemText
+                    primary={`${field.name}: ${field.type.name || field.type.kind}${field.type.ofType ? ` of ${field.type.ofType.name || field.type.ofType.kind}` : ''}`}
+                    secondary={field.description}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Collapse>
+      </>
+    );
+  };
+
+  const currentType = useMemo(() => {
+    if (currentPath.length === 0) return null;
+    const currentTypeName = currentPath[currentPath.length - 1].type;
+    return schema.types.find((type) => type.name === currentTypeName);
+  }, [currentPath, schema.types]);
+
   const renderTypeDetails = (type: SchemaType) => (
     <Box>
       <Typography variant='h6'>{type.name}</Typography>
       {type.description && <Typography variant='body2'>{type.description}</Typography>}
-      {type.fields && (
-        <>
-          <Typography variant='subtitle1'>Fields</Typography>
-          <List>
-            {type.fields.map((field) => (
-              <ListItem
-                key={field.name}
-                button
-                onClick={() => setCurrentPath((prev) => [...prev, field.name])}
-              >
-                <ListItemText
-                  primary={`${field.name}: ${field.type.name || field.type.kind}`}
-                  secondary={field.description}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </>
-      )}
-      {type.enumValues && (
-        <>
-          <Typography variant='subtitle1'>Enum Values</Typography>
-          <List>
-            {type.enumValues.map((enumValue) => (
-              <ListItem key={enumValue.name}>
-                <ListItemText primary={enumValue.name} secondary={enumValue.description} />
-              </ListItem>
-            ))}
-          </List>
-        </>
-      )}
+      {renderFields(type.fields, 'Fields')}
+      {renderFields(type.inputFields, 'Input Fields')}
+      {type.enumValues &&
+        renderFields(
+          type.enumValues?.map((ev) => ({
+            name: ev.name,
+            type: { name: 'EnumValue', kind: 'ENUM' },
+          })),
+          'Enum Values',
+        )}
+      {type.interfaces &&
+        renderFields(
+          type.interfaces.map((i) => ({
+            name: i.name,
+            type: { name: 'Interface', kind: 'INTERFACE' },
+          })),
+          'Interfaces',
+        )}
+      {type.possibleTypes &&
+        renderFields(
+          type.possibleTypes.map((pt) => ({
+            name: pt.name,
+            type: { name: pt.name, kind: 'OBJECT' },
+          })),
+          'Possible Types',
+        )}
     </Box>
   );
 
-  const renderFieldDetails = (field: SchemaField) => (
-    <Box>
-      <Typography variant='h6'>{field.name}</Typography>
-      <Typography variant='subtitle1'>
-        Type:{' '}
-        {field.type.name ||
-          `${field.type.kind}${field.type.ofType ? ` of ${field.type.ofType.name || field.type.ofType.kind}` : ''}`}
-      </Typography>
-      {field.description && <Typography variant='body2'>{field.description}</Typography>}
-      {field.args && field.args.length > 0 && (
-        <>
-          <Typography variant='subtitle1'>Arguments</Typography>
-          <List>
-            {field.args.map((arg) => (
-              <ListItem key={arg.name}>
-                <ListItemText
-                  primary={`${arg.name}: ${arg.type.name || arg.type.kind}`}
-                  secondary={arg.description}
-                />
+  const renderRootTypes = () => {
+    const rootTypes = [
+      { name: 'Query', type: schema.queryType },
+      { name: 'Mutation', type: schema.mutationType },
+      { name: 'Subscription', type: schema.subscriptionType },
+    ].filter((rt) => rt.type);
+
+    return (
+      <Box>
+        <Typography variant='h6'>Root Types</Typography>
+        <List>
+          {rootTypes.map((rt) => (
+            <ListItem key={rt.name} disablePadding>
+              <ListItemButton
+                onClick={() => handleFieldClick({ type: rt.type!.name, name: rt.name })}
+              >
+                <ListItemText primary={rt.name} secondary={`Type: ${rt.type!.name}`} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Typography variant='h6' sx={{ mt: 2 }}>
+          All Types
+        </Typography>
+        <List>
+          {schema.types
+            .filter((type) => !type.name.startsWith('__'))
+            .map((type) => (
+              <ListItem key={type.name} disablePadding>
+                <ListItemButton
+                  onClick={() => handleFieldClick({ type: type.name, name: type.name })}
+                >
+                  <ListItemText primary={type.name} secondary={type.description} />
+                </ListItemButton>
               </ListItem>
             ))}
-          </List>
-        </>
-      )}
-    </Box>
-  );
+        </List>
+      </Box>
+    );
+  };
+
+  const renderContent = () => {
+    if (currentPath.length === 0) {
+      return renderRootTypes();
+    }
+
+    if (currentType) {
+      return renderTypeDetails(currentType);
+    }
+
+    return <Typography>Type not found</Typography>;
+  };
 
   return (
     <Box>
       {renderBreadcrumbs()}
       <Divider sx={{ my: 2 }} />
-      {(() => {
-        if (currentPath.length === 0) {
-          return (
-            <List>
-              {schema.types.map((type) => (
-                <ListItem key={type.name} button onClick={() => setCurrentPath([type.name])}>
-                  <ListItemText primary={type.name} secondary={type.description} />
-                </ListItem>
-              ))}
-            </List>
-          );
-        }
-
-        if ('fields' in currentType) {
-          return renderTypeDetails(currentType as SchemaType);
-        }
-
-        return renderFieldDetails(currentType as SchemaField);
-      })()}
+      {renderContent()}
     </Box>
   );
 };

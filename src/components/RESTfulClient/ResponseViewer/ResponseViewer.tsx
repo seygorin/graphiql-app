@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { EditorView } from '@codemirror/view';
-import { Box, CircularProgress } from '@mui/material';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { Box, CircularProgress, IconButton } from '@mui/material';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
 
@@ -10,9 +11,15 @@ interface ResponseViewerProps {
 }
 
 const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) => {
+  const [isFormatted, setIsFormatted] = useState(true);
+
   const formatJson = (data: Record<string, unknown> | { error: string } | null) => {
     if (data === null) return '';
-    return JSON.stringify(data, null, 2);
+    return JSON.stringify(data, null, isFormatted ? 2 : 0);
+  };
+
+  const handleFormat = () => {
+    setIsFormatted(!isFormatted);
   };
 
   if (isLoading) {
@@ -32,12 +39,27 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
 
   if (response) {
     return (
-      <Box sx={{ height: '100%', overflow: 'hidden' }}>
+      <Box sx={{ height: '100%', overflow: 'hidden', position: 'relative' }}>
+        <IconButton
+          onClick={handleFormat}
+          sx={{
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
+            zIndex: 1,
+            backgroundColor: 'background.paper',
+            '&:hover': {
+              backgroundColor: 'action.hover',
+            },
+          }}
+        >
+          <AutoFixHighIcon />
+        </IconButton>
         <CodeMirror
           value={formatJson(response)}
           theme={EditorView.theme({
             '&': {
-              height: '100%',
+              height: 'calc(100% - 40px)',
             },
           })}
           extensions={[langs.json(), EditorView.lineWrapping]}
@@ -47,7 +69,6 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
             foldGutter: true,
             highlightActiveLine: false,
           }}
-          style={{ height: '100%' }}
         />
       </Box>
     );

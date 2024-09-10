@@ -148,6 +148,7 @@ const RESTfulClient: React.FC = () => {
       <Paper elevation={3} sx={{ mb: 2, p: 2 }}>
         <RequestForm
           method={method}
+          isLoading={isLoading}
           url={url}
           status={status || ''}
           onMethodChange={handleMethodChange}

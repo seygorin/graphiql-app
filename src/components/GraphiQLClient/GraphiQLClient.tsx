@@ -6,11 +6,23 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Button, Collapse, IconButton, Paper, TextField, Typography } from '@mui/material';
+import SchemaIcon from '@mui/icons-material/Schema';
+import SendIcon from '@mui/icons-material/Send';
+import {
+  Box,
+  Collapse,
+  IconButton,
+  InputAdornment,
+  Paper,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import HeadersEditor from 'components/RESTfulClient/HeadersEditor';
 import Resizer from 'components/RESTfulClient/Resizer';
 import ResponseViewer from 'components/RESTfulClient/ResponseViewer';
 import VariablesEditor from 'components/RESTfulClient/VariablesEditor';
+import StatusChip from 'components/StatusChip';
 import { useResizablePanes } from 'hooks/useResizablePanes';
 import { encodeGraphQLRequestParams } from 'utils/encodeBase64Url';
 import { fetchGraphQLQuery } from 'utils/fetchGraphQLQuery';
@@ -46,11 +58,12 @@ interface SchemaResult {
           }>;
         }>;
       }>;
+      queryType?: { name: string };
+      mutationType?: { name: string };
+      subscriptionType?: { name: string };
     };
   };
 }
-
-type SchemaType = SchemaResult['data']['__schema'];
 
 const DEFAULT_ENDPOINT = 'https://swapi-graphql.netlify.app/.netlify/functions/index';
 const DEFAULT_QUERY = `query {
@@ -83,9 +96,9 @@ const GraphiQLClient: React.FC = () => {
   const [headers, setHeaders] = useState(DEFAULT_HEADERS);
   const [variables, setVariables] = useState(DEFAULT_VARIABLES);
   const [response, setResponse] = useState<ResponseType>(null);
-  // const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [documentation, setDocumentation] = useState<SchemaType | null>(null);
+  const [documentation, setDocumentation] = useState<SchemaResult['data']['__schema'] | null>(null);
   const [showDocumentation, setShowDocumentation] = useState(false);
   const [isDocumentationExpanded, setIsDocumentationExpanded] = useState(true);
 
@@ -101,49 +114,54 @@ const GraphiQLClient: React.FC = () => {
       const responseData = await fetchGraphQLQuery({
         url: sdlEndpoint,
         query: `
-					query IntrospectionQuery {
-						__schema {
-							types {
-								name
-								description
-								fields {
-									name
-									description
-									type {
-										name
-										kind
-									}
-									args {
-										name
-										description
-										type {
-											name
-											kind
-										}
-									}
-								}
-							}
-						}
-					}
-				`,
+          query IntrospectionQuery {
+            __schema {
+              types {
+                name
+                description
+                fields {
+                  name
+                  description
+                  type {
+                    name
+                    kind
+                  }
+                  args {
+                    name
+                    description
+                    type {
+                      name
+                      kind
+                    }
+                  }
+                }
+              }
+              queryType { name }
+              mutationType { name }
+              subscriptionType { name }
+            }
+          }
+        `,
         headers: JSON.parse(headers),
       });
 
-      const schemaResult = responseData as unknown as SchemaResult;
       /* eslint-disable no-underscore-dangle */
+      const schemaResult = responseData as unknown as SchemaResult;
       if (schemaResult && schemaResult.data && schemaResult.data.__schema) {
         setDocumentation(schemaResult.data.__schema);
+        setStatus('200');
       } else {
         throw new Error('Invalid schema data');
       }
     } catch (error) {
-      console.error('Failed to fetch schema:', error);
-      setDocumentation(null);
       errorNotifyMessage(t('graphiql.schemaFetchError'));
+      setDocumentation(null);
+      setStatus('Error');
     } finally {
       setIsLoading(false);
     }
   }, [sdlEndpoint, headers, t]);
+
   useEffect(() => {
     if (effectRan.current === false) {
       const {
@@ -174,7 +192,7 @@ const GraphiQLClient: React.FC = () => {
       });
 
       setResponse(responseData);
-      // setStatus('200');
+      setStatus('200');
 
       saveToHistory({
         method: 'GRAPHQL',
@@ -185,11 +203,11 @@ const GraphiQLClient: React.FC = () => {
       });
     } catch (error) {
       if (error instanceof Error) {
-        // setStatus('Error');
+        setStatus('Error');
         setResponse({ error: error.message });
         errorNotifyMessage(error.message);
       } else {
-        // setStatus('Unknown Error');
+        setStatus('Unknown Error');
         setResponse({ error: 'An unknown error occurred' });
         errorNotifyMessage(t('graphiql.unknownError'));
       }
@@ -223,16 +241,36 @@ const GraphiQLClient: React.FC = () => {
       }}
     >
       <Paper elevation={3} sx={{ mb: 2, p: 2 }}>
-        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center' }}>
           <TextField
             fullWidth
             label={t('graphiql.endpointLabel')}
             value={endpoint}
             onChange={(e) => setEndpoint(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <StatusChip status={status} />
+                </InputAdornment>
+              ),
+            }}
           />
-          <Button variant='contained' onClick={handleSendRequest} disabled={isLoading}>
-            {t('graphiql.sendRequest')}
-          </Button>
+          <Tooltip title={t('graphiql.sendRequest')}>
+            <IconButton
+              onClick={handleSendRequest}
+              disabled={isLoading}
+              color='primary'
+              sx={{
+                width: 48,
+                height: 48,
+                '& .MuiSvgIcon-root': {
+                  fontSize: 24,
+                },
+              }}
+            >
+              <SendIcon />
+            </IconButton>
+          </Tooltip>
 
           <TextField
             fullWidth
@@ -241,16 +279,25 @@ const GraphiQLClient: React.FC = () => {
             onChange={(e) => setSdlEndpoint(e.target.value)}
           />
 
-          <Button
-            variant='outlined'
-            onClick={() => {
-              fetchSchema();
-              setShowDocumentation(true);
-            }}
-            disabled={isLoading}
-          >
-            {t('graphiql.fetchSchema')}
-          </Button>
+          <Tooltip title={t('graphiql.fetchSchema')}>
+            <IconButton
+              onClick={() => {
+                fetchSchema();
+                setShowDocumentation(true);
+              }}
+              disabled={isLoading}
+              color='primary'
+              sx={{
+                width: 48,
+                height: 48,
+                '& .MuiSvgIcon-root': {
+                  fontSize: 24,
+                },
+              }}
+            >
+              <SchemaIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Paper>
 
@@ -317,7 +364,7 @@ const GraphiQLClient: React.FC = () => {
             <IconButton onClick={toggleDocumentationExpansion}>
               {isDocumentationExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
             </IconButton>
-            <Typography>{t('graphiql.loadingDocumentation')}</Typography>
+            <Typography>{t('graphiql.documentation')}</Typography>
             <IconButton onClick={() => setShowDocumentation(false)}>
               <CloseIcon />
             </IconButton>
