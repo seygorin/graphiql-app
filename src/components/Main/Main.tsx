@@ -4,35 +4,16 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import React from 'react';
 import { Box, Container, Stack, Typography } from '@mui/material';
-import clsx from 'clsx';
 import { User } from 'firebase/auth';
-import CustomDashboardTabs from 'components/CustomDashboardTabs';
 import SignInButton from 'components/SignInButton';
 import SignUpButton from 'components/SignUpButton';
 import screenshot1 from 'public/screenshot_1.png';
 import screenshot2 from 'public/screenshot_2.png';
 import screenshot3 from 'public/screenshot_3.png';
 import withUser from 'utils/withUser';
-import theme from '../../theme/theme';
 import AboutUs from './AboutUs';
-import s from './Main.module.scss';
-
-const STYLES = {
-  box1: {
-    maxWidth: 'lg',
-    margin: '0 auto',
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 6,
-    flexGrow: 1,
-    width: '100%',
-    padding: 4,
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-    },
-  },
-};
+import CustomDashboardTabsMain from './CustomDashboardTabsMain';
+import { STYLES } from './styles.main';
 
 interface IProps {
   user?: User | null;
@@ -42,52 +23,39 @@ interface IProps {
 const Main: React.FC<IProps> = ({ user, name }) => {
   const t = useTranslations();
 
+  // useEffect(() => {
+  //   throw new Error('Synthetic error for testing Error Boundary');
+  // }, []);
+
   if (user) {
     return (
       <Container maxWidth={false} disableGutters>
-        <Box className={s.accent_background}>
-          <Box sx={STYLES.box1}>
-            <Box
-              className={s.main_info_content}
-              sx={{ [theme.breakpoints.down('md')]: { width: '100%', textAlign: 'center' } }}
-            >
-              <Typography
-                variant='h1'
-                className={s.main_info_title}
-                sx={{
-                  [theme.breakpoints.down('sm')]: { fontSize: '3.6rem' },
-                }}
-              >
+        <Box sx={STYLES.background}>
+          <Box sx={STYLES.info}>
+            <Box sx={STYLES.infoContent}>
+              <Typography variant='h1' sx={STYLES.infoTitle}>
                 {t('main.welcomeUser')},
-                <span className={s.title_name}> {name || user.displayName || user.email}!</span>
+                <Box component='span' sx={STYLES.infoTitleName}>
+                  {' '}
+                  {name || user.displayName || user.email}!
+                </Box>
               </Typography>
 
               <Typography variant='h6'>{t('main.text')}</Typography>
-              <CustomDashboardTabs size='large' />
+              <CustomDashboardTabsMain />
             </Box>
-            <Box
-              className={s.main_info_img_wrapper}
-              sx={{ [theme.breakpoints.down('md')]: { flexGrow: '0' } }}
-            >
-              <Box
-                className={s.main_info_img}
-                sx={{ [theme.breakpoints.down('md')]: { display: 'none', position: 'absolute' } }}
-              >
-                <Image
-                  src={screenshot1}
-                  className={clsx(s.main_img_screenshot, s.main_img_screenshot3)}
-                  alt='screenshot1'
-                />
-                <Image
-                  src={screenshot2}
-                  className={clsx(s.main_img_screenshot, s.main_img_screenshot2)}
-                  alt='screenshot2'
-                />
-                <Image
-                  src={screenshot3}
-                  className={clsx(s.main_img_screenshot, s.main_img_screenshot1)}
-                  alt='screenshot3'
-                />
+
+            <Box sx={STYLES.infoImgWrapper}>
+              <Box sx={STYLES.infoImg}>
+                <Box sx={{ ...STYLES.imgScreenshot3, ...STYLES.img }}>
+                  <Image src={screenshot1} alt='screenshot1' width={400} priority />
+                </Box>
+                <Box sx={{ ...STYLES.imgScreenshot2, ...STYLES.img }}>
+                  <Image src={screenshot2} alt='screenshot2' width={400} priority />
+                </Box>
+                <Box sx={{ ...STYLES.imgScreenshot1, ...STYLES.img }}>
+                  <Image src={screenshot3} alt='screenshot3' width={400} priority />
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -98,13 +66,8 @@ const Main: React.FC<IProps> = ({ user, name }) => {
   }
 
   return (
-    <Box className={s.main_not_auth}>
-      <Typography
-        variant='h1'
-        textAlign='center'
-        fontSize='5.5rem'
-        sx={{ textTransform: 'uppercase' }}
-      >
+    <Box sx={STYLES.notAuth}>
+      <Typography sx={STYLES.notAuthTitle} variant='h1'>
         {t('main.welcome')}
       </Typography>
       <Stack direction='row' gap={2} alignSelf='center' justifyContent='center'>

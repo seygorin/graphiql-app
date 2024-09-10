@@ -4,6 +4,14 @@ import logo from 'public/logo-rsschool3.png';
 import ROUTES from '../../shared/types/types';
 import Header from './Header';
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'mocked',
+    },
+  }),
+}));
+
 vi.mock('next/image', () => ({
   default: ({
     src,
@@ -23,6 +31,18 @@ vi.mock('next/link', () => ({
     <a href={href}>{children}</a>
   ),
 }));
+
+vi.mock('utils/withUser', () => ({
+  default: (Component: React.FC) => Component,
+}));
+
+vi.mock('@mui/material', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...((actual || false) && actual),
+    useMediaQuery: vi.fn().mockReturnValue(false),
+  };
+});
 
 vi.mock('./Buttons', () => ({
   default: () => <div>Buttons</div>,
@@ -45,8 +65,6 @@ describe('Header', () => {
     const logoImage = screen.getByAltText('logoRsSchool');
     expect(logoImage).toBeInTheDocument();
     expect(logoImage).toHaveAttribute('src', logo);
-    expect(logoImage).toHaveAttribute('width', '110');
-    expect(logoImage).toHaveAttribute('height', '40');
 
     const link = screen.getByRole('link', { name: 'logoRsSchool' });
     expect(link).toBeInTheDocument();

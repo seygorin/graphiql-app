@@ -19,7 +19,7 @@ export const ADDITION_COLOR = {
   textGoogle: vars.textGoogle,
   backgroundGoogle: vars.backgroundGoogle,
   shadowMain: vars.shadowMain,
-  borderFooter: vars.borderColorFooter,
+  borderFooter: vars.borderFooter,
   textFoo: vars.textFoo,
   info: vars.infoMain,
 };
@@ -71,13 +71,13 @@ const theme = createTheme({
       xl: 1536,
     },
   },
+  spacing: 4,
 
   typography: {
     fontFamily: roboto.style.fontFamily,
     h1: {
       fontSize: '4.5rem',
-      fontWeight: 500,
-      // lineHeight: 1,
+      fontWeight: 700,
     },
     h2: {
       fontSize: '4rem',
@@ -122,6 +122,7 @@ const theme = createTheme({
         root: {
           // textTransform: 'none',
           fontWeight: 400,
+          // borderRadius: '2px',
         },
       },
     },

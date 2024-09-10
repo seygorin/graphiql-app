@@ -123,7 +123,7 @@
     "name2": "seygorin",
     "dev2": "Talented developer with an eye for detail and a passion for creating quality code.",
     "name3": "KsushaSher",
-    "dev3": "A beginner developer with a great desire to learn and develop.",
+    "dev3": "A novice developer with a great desire to learn and develop, mastering new technologies.",
     "titleProject": "About the project",
     "project": "This project required the development of a simplified API application that combines Postman and GraphiQL functionality. It should allow making requests to RESTful and GraphQL APIs, support authentication and authorization, and store request history.",
     "titleCourse": "About the course",

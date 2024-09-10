@@ -1,35 +1,76 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import React from 'react';
-import { Link } from '@mui/material';
+import { Box, Container, Link, Typography } from '@mui/material';
 import courseLogo from 'public/rss-logo.svg';
-import s from './Footer.module.scss';
+import theme, { ADDITION_COLOR } from '../../theme/theme';
+
+const STYLES = {
+  wrapper: {
+    height: ADDITION_COLOR.footerHeight,
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: ADDITION_COLOR.backgroundFooter,
+  },
+  info: {
+    padding: '0px 16px',
+    color: '$background-default',
+    maxWidth: '1200px',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 7,
+    [theme.breakpoints.down('sm')]: { gap: 1 },
+  },
+  links: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    gap: 5,
+    flexGrow: 1,
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      gap: 0,
+      fontSize: '1rem',
+    },
+  },
+  link: {
+    lineHeight: 1.25,
+    color: 'background.default',
+    '&:hover': {
+      color: 'secondary.main',
+    },
+  },
+  year: {},
+};
 
 const Footer: React.FC = () => {
   const t = useTranslations();
 
   return (
-    <footer className={s.footer_wrapper}>
-      <div className={s.footer_info}>
-        <div className={s.footer_links}>
-          <Link variant='body1' className={s.link} href='https://github.com/intrstng'>
+    <Container component='footer' sx={STYLES.wrapper} disableGutters maxWidth={false}>
+      <Box sx={STYLES.info}>
+        <Box sx={STYLES.links}>
+          <Link variant='body1' sx={STYLES.link} href='https://github.com/intrstng'>
             Intrstng
           </Link>
 
-          <Link variant='body1' className={s.link} href='https://github.com/seygorin'>
+          <Link variant='body1' sx={STYLES.link} href='https://github.com/seygorin'>
             seygorin
           </Link>
 
-          <Link variant='body1' className={s.link} href='https://github.com/ksushasher'>
+          <Link variant='body1' sx={STYLES.link} href='https://github.com/ksushasher'>
             KsushaSher
           </Link>
-        </div>
-        <div className={s.year}>2024 {t('footer.year')}</div>
-        <Link href='https://rs.school/' width={50} height={50}>
-          <Image src={courseLogo} width={50} height={50} alt='courseLogo' />
+        </Box>
+        <Typography sx={STYLES.year}>2024 {t('footer.year')}</Typography>
+        <Link href='https://rs.school/'>
+          <Image src={courseLogo} width={42} height={42} alt='courseLogo' />
         </Link>
-      </div>
-    </footer>
+      </Box>
+    </Container>
   );
 };
 
