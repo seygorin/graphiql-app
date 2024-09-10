@@ -20,7 +20,7 @@ export function encodeRestRequestParams(
 
   let encodedHeaders = '';
   if (headers) {
-    const headerPairs: string[] = Object.entries(headers).map(
+    const headerPairs = Object.entries(headers).map(
       ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
     );
     encodedHeaders = headerPairs.length > 0 ? `?${headerPairs.join('&')}` : '';

@@ -13,7 +13,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { Base64 } from 'js-base64';
+import { encodeBase64Url } from 'utils/encodeBase64Url';
 import { errorNotifyMessage, warningNotifyMessage } from 'utils/notifyMessage';
 
 interface HistoryItem {
@@ -59,17 +59,19 @@ const HistoryComponent: React.FC = () => {
     const basePath = `/${locale}`;
 
     if (item.method === 'GRAPHQL') {
-      const encodedEndpoint = Base64.encodeURI(item.url);
-      const encodedQuery = item.requestBody ? Base64.encodeURI(item.requestBody) : '';
-      const headerParams = new URLSearchParams();
+      const encodedEndpoint = encodeBase64Url(item.url);
+      const encodedQuery = item.requestBody ? encodeBase64Url(item.requestBody) : '';
+      let params: string[] = [];
 
       if (item.headers) {
         try {
           const parsedHeaders = JSON.parse(item.headers);
           if (typeof parsedHeaders === 'object' && parsedHeaders !== null) {
-            Object.entries(parsedHeaders).forEach(([key, value]) => {
-              headerParams.append(key, encodeURIComponent(String(value)));
-            });
+            params = params.concat(
+              Object.entries(parsedHeaders).map(
+                ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
+              ),
+            );
           }
         } catch (error) {
           errorNotifyMessage(t('history.errorParsingHeaders'));
@@ -77,29 +79,36 @@ const HistoryComponent: React.FC = () => {
       }
 
       if (item.variables) {
-        headerParams.append('variables', encodeURIComponent(item.variables));
+        params.push(`variables=${encodeURIComponent(item.variables)}`);
       }
 
-      return `${basePath}/GRAPHQL/${encodedEndpoint}/${encodedQuery}?${headerParams.toString()}`;
+      const encodedParams = params.length > 0 ? `?${params.join('&')}` : '';
+
+      return `${basePath}/GRAPHQL/${encodedEndpoint}/${encodedQuery}${encodedParams}`;
     }
-    const encodedUrl = Base64.encodeURI(item.url);
-    const encodedBody = item.requestBody ? `/${Base64.encodeURI(item.requestBody)}` : '';
-    const headerParams = new URLSearchParams();
+
+    const encodedUrl = encodeBase64Url(item.url);
+    const encodedBody = item.requestBody ? `/${encodeBase64Url(item.requestBody)}` : '';
+    let params: string[] = [];
 
     if (item.headers) {
       try {
         const parsedHeaders = JSON.parse(item.headers);
         if (typeof parsedHeaders === 'object' && parsedHeaders !== null) {
-          Object.entries(parsedHeaders).forEach(([key, value]) => {
-            headerParams.append(key, encodeURIComponent(String(value)));
-          });
+          params = params.concat(
+            Object.entries(parsedHeaders).map(
+              ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
+            ),
+          );
         }
       } catch (error) {
         errorNotifyMessage(t('history.errorParsingHeaders'));
       }
     }
 
-    return `${basePath}/${item.method}/${encodedUrl}${encodedBody}?${headerParams.toString()}`;
+    const encodedParams = params.length > 0 ? `?${params.join('&')}` : '';
+
+    return `${basePath}/${item.method}/${encodedUrl}${encodedBody}${encodedParams}`;
   };
 
   const getChipColor = (method: string) => {
