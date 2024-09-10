@@ -23,10 +23,6 @@ interface IProps {
 const Main: React.FC<IProps> = ({ user, name }) => {
   const t = useTranslations();
 
-  // useEffect(() => {
-  //   throw new Error('Synthetic error for testing Error Boundary');
-  // }, []);
-
   if (user) {
     return (
       <Container maxWidth={false} disableGutters>

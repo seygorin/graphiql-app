@@ -5,9 +5,10 @@ import Image from 'next/image';
 import React from 'react';
 import { Box, Container, Link, Typography } from '@mui/material';
 import courseLogo from 'public/rss-logo.svg';
+import { genStyles } from '../../styles/genStyles';
 import theme, { ADDITION_COLOR } from '../../theme/theme';
 
-const STYLES = {
+const STYLES = genStyles({
   wrapper: {
     height: ADDITION_COLOR.footerHeight,
     display: 'flex',
@@ -44,7 +45,7 @@ const STYLES = {
     },
   },
   year: {},
-};
+});
 
 const Footer: React.FC = () => {
   const t = useTranslations();

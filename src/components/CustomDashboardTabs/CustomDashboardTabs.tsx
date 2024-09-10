@@ -5,6 +5,14 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import ROUTES from '../../shared/types/types';
+import { genStyles } from '../../styles/genStyles';
+
+const STYLES = genStyles({
+  wrapper: {
+    width: '1200px',
+    m: '0 auto',
+  },
+});
 
 export default function NavTabs() {
   const t = useTranslations();
@@ -21,7 +29,7 @@ export default function NavTabs() {
   );
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={STYLES.wrapper}>
       <Tabs value={pathname} role='navigation'>
         {tabs.map((tab) => (
           <Tab key={tab.href} component='a' label={tab.label} href={tab.href} value={tab.href} />
