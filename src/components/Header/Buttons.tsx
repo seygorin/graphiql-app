@@ -22,4 +22,4 @@ const Buttons: React.FC<IProps> = ({ user, name }) => {
   );
 };
 
-export default withUser(Buttons);
+export default withUser(Buttons, false);

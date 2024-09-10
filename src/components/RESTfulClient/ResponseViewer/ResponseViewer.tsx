@@ -1,8 +1,9 @@
 import React from 'react';
 import { EditorView } from '@codemirror/view';
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import CodeMirror from '@uiw/react-codemirror';
+import Loader from 'components/Loader';
 
 interface ResponseViewerProps {
   isLoading: boolean;
@@ -25,7 +26,8 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
           height: '100%',
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
+        <Loader />
       </Box>
     );
   }

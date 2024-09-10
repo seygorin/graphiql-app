@@ -1,17 +1,12 @@
-import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import React from 'react';
-import loadSpinner from '../../assets/load-spinner-red.gif';
-import s from './Loader.module.scss';
+import { CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
 
 const Loader = () => {
-  const t = useTranslations();
-
   return (
-    <div className={s.loader}>
-      <Image src={loadSpinner} alt='loading' width={230} height={230} unoptimized />
-      <p className={s.loading}>{t('loader.message')}</p>
-    </div>
+    <Box display='flex' justifyContent='center' alignItems='center' height='calc(100vh - 150px)'>
+      <CircularProgress color='primary' />
+    </Box>
   );
 };
 

@@ -11,7 +11,6 @@ import { fetchQuery } from 'utils/fetchQuery';
 import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistory } from 'utils/saveToHistory';
-import withAuth from 'utils/withAuth';
 import HeadersEditor from './HeadersEditor';
 import RequestBodyEditor from './RequestBodyEditor';
 import RequestForm from './RequestForm/RequestForm';
@@ -197,4 +196,4 @@ const RESTfulClient: React.FC = () => {
   );
 };
 
-export default withAuth(RESTfulClient);
+export default RESTfulClient;

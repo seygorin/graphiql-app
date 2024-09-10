@@ -16,6 +16,14 @@ vi.mock('firebase/auth', () => {
   };
 });
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 vi.mock('react-hook-form', () => ({
   useForm: vi.fn(),
 }));

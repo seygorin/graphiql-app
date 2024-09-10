@@ -42,7 +42,6 @@ export const signInWithGoogle = async (t: TFunction) => {
     } else {
       errorNotifyMessage(t('auth.error.unknown'));
     }
-    // throw err; // Re-throw the error to ensure the promise rejects
   }
 };
 

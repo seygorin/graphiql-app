@@ -3,6 +3,7 @@
 import React from 'react';
 import { Container } from '@mui/material';
 import CustomDashboardTabs from 'components/CustomDashboardTabs';
+import withAuth from 'utils/withAuth';
 
 export type HistoryLayoutProps = Readonly<{
   children: React.ReactNode;
@@ -18,4 +19,4 @@ const HistoryLayout = ({ children }: HistoryLayoutProps) => {
   );
 };
 
-export default HistoryLayout;
+export default withAuth(HistoryLayout);

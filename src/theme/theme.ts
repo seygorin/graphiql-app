@@ -13,9 +13,12 @@ const roboto = Roboto({
 export const ADDITION_COLOR = {
   backgroundMain: vars.backgroundMain,
   backgroundFooter: vars.backgroundFooter,
+  textGoogle: vars.textGoogle,
+  backgroundGoogle: vars.backgroundGoogle,
   shadowMain: vars.shadowMain,
   borderFooter: vars.borderColorFooter,
   textFoo: vars.textFoo,
+  info: vars.infoMain,
 };
 
 const theme = createTheme({

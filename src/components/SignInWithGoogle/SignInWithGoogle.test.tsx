@@ -5,6 +5,14 @@ import SignInWithGoogle from 'components/SignInWithGoogle/SignInWithGoogle';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signInWithGoogle } from '../../lib/auth';
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 vi.mock('next-intl', () => ({
   useTranslations: vi.fn(),
 }));
@@ -27,12 +35,12 @@ describe('SignInWithGoogle', () => {
   it('renders the component', () => {
     render(<SignInWithGoogle />);
     expect(screen.getByText('form.subtitle.google')).toBeInTheDocument();
-    expect(screen.getByAltText('google')).toBeInTheDocument();
+    expect(screen.getByAltText('Google sign in button')).toBeInTheDocument();
   });
 
   it('calls signInWithGoogle on button click', async () => {
     render(<SignInWithGoogle />);
-    fireEvent.click(screen.getByAltText('google'));
+    fireEvent.click(screen.getByAltText('Google sign in button'));
     expect(signInWithGoogle).toHaveBeenCalled();
   });
 
@@ -41,7 +49,7 @@ describe('SignInWithGoogle', () => {
     (signInWithGoogle as vi.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
     render(<SignInWithGoogle />);
-    fireEvent.click(screen.getByAltText('google'));
+    fireEvent.click(screen.getByAltText('Google sign in button'));
 
     await waitFor(() => {
       expect(signInWithGoogle).toHaveBeenCalled();

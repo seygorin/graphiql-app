@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { User } from 'firebase/auth';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import Loader from 'components/Loader';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { auth, db } from '../lib/firebase';
 
 const withUser = <T extends { user?: User | null; name?: string | null }>(
   WrappedComponent: React.FC<T>,
+  loader: boolean = true,
 ) => {
   const ComponentWithAuth = (props: T) => {
-    const [user] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const [name, setName] = useState<string | null>(null);
     const t = useTranslations();
 
@@ -25,13 +27,20 @@ const withUser = <T extends { user?: User | null; name?: string | null }>(
           errorNotifyMessage(t('auth.error.database'));
         }
       };
-
       if (user) {
         fetchUserName();
       } else {
         setName(null);
       }
     }, [user, t]);
+
+    if (loader && loading) {
+      return <Loader />;
+    }
+
+    if (!loader && loading) {
+      return null;
+    }
 
     if (!user) {
       return <WrappedComponent {...props} user={null} name={null} />;

@@ -37,8 +37,7 @@ const Header: React.FC = () => {
       <Box className={s.header}>
         <Stack direction='row' alignItems='center' gap={2}>
           <Link href={ROUTES.MAIN_PAGE}>
-            {/* <Image src={logo} width={110} style={{ height: 'auto' }} alt="logoRsSchool" /> */}
-            <Image src={logo} width={110} height={40} alt='logoRsSchool' />
+            <Image src={logo} width={110} height={40} alt='logoRsSchool' priority />
           </Link>
           <SelectLanguage />
         </Stack>

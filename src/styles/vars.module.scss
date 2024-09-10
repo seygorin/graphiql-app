@@ -22,6 +22,9 @@ $secondary-light: #b7cac8;
 $secondary-dark: #697c7a;
 $secondary-contrastText: #fff;
 
+$text-google: #757575;
+$background-google: #f8f9fa;
+
 $error-main: #222;
 
 $warning-main: #e8b86d;
@@ -38,6 +41,7 @@ $text-primary: #222;
 $text-secondary: #333;
 $text-disabled: #a5a4a4;
 
+
 // Fonts
 $font-family-message: 'Arial', serif;
 
@@ -47,6 +51,9 @@ $font-family-message: 'Arial', serif;
   shadow-main: $shadow-main;
   borderFooter: $border-footer;
   textFoo: $text-footer;
+
+  textGoogle: $text-google;
+  backgroundGoogle: $background-google;
 
   primaryMain: $primary-main;
   primaryLight: $primary-light;

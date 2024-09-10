@@ -26,6 +26,14 @@ vi.mock('firebase/auth', () => ({
   }),
 }));
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 vi.mock('next-intl', () => ({
   useTranslations: vi.fn(),
   NextIntlClientProvider: ({ children }) => children,

@@ -28,7 +28,6 @@ import { ISignInFormData, validateSignInSchema } from '../../validations/signInV
 import s from './SignInForm.module.scss';
 
 const SignInForm = () => {
-  // const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const onClickShowPassword = () => setShowPassword((show) => !show);
   const onMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,14 +42,12 @@ const SignInForm = () => {
     formState: { errors, isValid },
   } = useForm<ISignInFormData>({
     mode: 'all',
-    // mode: 'onBlur',
     resolver: yupResolver(validateSignInSchema(t)),
   });
 
   const onSubmit: SubmitHandler<ISignInFormData> = async (data) => {
     try {
       await signInUser(data.email, data.password, t);
-      // router.push(ROUTES.MAIN_PAGE);
       reset();
     } catch (err) {
       if (err instanceof Error) {
@@ -132,7 +129,7 @@ const SignInForm = () => {
             </Button>
           </FormGroup>
           <Grid container>
-            <Grid item>
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
               <Link href={ROUTES.SIGN_UP} variant='subtitle2' underline='hover' color='info.main'>
                 {t('form.subtitle.signIn')}
               </Link>

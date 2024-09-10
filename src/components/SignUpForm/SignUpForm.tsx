@@ -56,14 +56,12 @@ const SignUpForm = () => {
     formState: { errors, isValid },
   } = useForm<ISignUpFormData>({
     mode: 'all',
-    // mode: 'onBlur',
     resolver: yupResolver(validateSignUpSchema(t)),
   });
 
   const onSubmit: SubmitHandler<ISignUpFormData> = async (data) => {
     try {
       await signUpUser(data.name, data.email, data.password, t);
-      // router.push(ROUTES.MAIN_PAGE);
       reset();
     } catch (err) {
       if (err instanceof Error) {
@@ -203,7 +201,7 @@ const SignUpForm = () => {
             </Button>
           </FormGroup>
           <Grid container>
-            <Grid item>
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
               <Link href={ROUTES.SIGN_IN} variant='subtitle2' underline='hover' color='info.main'>
                 {t('form.subtitle.signUp')}
               </Link>

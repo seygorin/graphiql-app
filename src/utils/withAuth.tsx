@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { User, onIdTokenChanged } from 'firebase/auth';
 import Loader from 'components/Loader';
@@ -8,7 +8,7 @@ import { signOutUser } from '../lib/auth';
 import { auth } from '../lib/firebase';
 import ROUTES from '../shared/types/types';
 
-const withAuth = <T extends JSX.IntrinsicAttributes>(WrappedComponent: React.FC<T>) => {
+const withAuth = <T extends object>(WrappedComponent: React.FC<T>) => {
   const ComponentWithAuth = (props: T) => {
     const [user, loading] = useAuthState(auth);
     const router = useRouter();
@@ -29,7 +29,6 @@ const withAuth = <T extends JSX.IntrinsicAttributes>(WrappedComponent: React.FC<
       }
 
       const unsubscribe = onIdTokenChanged(auth, initializeUser);
-      // const unsubscribe = onAuthStateChanged(auth, initializeUser);
       return () => {
         unsubscribe();
         if (tokenTimerIDRef.current) {

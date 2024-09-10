@@ -17,7 +17,6 @@ import { fetchGraphQLQuery } from 'utils/fetchGraphQLQuery';
 import { initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistory } from 'utils/saveToHistory';
-import withAuth from 'utils/withAuth';
 import DocumentationViewer from './DocumentationViewer';
 import QueryEditor from './QueryEditor';
 
@@ -337,4 +336,4 @@ const GraphiQLClient: React.FC = () => {
   );
 };
 
-export default withAuth(GraphiQLClient);
+export default GraphiQLClient;

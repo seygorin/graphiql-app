@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const ToastifyNotification = () => {
   return (
     <ToastContainer
-      // position="bottom-left"
       autoClose={3000}
       hideProgressBar={false}
       newestOnTop={false}
