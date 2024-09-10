@@ -1,42 +1,23 @@
 import React from 'react';
-import { EditorView } from '@codemirror/view';
-import { Box, Button } from '@mui/material';
-import CodeMirror from '@uiw/react-codemirror';
-import { graphql } from 'cm6-graphql';
+import { Box } from '@mui/material';
+import CodeEditor from '../../CodeEditor';
 
 interface QueryEditorProps {
   query: string;
   onQueryChange: (value: string) => void;
   t: (key: string) => string;
+  isGraphQL?: boolean;
 }
 
-const QueryEditor: React.FC<QueryEditorProps> = ({ query, onQueryChange, t }) => {
-  const handleFormat = () => {
-    try {
-      const formatted = JSON.stringify(JSON.parse(query), null, 2);
-      onQueryChange(formatted);
-    } catch (error) {
-      console.error('Failed to format query:', error);
-    }
-  };
-
+const QueryEditor: React.FC<QueryEditorProps> = ({ query, onQueryChange, t, isGraphQL = true }) => {
   return (
     <Box sx={{ mb: 2 }}>
-      <CodeMirror
+      <CodeEditor
         value={query}
-        height='200px'
-        theme={EditorView.theme({
-          '&': {
-            height: '100%',
-          },
-        })}
-        extensions={[graphql(), EditorView.lineWrapping]}
         onChange={onQueryChange}
-        placeholder={t('graphiql.queryPlaceholder')}
+        isGraphQL={isGraphQL}
+        placeholder={t(isGraphQL ? 'graphiql.queryPlaceholder' : 'restful.bodyPlaceholder')}
       />
-      <Button onClick={handleFormat} sx={{ mt: 1 }}>
-        {t('graphiql.formatQuery')}
-      </Button>
     </Box>
   );
 };

@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
-import CodeEditor from 'components/CodeEditor/CodeEditor';
+import CodeEditor from '../CodeEditor';
 
 interface CollapsibleCodeEditorProps {
   title: string;
   value: string;
   onChange: (value: string) => void;
+  isGraphQL?: boolean;
 }
 
 const CollapsibleCodeEditor: React.FC<CollapsibleCodeEditorProps> = ({
   title,
   value,
   onChange,
+
+  isGraphQL = false,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -26,7 +29,7 @@ const CollapsibleCodeEditor: React.FC<CollapsibleCodeEditorProps> = ({
         <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <CodeEditor value={value} onChange={onChange} />
+        <CodeEditor value={value} onChange={onChange} isGraphQL={isGraphQL} />
       </AccordionDetails>
     </Accordion>
   );
