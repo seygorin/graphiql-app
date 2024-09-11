@@ -80,7 +80,9 @@
     "noDocumentation": "Документация отсутствует",
     "loadingDocumentation": "Загрузка документации...",
     "schemaFetchError": "Ошибка при получении схемы",
-    "unknownError": "Неизвестная ошибка"
+    "unknownError": "Неизвестная ошибка",
+    "invalidHeadersJson": "Неверный формат JSON в заголовках",
+    "invalidVariablesJson": "Неверный формат JSON в переменных"
   },
   "history": {
     "noRequests": "Вы еще не выполнили ни одного запроса",
@@ -102,7 +104,10 @@
     "responseBody": "Тело ответа",
     "variables": "Переменные",
     "invalidJson": "Неверный формат JSON",
-    "unknownError": "Произошла неизвестная ошибка"
+    "unknownError": "Произошла неизвестная ошибка",
+    "invalidHeadersJson": "Неверный формат JSON в заголовках",
+    "invalidVariablesJson": "Неверный формат JSON в переменных",
+    "invalidRequestBodyJson": "Неверный формат JSON в теле запроса"
   },
   "auth": {
     "success": {

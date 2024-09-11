@@ -1,8 +1,9 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Paper } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useResizablePanes } from 'hooks/useResizablePanes';
@@ -11,12 +12,13 @@ import { fetchQuery } from 'utils/fetchQuery';
 import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistory } from 'utils/saveToHistory';
-import HeadersEditor from './HeadersEditor';
-import RequestBodyEditor from './RequestBodyEditor';
-import RequestForm from './RequestForm/RequestForm';
-import Resizer from './Resizer';
-import ResponseViewer from './ResponseViewer/ResponseViewer';
-import VariablesEditor from './VariablesEditor/VariablesEditor';
+
+const HeadersEditor = dynamic(() => import('./HeadersEditor'), { ssr: false });
+const RequestBodyEditor = dynamic(() => import('./RequestBodyEditor'), { ssr: false });
+const RequestForm = dynamic(() => import('./RequestForm/RequestForm'), { ssr: false });
+const Resizer = dynamic(() => import('./Resizer'), { ssr: false });
+const ResponseViewer = dynamic(() => import('./ResponseViewer/ResponseViewer'), { ssr: false });
+const VariablesEditor = dynamic(() => import('./VariablesEditor/VariablesEditor'), { ssr: false });
 
 type ResponseType = Record<string, unknown> | { error: string } | null;
 
@@ -31,7 +33,6 @@ const RESTfulClient: React.FC = () => {
   const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const effectRan = useRef(false);
 
   const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD);
   const [url, setUrl] = useState(DEFAULT_URL);
@@ -49,37 +50,56 @@ const RESTfulClient: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (effectRan.current === false) {
-      const {
-        method: initialMethod,
-        url: initialUrl,
-        requestBody: initialBody,
-        headers: initialHeaders,
-      } = initializeFromUrl(pathname, searchParams);
+    const {
+      method: initialMethod,
+      url: initialUrl,
+      requestBody: initialBody,
+      headers: initialHeaders,
+      variables: initialVariables,
+    } = initializeFromUrl(pathname, searchParams);
 
-      const isValidHttpMethod = (methodToCheck: string | undefined): methodToCheck is HttpMethod =>
-        methodToCheck !== undefined &&
-        ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(methodToCheck);
+    const isValidHttpMethod = (methodToCheck: string | undefined): methodToCheck is HttpMethod =>
+      methodToCheck !== undefined &&
+      ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(methodToCheck);
 
-      if (isValidHttpMethod(initialMethod)) {
-        setMethod(initialMethod);
-      } else {
-        setMethod(DEFAULT_METHOD);
-      }
-
-      setUrl(initialUrl || DEFAULT_URL);
-      setRequestBody(initialBody || DEFAULT_REQUEST_BODY);
-      setHeaders(initialHeaders || DEFAULT_HEADERS);
-      effectRan.current = true;
+    if (isValidHttpMethod(initialMethod)) {
+      setMethod(initialMethod);
     }
+    setUrl(initialUrl || DEFAULT_URL);
+    setRequestBody(initialBody || DEFAULT_REQUEST_BODY);
+    setHeaders(initialHeaders || DEFAULT_HEADERS);
+    setVariables(initialVariables || DEFAULT_VARIABLES);
   }, [pathname, searchParams]);
 
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
     try {
-      const headerObj = JSON.parse(headers);
-      const variablesObj = JSON.parse(variables);
-      const bodyObj = method !== 'GET' && method !== 'DELETE' ? JSON.parse(requestBody) : undefined;
+      let headerObj;
+      let variablesObj;
+      let bodyObj;
+
+      try {
+        headerObj = JSON.parse(headers);
+      } catch (error) {
+        errorNotifyMessage(t('restful.invalidHeadersJson'));
+        return;
+      }
+
+      try {
+        variablesObj = JSON.parse(variables);
+      } catch (error) {
+        errorNotifyMessage(t('restful.invalidVariablesJson'));
+        return;
+      }
+
+      if (method !== 'GET' && method !== 'DELETE') {
+        try {
+          bodyObj = JSON.parse(requestBody);
+        } catch (error) {
+          errorNotifyMessage(t('restful.invalidRequestBodyJson'));
+          return;
+        }
+      }
 
       const responseData = await fetchQuery({
         url,
@@ -100,9 +120,7 @@ const RESTfulClient: React.FC = () => {
         variables,
       });
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        errorNotifyMessage(t('restful.invalidJson'));
-      } else if (error instanceof Error) {
+      if (error instanceof Error) {
         const statusMatch = error.message.match(/status: (\d+)/);
         if (statusMatch) {
           setStatus(statusMatch[1]);
@@ -125,14 +143,19 @@ const RESTfulClient: React.FC = () => {
   };
 
   const handleSendRequest = () => {
-    const newPath = encodeRestRequestParams(
-      method,
-      url,
-      method !== 'GET' && method !== 'DELETE' ? requestBody : '',
-      JSON.parse(headers),
-    );
-    updateURLWithoutNavigation(`/${locale}${newPath}`);
-    sendRequest();
+    try {
+      const parsedHeaders = JSON.parse(headers);
+      const newPath = encodeRestRequestParams(
+        method,
+        url,
+        method !== 'GET' && method !== 'DELETE' ? requestBody : '',
+        parsedHeaders,
+      );
+      updateURLWithoutNavigation(`/${locale}${newPath}`);
+      sendRequest();
+    } catch (error) {
+      errorNotifyMessage(t('restful.invalidHeadersJson'));
+    }
   };
 
   return (
@@ -157,42 +180,44 @@ const RESTfulClient: React.FC = () => {
         />
       </Paper>
 
-      <Box sx={{ display: 'flex', flex: 1, gap: 2, minHeight: '10vh' }}>
-        <Paper
-          elevation={3}
-          sx={{
-            width: `${leftPaneWidth}%`,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <Box sx={{ flex: 1, overflow: 'auto' }}>
-            <HeadersEditor headers={headers} onHeadersChange={setHeaders} t={t} />
-            <VariablesEditor variables={variables} onVariablesChange={setVariables} t={t} />
-            {method !== 'GET' && method !== 'DELETE' && (
-              <RequestBodyEditor
-                requestBody={requestBody}
-                onRequestBodyChange={setRequestBody}
-                t={t}
-              />
-            )}
-          </Box>
-        </Paper>
+      {typeof window !== 'undefined' && (
+        <Box sx={{ display: 'flex', flex: 1, gap: 2, minHeight: '10vh' }}>
+          <Paper
+            elevation={3}
+            sx={{
+              width: `${leftPaneWidth}%`,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Box sx={{ flex: 1, overflow: 'auto' }}>
+              <HeadersEditor headers={headers} onHeadersChange={setHeaders} t={t} />
+              <VariablesEditor variables={variables} onVariablesChange={setVariables} t={t} />
+              {method !== 'GET' && method !== 'DELETE' && (
+                <RequestBodyEditor
+                  requestBody={requestBody}
+                  onRequestBodyChange={setRequestBody}
+                  t={t}
+                />
+              )}
+            </Box>
+          </Paper>
 
-        <Resizer onMouseDown={handleMouseDown} />
+          <Resizer onMouseDown={handleMouseDown} />
 
-        <Paper
-          elevation={3}
-          sx={{
-            width: `calc(${100 - leftPaneWidth}% - 8px)`,
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-          }}
-        >
-          <ResponseViewer isLoading={isLoading} response={response} />
-        </Paper>
-      </Box>
+          <Paper
+            elevation={3}
+            sx={{
+              width: `calc(${100 - leftPaneWidth}% - 8px)`,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
+            <ResponseViewer isLoading={isLoading} response={response} />
+          </Paper>
+        </Box>
+      )}
     </Box>
   );
 };

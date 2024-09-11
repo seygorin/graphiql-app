@@ -1,8 +1,9 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -18,19 +19,24 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import HeadersEditor from 'components/RESTfulClient/HeadersEditor';
-import Resizer from 'components/RESTfulClient/Resizer';
-import ResponseViewer from 'components/RESTfulClient/ResponseViewer';
-import VariablesEditor from 'components/RESTfulClient/VariablesEditor';
 import StatusChip from 'components/StatusChip';
-import { useResizablePanes } from 'hooks/useResizablePanes';
 import { encodeGraphQLRequestParams } from 'utils/encodeBase64Url';
 import { fetchGraphQLQuery } from 'utils/fetchGraphQLQuery';
 import { initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistory } from 'utils/saveToHistory';
-import DocumentationViewer from './DocumentationViewer';
-import QueryEditor from './QueryEditor';
+
+const QueryEditor = dynamic(() => import('./QueryEditor'), { ssr: false });
+const VariablesEditor = dynamic(() => import('components/RESTfulClient/VariablesEditor'), {
+  ssr: false,
+});
+const HeadersEditor = dynamic(() => import('components/RESTfulClient/HeadersEditor'), {
+  ssr: false,
+});
+const ResponseViewer = dynamic(() => import('components/RESTfulClient/ResponseViewer'), {
+  ssr: false,
+});
+const DocumentationViewer = dynamic(() => import('./DocumentationViewer'), { ssr: false });
 
 type ResponseType = Record<string, unknown> | { error: string } | null;
 
@@ -87,7 +93,6 @@ const GraphiQLClient: React.FC = () => {
   const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const effectRan = useRef(false);
 
   const [endpoint, setEndpoint] = useState(DEFAULT_ENDPOINT);
   const [sdlEndpoint, setSdlEndpoint] = useState(`${DEFAULT_ENDPOINT}?sdl`);
@@ -101,87 +106,43 @@ const GraphiQLClient: React.FC = () => {
   const [showDocumentation, setShowDocumentation] = useState(false);
   const [isDocumentationExpanded, setIsDocumentationExpanded] = useState(true);
 
-  const { leftPaneWidth, handleMouseDown } = useResizablePanes();
-
-  const updateURLWithoutNavigation = useCallback((newPath: string) => {
-    window.history.pushState(null, '', newPath);
-  }, []);
-
-  const fetchSchema = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const responseData = await fetchGraphQLQuery({
-        url: sdlEndpoint,
-        query: `
-          query IntrospectionQuery {
-            __schema {
-              types {
-                name
-                description
-                fields {
-                  name
-                  description
-                  type {
-                    name
-                    kind
-                  }
-                  args {
-                    name
-                    description
-                    type {
-                      name
-                      kind
-                    }
-                  }
-                }
-              }
-              queryType { name }
-              mutationType { name }
-              subscriptionType { name }
-            }
-          }
-        `,
-        headers: JSON.parse(headers),
-      });
-
-      /* eslint-disable no-underscore-dangle */
-      const schemaResult = responseData as unknown as SchemaResult;
-      if (schemaResult && schemaResult.data && schemaResult.data.__schema) {
-        setDocumentation(schemaResult.data.__schema);
-        setStatus('200');
-      } else {
-        throw new Error('Invalid schema data');
-      }
-    } catch (error) {
-      errorNotifyMessage(t('graphiql.schemaFetchError'));
-      setDocumentation(null);
-      setStatus('Error');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [sdlEndpoint, headers, t]);
-
   useEffect(() => {
-    if (effectRan.current === false) {
-      const {
-        url: initialEndpoint,
-        query: initialQuery,
-        headers: initialHeaders,
-        variables: initialVariables,
-      } = initializeFromUrl(pathname, searchParams);
-      setEndpoint(initialEndpoint || DEFAULT_ENDPOINT);
-      setQuery(initialQuery || DEFAULT_QUERY);
-      setHeaders(initialHeaders || DEFAULT_HEADERS);
-      setVariables(initialVariables || DEFAULT_VARIABLES);
-      effectRan.current = true;
-    }
+    const {
+      url: initialEndpoint,
+      query: initialQuery,
+      headers: initialHeaders,
+      variables: initialVariables,
+      sdlUrl: initialSdlEndpoint,
+    } = initializeFromUrl(pathname, searchParams);
+
+    setEndpoint(initialEndpoint || DEFAULT_ENDPOINT);
+    setSdlEndpoint(initialSdlEndpoint || `${initialEndpoint || DEFAULT_ENDPOINT}?sdl`);
+    setQuery(initialQuery || DEFAULT_QUERY);
+    setHeaders(initialHeaders || DEFAULT_HEADERS);
+    setVariables(initialVariables || DEFAULT_VARIABLES);
   }, [pathname, searchParams]);
 
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
     try {
-      const headerObj = JSON.parse(headers);
-      const variablesObj = JSON.parse(variables);
+      let headerObj;
+      let variablesObj;
+
+      try {
+        headerObj = JSON.parse(headers);
+      } catch (error) {
+        errorNotifyMessage(t('graphiql.invalidHeadersJson'));
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        variablesObj = JSON.parse(variables);
+      } catch (error) {
+        errorNotifyMessage(t('graphiql.invalidVariablesJson'));
+        setIsLoading(false);
+        return;
+      }
 
       const responseData = await fetchGraphQLQuery({
         url: endpoint,
@@ -215,13 +176,80 @@ const GraphiQLClient: React.FC = () => {
     }
   }, [endpoint, query, headers, variables, t]);
 
-  useEffect(() => {
-    setSdlEndpoint(`${endpoint}?sdl`);
-  }, [endpoint]);
+  const fetchSchema = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      let parsedHeaders;
+      try {
+        parsedHeaders = JSON.parse(headers);
+      } catch (error) {
+        errorNotifyMessage(t('graphiql.invalidHeadersJson'));
+        setIsLoading(false);
+        return;
+      }
+
+      const responseData = await fetchGraphQLQuery({
+        url: sdlEndpoint,
+        query: `
+          query IntrospectionQuery {
+            __schema {
+              types {
+                name
+                description
+                fields {
+                  name
+                  description
+                  type {
+                    name
+                    kind
+                  }
+                  args {
+                    name
+                    description
+                    type {
+                      name
+                      kind
+                    }
+                  }
+                }
+              }
+              queryType { name }
+              mutationType { name }
+              subscriptionType { name }
+            }
+          }
+        `,
+        headers: parsedHeaders,
+      });
+
+      /* eslint-disable no-underscore-dangle */
+      const schemaResult = responseData as unknown as SchemaResult;
+      if (schemaResult && schemaResult.data && schemaResult.data.__schema) {
+        setDocumentation(schemaResult.data.__schema);
+        setStatus('200');
+      } else {
+        throw new Error('Invalid schema data');
+      }
+    } catch (error) {
+      errorNotifyMessage(t('graphiql.schemaFetchError'));
+      setDocumentation(null);
+      setStatus('Error');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [sdlEndpoint, headers, t]);
 
   const handleSendRequest = () => {
-    const newPath = encodeGraphQLRequestParams(endpoint, query, JSON.parse(headers), variables);
-    updateURLWithoutNavigation(`/${locale}${newPath}`);
+    let parsedHeaders;
+    try {
+      parsedHeaders = JSON.parse(headers);
+    } catch (error) {
+      errorNotifyMessage(t('graphiql.invalidHeadersJson'));
+      return;
+    }
+
+    const newPath = encodeGraphQLRequestParams(endpoint, query, parsedHeaders, variables);
+    window.history.pushState(null, '', `/${locale}${newPath}`);
     sendRequest();
   };
 
@@ -312,7 +340,7 @@ const GraphiQLClient: React.FC = () => {
         <Paper
           elevation={3}
           sx={{
-            width: `${leftPaneWidth}%`,
+            width: '50%',
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -324,12 +352,10 @@ const GraphiQLClient: React.FC = () => {
           </Box>
         </Paper>
 
-        <Resizer onMouseDown={handleMouseDown} />
-
         <Paper
           elevation={3}
           sx={{
-            width: `calc(${100 - leftPaneWidth}% - 8px)`,
+            width: '50%',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'auto',
