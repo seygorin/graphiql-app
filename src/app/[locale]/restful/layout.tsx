@@ -12,7 +12,7 @@ export type QeurryLayoutProps = Readonly<{
 const QeurryLayout = ({ children }: QeurryLayoutProps) => {
   return (
     <>
-      <CustomDashboardTabs size='small' />
+      <CustomDashboardTabs />
       {children}
     </>
   );

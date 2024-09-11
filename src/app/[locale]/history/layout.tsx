@@ -13,7 +13,7 @@ export type HistoryLayoutProps = Readonly<{
 const HistoryLayout = ({ children }: HistoryLayoutProps) => {
   return (
     <Container maxWidth='lg'>
-      <CustomDashboardTabs size='small' />
+      <CustomDashboardTabs />
       {children}
     </Container>
   );

@@ -5,6 +5,14 @@ import { User } from 'firebase/auth';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import Buttons, { IProps } from './Buttons';
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'mocked',
+    },
+  }),
+}));
+
 vi.mock('utils/withUser', () => ({
   default: (Component: React.FC) => Component,
 }));

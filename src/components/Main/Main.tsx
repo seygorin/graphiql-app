@@ -4,9 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import React from 'react';
 import { Box, Container, Stack, Typography } from '@mui/material';
-import clsx from 'clsx';
 import { User } from 'firebase/auth';
-import CustomDashboardTabs from 'components/CustomDashboardTabs';
 import SignInButton from 'components/SignInButton';
 import SignUpButton from 'components/SignUpButton';
 import screenshot1 from 'public/screenshot_1.png';
@@ -14,7 +12,8 @@ import screenshot2 from 'public/screenshot_2.png';
 import screenshot3 from 'public/screenshot_3.png';
 import withUser from 'utils/withUser';
 import AboutUs from './AboutUs';
-import s from './Main.module.scss';
+import CustomDashboardTabsMain from './CustomDashboardTabsMain';
+import { STYLES } from './styles.main';
 
 interface IProps {
   user?: User | null;
@@ -27,32 +26,35 @@ const Main: React.FC<IProps> = ({ user, name }) => {
   if (user) {
     return (
       <Container maxWidth={false} disableGutters>
-        <Box className={s.accent_background}>
-          <Box className={s.main_info}>
-            <Box className={s.main_info_content}>
-              <Typography variant='h1' className={s.main_info_title}>
-                {t('main.welcomeUser', { user: name || user.displayName || user.email })}
+        <Box sx={STYLES.background}>
+          <Box sx={STYLES.info}>
+            <Box sx={STYLES.infoContent}>
+              <Typography variant='h1' sx={STYLES.infoTitle}>
+                {t('main.welcomeUser')},
+                <Box component='span' sx={STYLES.infoTitleName}>
+                  {' '}
+                  {name || user.displayName || user.email}!
+                </Box>
               </Typography>
 
-              <Typography variant='h6'>{t('main.text')}</Typography>
-              <CustomDashboardTabs size='large' />
+              <Typography variant='h6' sx={STYLES.infoText}>
+                {t('main.text')}
+              </Typography>
+              <CustomDashboardTabsMain />
             </Box>
-            <Box className={s.main_info_img}>
-              <Image
-                src={screenshot1}
-                className={clsx(s.main_img_screenshot, s.main_img_screenshot3)}
-                alt='screenshot1'
-              />
-              <Image
-                src={screenshot2}
-                className={clsx(s.main_img_screenshot, s.main_img_screenshot2)}
-                alt='screenshot2'
-              />
-              <Image
-                src={screenshot3}
-                className={clsx(s.main_img_screenshot, s.main_img_screenshot1)}
-                alt='screenshot3'
-              />
+
+            <Box sx={STYLES.infoImgWrapper}>
+              <Box sx={STYLES.infoImg}>
+                <Box sx={{ ...STYLES.imgScreenshot3, ...STYLES.img }}>
+                  <Image src={screenshot1} alt='screenshot1' width={400} priority />
+                </Box>
+                <Box sx={{ ...STYLES.imgScreenshot2, ...STYLES.img }}>
+                  <Image src={screenshot2} alt='screenshot2' width={400} priority />
+                </Box>
+                <Box sx={{ ...STYLES.imgScreenshot1, ...STYLES.img }}>
+                  <Image src={screenshot3} alt='screenshot3' width={400} priority />
+                </Box>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -62,8 +64,8 @@ const Main: React.FC<IProps> = ({ user, name }) => {
   }
 
   return (
-    <Box className={s.main_not_auth}>
-      <Typography variant='h1' textAlign='center'>
+    <Box sx={STYLES.notAuth}>
+      <Typography sx={STYLES.notAuthTitle} variant='h1'>
         {t('main.welcome')}
       </Typography>
       <Stack direction='row' gap={2} alignSelf='center' justifyContent='center'>
