@@ -11,8 +11,7 @@
     "format:fix": "prettier --write 'src//**/*.{js,jsx,ts,tsx}' 'bin//*.{js,jsx,ts,tsx}'",
     "test": "vitest",
     "test:check": "vitest --run",
-    "coverage": "vitest run --coverage",
-    "flatToTree": "ts-node ./bin/flatToTree.js"
+    "coverage": "vitest run --coverage"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -78,11 +77,8 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.34.4",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "fs-extra": "^11.2.0",
     "husky": "^9.1.5",
     "jsdom": "^24.1.1",
-    "lodash": "^4.17.21",
-    "ts-node": "^10.9.2",
     "typescript": "^5",
     "vitest": "^2.0.5"
   }
