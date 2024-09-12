@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { Box, Paper } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useResizablePanes } from 'hooks/useResizablePanes';
@@ -10,7 +11,8 @@ import { encodeRestRequestParams } from 'utils/encodeBase64Url';
 import { fetchQuery } from 'utils/fetchQuery';
 import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
-import { saveToHistory } from 'utils/saveToHistory';
+import { saveToHistoryFirestore } from 'utils/saveToHistory';
+import { auth } from '../../lib/firebase';
 import HeadersEditor from './HeadersEditor';
 import RequestBodyEditor from './RequestBodyEditor';
 import RequestForm from './RequestForm/RequestForm';
@@ -33,6 +35,7 @@ const RESTfulClient: React.FC = () => {
   const searchParams = useSearchParams();
   const effectRan = useRef(false);
 
+  const [user] = useAuthState(auth);
   const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD);
   const [url, setUrl] = useState(DEFAULT_URL);
   const [requestBody, setRequestBody] = useState(DEFAULT_REQUEST_BODY);
@@ -77,6 +80,9 @@ const RESTfulClient: React.FC = () => {
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
     try {
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
       const headerObj = JSON.parse(headers);
       const variablesObj = JSON.parse(variables);
       const bodyObj = method !== 'GET' && method !== 'DELETE' ? JSON.parse(requestBody) : undefined;
@@ -92,13 +98,17 @@ const RESTfulClient: React.FC = () => {
       setResponse(responseData);
       setStatus('200');
 
-      saveToHistory({
-        method,
-        url,
-        requestBody,
-        headers: JSON.stringify(headerObj),
-        variables,
-      });
+      await saveToHistoryFirestore(
+        {
+          method,
+          url,
+          requestBody,
+          headers: JSON.stringify(headerObj),
+          variables,
+        },
+        user.uid,
+        t,
+      );
     } catch (error) {
       if (error instanceof SyntaxError) {
         errorNotifyMessage(t('restful.invalidJson'));
@@ -118,7 +128,7 @@ const RESTfulClient: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [method, url, headers, requestBody, variables, t]);
+  }, [method, url, headers, requestBody, variables, t, user]);
 
   const handleMethodChange = (event: SelectChangeEvent<HttpMethod>) => {
     setMethod(event.target.value as HttpMethod);

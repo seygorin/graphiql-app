@@ -20,12 +20,12 @@ import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { STYLES } from 'components/SigInForm/styles.signInForm';
 import SignInWithGoogle from 'components/SignInWithGoogle';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signInUser } from '../../lib/auth';
 import ROUTES from '../../shared/types/types';
 import { ISignInFormData, validateSignInSchema } from '../../validations/signInValidation.schema';
-import s from './SignInForm.module.scss';
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -51,22 +51,15 @@ const SignInForm = () => {
       reset();
     } catch (err) {
       if (err instanceof Error) {
-        errorNotifyMessage(t(err.message));
+        errorNotifyMessage(err.message);
       }
     }
   };
 
   return (
     <Container component='main' maxWidth='xs'>
-      <Box
-        sx={{
-          paddingTop: 6,
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+      <Box sx={STYLES.content}>
+        <Avatar sx={STYLES.logo}>
           <LockOpenIcon />
         </Avatar>
         <Typography component='h2' variant='h5'>
@@ -83,13 +76,19 @@ const SignInForm = () => {
                 id='email'
                 error={!!errors?.email}
                 variant='outlined'
-                sx={{ mb: 3 }}
+                sx={STYLES.emailInput}
                 {...register('email')}
                 autoComplete='email'
                 size='small'
               />
               {errors?.email && (
-                <p className={`error_form ${s.error_mail}`}>{errors.email.message}</p>
+                <Typography
+                  component='h2'
+                  variant='body2'
+                  sx={{ ...STYLES.errorForm, ...STYLES.errorMail }}
+                >
+                  {errors.email.message}
+                </Typography>
               )}
             </FormControl>
             <FormControl variant='outlined' size='small' error={!!errors?.password}>
@@ -114,11 +113,17 @@ const SignInForm = () => {
                 label={t('form.password')}
               />
               {!isValid && errors?.password && (
-                <p className={`error_form ${s.error_pass}`}>{errors.password.message}</p>
+                <Typography
+                  component='h2'
+                  variant='body2'
+                  sx={{ ...STYLES.errorForm, ...STYLES.errorPass }}
+                >
+                  {errors.password.message}
+                </Typography>
               )}
             </FormControl>
             <Button
-              sx={{ mt: 4, mb: 1 }}
+              sx={STYLES.button}
               type='submit'
               variant='contained'
               fullWidth
@@ -129,7 +134,7 @@ const SignInForm = () => {
             </Button>
           </FormGroup>
           <Grid container>
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid item xs={12} sx={STYLES.link}>
               <Link href={ROUTES.SIGN_UP} variant='subtitle2' underline='hover' color='info.main'>
                 {t('form.subtitle.signIn')}
               </Link>

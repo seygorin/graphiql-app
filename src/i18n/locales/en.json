@@ -76,10 +76,17 @@
     "schemaFetchError": "Error Fetching Schema",
     "unknownError": "Unknown Error"
   },
+  "firestore": {
+    "error": {
+      "firestoreSave": "Error saving to Firestore",
+      "unknown": "Unknown Error"
+    }
+  },
   "history": {
     "noRequests": "You haven't executed any requests yet",
     "errorParsingHistory": "Error parsing history",
     "errorParsingHeaders": "Error parsing headers",
+    "errorHistoryCleared": "Error clearing history data",
     "historyCleared": "History cleared",
     "clearHistory": "Clear history"
   },

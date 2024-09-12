@@ -38,7 +38,7 @@ export const signInWithGoogle = async (t: TFunction) => {
     successNotifyMessage(t('auth.success.signinGoogle'));
   } catch (err) {
     if (err instanceof Error) {
-      errorNotifyMessage(t(err.message));
+      errorNotifyMessage(err.message);
     } else {
       errorNotifyMessage(t('auth.error.unknown'));
     }
@@ -60,7 +60,7 @@ export const signUpUser = async (name: string, email: string, password: string, 
     if (err instanceof FirebaseError && err.code === 'auth/email-already-in-use') {
       warningNotifyMessage(t('auth.error.signup.userExists'));
     } else if (err instanceof Error) {
-      errorNotifyMessage(t(err.message));
+      errorNotifyMessage(err.message);
     } else {
       errorNotifyMessage(t('auth.error.signup.failed'));
     }
@@ -75,7 +75,7 @@ export const signInUser = async (email: string, password: string, t: TFunction) 
     if (err instanceof FirebaseError && err.code === 'auth/invalid-credential') {
       warningNotifyMessage(t('auth.error.signin'));
     } else if (err instanceof Error) {
-      errorNotifyMessage(t(err.message));
+      errorNotifyMessage(err.message);
     } else {
       errorNotifyMessage(t('auth.error.unknown'));
     }
@@ -92,7 +92,7 @@ export const signOutUser = async (t: TFunction, extraMsg?: string) => {
     }
   } catch (err) {
     if (err instanceof Error) {
-      errorNotifyMessage(t(err.message));
+      errorNotifyMessage(err.message);
     } else {
       errorNotifyMessage(t('auth.error.unknown'));
     }

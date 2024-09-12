@@ -3,6 +3,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import GoogleSignInButton from 'components/GoogleSignInButton/GoogleSignInButton';
+import { STYLES } from 'components/SignInWithGoogle/styles.signInWithGoogle';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { signInWithGoogle } from '../../lib/auth';
 
@@ -14,21 +15,14 @@ const SignInWithGoogle: React.FC = () => {
       await signInWithGoogle(t);
     } catch (err) {
       if (err instanceof Error) {
-        errorNotifyMessage(t(err.message));
+        errorNotifyMessage(err.message);
       }
     }
   };
 
   return (
-    <Box
-      sx={{
-        marginTop: 1,
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}
-    >
-      <Typography sx={{ mt: 1 }} component='h2' variant='body2' color='textSecondary'>
+    <Box sx={STYLES.content}>
+      <Typography sx={STYLES.googleFont} component='h2' variant='body2'>
         {t('form.subtitle.google')}
       </Typography>
       <Box style={{ display: 'flex', justifyContent: 'center' }} onClick={signInGoogle}>

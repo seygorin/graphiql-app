@@ -35,6 +35,14 @@ vi.mock('utils/getStringAvatar', () => ({
   default: (name: string) => ({ children: name }),
 }));
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 describe('SignOutButton', () => {
   beforeEach(() => {
     (useTranslations as jest.Mock).mockReturnValue((key: string) => key);

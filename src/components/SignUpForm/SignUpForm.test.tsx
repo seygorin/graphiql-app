@@ -24,6 +24,14 @@ vi.mock('../../utils/notifyMessage', () => ({
   errorNotifyMessage: vi.fn(),
 }));
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 describe('SignUpForm', () => {
   beforeEach(() => {
     (useTranslations as vi.Mock).mockReturnValue((key: string) => key);

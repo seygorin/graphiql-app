@@ -20,6 +20,8 @@ $secondary-light: #b7cac8;
 $secondary-dark: #697c7a;
 $secondary-contrastText: #fff;
 
+$translucent: rgba(201, 201, 201, 0.5);
+
 $text-google: #757575;
 $background-google: #f8f9fa;
 
@@ -76,7 +78,11 @@ $font-family-message: 'Arial', serif;
   backgroundDefault: $background-default;
   backgroundPaper: $background-paper;
 
+  translucent: $translucent;
+
   textPrimary: $text-primary;
   textSecondary: $text-secondary;
   textDisabled: $text-disabled;
+
+  fontMessage: $font-family-message;
 }

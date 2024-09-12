@@ -36,6 +36,14 @@ vi.mock('components/Loader', () => ({
   default: () => <div>Loading...</div>,
 }));
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 describe('SignUpPage', () => {
   const mockPush = vi.fn();
 

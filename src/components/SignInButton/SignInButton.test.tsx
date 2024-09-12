@@ -35,6 +35,14 @@ vi.mock('@mui/material/Button', () => ({
   ),
 }));
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 describe('SignInButton', () => {
   it('renders the sign-in button with correct attributes', () => {
     (useTranslations as vi.Mock).mockReturnValue((key: string) => key);

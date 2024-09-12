@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -28,7 +29,8 @@ import { encodeGraphQLRequestParams } from 'utils/encodeBase64Url';
 import { fetchGraphQLQuery } from 'utils/fetchGraphQLQuery';
 import { initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
-import { saveToHistory } from 'utils/saveToHistory';
+import { saveToHistoryFirestore } from 'utils/saveToHistory';
+import { auth } from '../../lib/firebase';
 import DocumentationViewer from './DocumentationViewer';
 import QueryEditor from './QueryEditor';
 
@@ -89,6 +91,7 @@ const GraphiQLClient: React.FC = () => {
   const searchParams = useSearchParams();
   const effectRan = useRef(false);
 
+  const [user] = useAuthState(auth);
   const [endpoint, setEndpoint] = useState(DEFAULT_ENDPOINT);
   const [sdlEndpoint, setSdlEndpoint] = useState(`${DEFAULT_ENDPOINT}?sdl`);
   const [query, setQuery] = useState(DEFAULT_QUERY);
@@ -180,6 +183,10 @@ const GraphiQLClient: React.FC = () => {
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
     try {
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
       const headerObj = JSON.parse(headers);
       const variablesObj = JSON.parse(variables);
 
@@ -193,13 +200,17 @@ const GraphiQLClient: React.FC = () => {
       setResponse(responseData);
       setStatus('200');
 
-      saveToHistory({
-        method: 'GRAPHQL',
-        url: endpoint,
-        requestBody: query,
-        headers,
-        variables,
-      });
+      await saveToHistoryFirestore(
+        {
+          method: 'GRAPHQL',
+          url: endpoint,
+          requestBody: query,
+          headers,
+          variables,
+        },
+        user.uid,
+        t,
+      );
     } catch (error) {
       if (error instanceof Error) {
         setStatus('Error');
@@ -213,7 +224,7 @@ const GraphiQLClient: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [endpoint, query, headers, variables, t]);
+  }, [endpoint, query, headers, variables, t, user]);
 
   useEffect(() => {
     setSdlEndpoint(`${endpoint}?sdl`);

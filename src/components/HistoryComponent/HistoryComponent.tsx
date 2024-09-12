@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import {
   Box,
   Button,
@@ -13,14 +14,17 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+import { collection, deleteDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { encodeBase64Url } from 'utils/encodeBase64Url';
 import { errorNotifyMessage, warningNotifyMessage } from 'utils/notifyMessage';
+import { auth, db } from '../../lib/firebase';
 
 interface HistoryItem {
   id: string;
   method: string;
   url: string;
   timestamp: number;
+  userUid: string;
   requestBody?: string;
   headers?: string;
   variables?: string;
@@ -31,29 +35,58 @@ const HistoryComponent: React.FC = () => {
   const t = useTranslations();
   const locale = useLocale();
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
+  const [user] = useAuthState(auth);
 
-  const loadHistory = useCallback(() => {
-    const storedHistory = localStorage.getItem('requestHistory');
-    if (storedHistory) {
+  const loadHistoryFirestore = useCallback(
+    async (userUid: string) => {
       try {
-        const parsedHistory = JSON.parse(storedHistory) as HistoryItem[];
-        setHistoryItems(parsedHistory.sort((a, b) => b.timestamp - a.timestamp));
+        const historyCollection = collection(db, 'requestHistory');
+        const q = query(
+          historyCollection,
+          where('userUid', '==', userUid),
+          orderBy('timestamp', 'desc'),
+        );
+
+        const querySnapshot = await getDocs(q);
+        const historyItemsArray = querySnapshot.docs.map((doc) => doc.data() as HistoryItem);
+        setHistoryItems(historyItemsArray);
       } catch (error) {
-        errorNotifyMessage(t('history.errorParsingHistory'));
+        errorNotifyMessage(t('history.errorLoadingHistory'));
         setHistoryItems([]);
       }
-    }
-  }, [t]);
+    },
+    [t],
+  );
 
   useEffect(() => {
-    loadHistory();
-  }, [loadHistory]);
+    if (user) {
+      loadHistoryFirestore(user.uid);
+    }
+  }, [loadHistoryFirestore, user]);
 
-  const clearHistory = useCallback(() => {
-    localStorage.removeItem('requestHistory');
-    setHistoryItems([]);
-    warningNotifyMessage(t('history.historyCleared'));
-  }, [t]);
+  const clearFirestoreHistory = useCallback(
+    async (userUid: string) => {
+      try {
+        const historyCollection = collection(db, 'requestHistory');
+        const q = query(historyCollection, where('userUid', '==', userUid));
+        const querySnapshot = await getDocs(q);
+
+        const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+        await Promise.all(deletePromises);
+        setHistoryItems([]);
+        warningNotifyMessage(t('history.historyCleared'));
+      } catch (error) {
+        errorNotifyMessage(t('history.errorHistoryCleared'));
+      }
+    },
+    [t],
+  );
+
+  const clearHistory = () => {
+    if (user) {
+      clearFirestoreHistory(user.uid);
+    }
+  };
 
   const generateLink = (item: HistoryItem) => {
     const basePath = `/${locale}`;
