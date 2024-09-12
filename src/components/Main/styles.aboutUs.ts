@@ -8,7 +8,7 @@ export const STYLES = genStyles({
     margin: '0 auto',
   },
   title: {
-    pt: '110px',
+    pt: { md: 27, sm: 20, xs: 15 },
     pb: '28px',
     fontSize: {
       md: '2.1rem',
