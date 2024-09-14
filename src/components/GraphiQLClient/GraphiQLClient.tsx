@@ -18,14 +18,25 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import StatusChip from 'components/StatusChip';
+import { useResizablePanes } from 'hooks/useResizablePanes';
 import { encodeGraphQLRequestParams } from 'utils/encodeBase64Url';
 import { fetchGraphQLQuery } from 'utils/fetchGraphQLQuery';
 import { initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistory } from 'utils/saveToHistory';
+import {
+  DEFAULT_ENDPOINT,
+  DEFAULT_HEADERS,
+  DEFAULT_QUERY,
+  DEFAULT_VARIABLES,
+  SCHEMA_QUERY,
+} from '../../shared/consts/defaultsGrahpiQL';
 
+const Resizer = dynamic(() => import('../RESTfulClient/Resizer'), { ssr: false });
 const QueryEditor = dynamic(() => import('./QueryEditor'), { ssr: false });
 const VariablesEditor = dynamic(() => import('components/RESTfulClient/VariablesEditor'), {
   ssr: false,
@@ -70,29 +81,14 @@ interface SchemaResult {
   };
 }
 
-const DEFAULT_ENDPOINT = 'https://swapi-graphql.netlify.app/.netlify/functions/index';
-const DEFAULT_QUERY = `query {
-  allFilms {
-    films {
-      title
-      director
-      releaseDate
-    }
-  }
-}`;
-const DEFAULT_HEADERS = `{
-  "Content-Type": "application/json",
-  "Accept": "application/json"
-}`;
-const DEFAULT_VARIABLES = `{
-  "filmId": "ZmlsbXM6MQ=="
-}`;
-
 const GraphiQLClient: React.FC = () => {
   const t = useTranslations();
   const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { leftPaneWidth, handleMouseDown } = useResizablePanes();
 
   const [endpoint, setEndpoint] = useState(DEFAULT_ENDPOINT);
   const [sdlEndpoint, setSdlEndpoint] = useState(`${DEFAULT_ENDPOINT}?sdl`);
@@ -190,35 +186,7 @@ const GraphiQLClient: React.FC = () => {
 
       const responseData = await fetchGraphQLQuery({
         url: sdlEndpoint,
-        query: `
-          query IntrospectionQuery {
-            __schema {
-              types {
-                name
-                description
-                fields {
-                  name
-                  description
-                  type {
-                    name
-                    kind
-                  }
-                  args {
-                    name
-                    description
-                    type {
-                      name
-                      kind
-                    }
-                  }
-                }
-              }
-              queryType { name }
-              mutationType { name }
-              subscriptionType { name }
-            }
-          }
-        `,
+        query: SCHEMA_QUERY,
         headers: parsedHeaders,
       });
 
@@ -262,75 +230,103 @@ const GraphiQLClient: React.FC = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: 'calc(100vh - 270px)',
+        height: { xs: 'auto', md: 'calc(100vh - 270px)' },
         padding: 2,
         overflow: 'hidden',
       }}
     >
       <Paper elevation={3} sx={{ mb: 2, p: 2 }}>
-        <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center' }}>
-          <TextField
-            fullWidth
-            label={t('graphiql.endpointLabel')}
-            value={endpoint}
-            onChange={(e) => setEndpoint(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <StatusChip status={status} />
-                </InputAdornment>
-              ),
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: 2,
+            mb: 2,
+            alignItems: 'center',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              width: '100%',
             }}
-          />
-          <Tooltip title={t('graphiql.sendRequest')}>
-            <IconButton
-              onClick={handleSendRequest}
-              disabled={isLoading}
-              color='primary'
-              sx={{
-                width: 48,
-                height: 48,
-                '& .MuiSvgIcon-root': {
-                  fontSize: 24,
-                },
+          >
+            <TextField
+              fullWidth
+              label={t('graphiql.endpointLabel')}
+              value={endpoint}
+              onChange={(e) => setEndpoint(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <StatusChip status={status} />
+                  </InputAdornment>
+                ),
               }}
-            >
-              <SendIcon />
-            </IconButton>
-          </Tooltip>
+            />
+            <Tooltip title={t('graphiql.sendRequest')}>
+              <IconButton
+                onClick={handleSendRequest}
+                disabled={isLoading}
+                color='primary'
+                sx={{
+                  width: 48,
+                  height: 48,
+                  flexShrink: 0,
+                  '& .MuiSvgIcon-root': {
+                    fontSize: 24,
+                  },
+                }}
+              >
+                <SendIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
 
-          <TextField
-            fullWidth
-            label={t('graphiql.sdlEndpointLabel')}
-            value={sdlEndpoint}
-            onChange={(e) => setSdlEndpoint(e.target.value)}
-          />
-
-          <Tooltip title={t('graphiql.fetchSchema')}>
-            <IconButton
-              onClick={() => {
-                fetchSchema();
-                setShowDocumentation(true);
-              }}
-              disabled={isLoading}
-              color='primary'
-              sx={{
-                width: 48,
-                height: 48,
-                '& .MuiSvgIcon-root': {
-                  fontSize: 24,
-                },
-              }}
-            >
-              <SchemaIcon />
-            </IconButton>
-          </Tooltip>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              width: '100%',
+            }}
+          >
+            <TextField
+              fullWidth
+              label={t('graphiql.sdlEndpointLabel')}
+              value={sdlEndpoint}
+              onChange={(e) => setSdlEndpoint(e.target.value)}
+            />
+            <Tooltip title={t('graphiql.fetchSchema')}>
+              <IconButton
+                onClick={() => {
+                  fetchSchema();
+                  setShowDocumentation(true);
+                }}
+                disabled={isLoading}
+                color='primary'
+                sx={{
+                  width: 48,
+                  height: 48,
+                  flexShrink: 0,
+                  '& .MuiSvgIcon-root': {
+                    fontSize: 24,
+                  },
+                }}
+              >
+                <SchemaIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
       </Paper>
 
       <Box
         sx={{
           display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
           flex: 1,
           gap: 2,
           minHeight: '10vh',
@@ -340,9 +336,10 @@ const GraphiQLClient: React.FC = () => {
         <Paper
           elevation={3}
           sx={{
-            width: '50%',
+            width: { xs: '100%', md: `${leftPaneWidth}%` },
             display: 'flex',
             flexDirection: 'column',
+            mb: { xs: 2, md: 0 },
           }}
         >
           <Box sx={{ flex: 1, overflow: 'auto' }}>
@@ -352,10 +349,12 @@ const GraphiQLClient: React.FC = () => {
           </Box>
         </Paper>
 
+        {!isMobile && <Resizer onMouseDown={handleMouseDown} />}
+
         <Paper
           elevation={3}
           sx={{
-            width: '50%',
+            width: { xs: '100%', md: `calc(${100 - leftPaneWidth}% - 8px)` },
             display: 'flex',
             flexDirection: 'column',
             overflow: 'auto',
@@ -372,7 +371,7 @@ const GraphiQLClient: React.FC = () => {
             position: 'relative',
             mt: 2,
             transition: 'all 0.3s ease',
-            height: isDocumentationExpanded ? 'calc(60% - 16px)' : '48px',
+            height: isDocumentationExpanded ? { xs: 'auto', md: 'calc(60% - 16px)' } : '48px',
             overflow: 'auto',
           }}
         >

@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Paper } from '@mui/material';
+import { Box, Paper, useMediaQuery, useTheme } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useResizablePanes } from 'hooks/useResizablePanes';
 import { encodeRestRequestParams } from 'utils/encodeBase64Url';
@@ -12,6 +12,13 @@ import { fetchQuery } from 'utils/fetchQuery';
 import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistory } from 'utils/saveToHistory';
+import {
+  DEFAULT_HEADERS,
+  DEFAULT_METHOD,
+  DEFAULT_REQUEST_BODY,
+  DEFAULT_URL,
+  DEFAULT_VARIABLES,
+} from '../../shared/consts/defaultRestful';
 
 const HeadersEditor = dynamic(() => import('./HeadersEditor'), { ssr: false });
 const RequestBodyEditor = dynamic(() => import('./RequestBodyEditor'), { ssr: false });
@@ -22,19 +29,15 @@ const VariablesEditor = dynamic(() => import('./VariablesEditor/VariablesEditor'
 
 type ResponseType = Record<string, unknown> | { error: string } | null;
 
-const DEFAULT_METHOD: HttpMethod = 'GET';
-const DEFAULT_URL = 'https://jsonplaceholder.typicode.com/posts';
-const DEFAULT_REQUEST_BODY = '{\n  "title": "foo",\n  "body": "bar",\n  "userId": 1\n}';
-const DEFAULT_HEADERS = '{\n  "Content-Type": "application/json"\n}';
-const DEFAULT_VARIABLES = '{\n  "id": 1\n}';
-
 const RESTfulClient: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const t = useTranslations();
   const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD);
+  const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD as HttpMethod);
   const [url, setUrl] = useState(DEFAULT_URL);
   const [requestBody, setRequestBody] = useState(DEFAULT_REQUEST_BODY);
   const [headers, setHeaders] = useState(DEFAULT_HEADERS);
@@ -163,7 +166,7 @@ const RESTfulClient: React.FC = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: 'calc(100vh - 250px)',
+        height: { xs: 'auto', md: 'calc(100vh - 250px)' },
         padding: 2,
       }}
     >
@@ -180,44 +183,51 @@ const RESTfulClient: React.FC = () => {
         />
       </Paper>
 
-      {typeof window !== 'undefined' && (
-        <Box sx={{ display: 'flex', flex: 1, gap: 2, minHeight: '10vh' }}>
-          <Paper
-            elevation={3}
-            sx={{
-              width: `${leftPaneWidth}%`,
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <Box sx={{ flex: 1, overflow: 'auto' }}>
-              <HeadersEditor headers={headers} onHeadersChange={setHeaders} t={t} />
-              <VariablesEditor variables={variables} onVariablesChange={setVariables} t={t} />
-              {method !== 'GET' && method !== 'DELETE' && (
-                <RequestBodyEditor
-                  requestBody={requestBody}
-                  onRequestBodyChange={setRequestBody}
-                  t={t}
-                />
-              )}
-            </Box>
-          </Paper>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          flex: 1,
+          gap: 2,
+          minHeight: '10vh',
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            width: { xs: '100%', md: `${leftPaneWidth}%` },
+            display: 'flex',
+            flexDirection: 'column',
+            mb: { xs: 2, md: 0 },
+          }}
+        >
+          <Box sx={{ flex: 1, overflow: 'auto' }}>
+            <HeadersEditor headers={headers} onHeadersChange={setHeaders} t={t} />
+            <VariablesEditor variables={variables} onVariablesChange={setVariables} t={t} />
+            {method !== 'GET' && method !== 'DELETE' && (
+              <RequestBodyEditor
+                requestBody={requestBody}
+                onRequestBodyChange={setRequestBody}
+                t={t}
+              />
+            )}
+          </Box>
+        </Paper>
 
-          <Resizer onMouseDown={handleMouseDown} />
+        {!isMobile && <Resizer onMouseDown={handleMouseDown} />}
 
-          <Paper
-            elevation={3}
-            sx={{
-              width: `calc(${100 - leftPaneWidth}% - 8px)`,
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-            }}
-          >
-            <ResponseViewer isLoading={isLoading} response={response} />
-          </Paper>
-        </Box>
-      )}
+        <Paper
+          elevation={3}
+          sx={{
+            width: { xs: '100%', md: `calc(${100 - leftPaneWidth}% - 8px)` },
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
+        >
+          <ResponseViewer isLoading={isLoading} response={response} />
+        </Paper>
+      </Box>
     </Box>
   );
 };
