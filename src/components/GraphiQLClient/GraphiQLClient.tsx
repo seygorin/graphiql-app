@@ -201,7 +201,6 @@ const GraphiQLClient: React.FC = () => {
         headers: parsedHeaders,
       });
 
-      /* eslint-disable no-underscore-dangle */
       const schemaResult = responseData as unknown as SchemaResult;
       if (schemaResult && schemaResult.data && schemaResult.data.__schema) {
         setDocumentation(schemaResult.data.__schema);

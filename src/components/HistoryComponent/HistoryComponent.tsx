@@ -13,6 +13,8 @@ import {
   ListItemButton,
   ListItemText,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { collection, deleteDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { encodeBase64Url } from 'utils/encodeBase64Url';
@@ -38,6 +40,8 @@ const HistoryComponent: React.FC = () => {
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const loadHistoryFirestore = useCallback(
     async (userUid: string) => {
@@ -187,7 +191,11 @@ const HistoryComponent: React.FC = () => {
       <List>
         {historyItems.map((item) => (
           <ListItem key={item.timestamp}>
-            <ListItemButton component={Link} href={generateLink(item)}>
+            <ListItemButton
+              sx={isMobile ? { display: 'flex', flexDirection: 'column' } : {}}
+              component={Link}
+              href={generateLink(item)}
+            >
               <Chip
                 label={item.method}
                 color={

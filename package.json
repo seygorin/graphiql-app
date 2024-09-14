@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint && eslint . --ext .js,.jsx,.ts,.tsx",
-    "format:fix": "prettier --write 'src//**/*.{js,jsx,ts,tsx}' 'bin//*.{js,jsx,ts,tsx}'",
+    "format:fix": "prettier --write 'src//**/*.{js,jsx,ts,tsx}'",
     "test": "vitest",
     "test:check": "vitest --run",
     "coverage": "vitest run --coverage"

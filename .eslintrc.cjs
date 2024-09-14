@@ -48,6 +48,7 @@ module.exports = {
     'react/button-has-type': 'off',
     'no-restricted-exports': 'off',
     'react/self-closing-comp': 'off',
+    'no-underscore-dangle': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
