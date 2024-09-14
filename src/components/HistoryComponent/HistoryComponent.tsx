@@ -18,6 +18,7 @@ import { collection, deleteDoc, getDocs, orderBy, query, where } from 'firebase/
 import { encodeBase64Url } from 'utils/encodeBase64Url';
 import { errorNotifyMessage, warningNotifyMessage } from 'utils/notifyMessage';
 import { auth, db } from '../../lib/firebase';
+import Loader from '../Loader';
 
 interface HistoryItem {
   id: string;
@@ -36,9 +37,11 @@ const HistoryComponent: React.FC = () => {
   const locale = useLocale();
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [user] = useAuthState(auth);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadHistoryFirestore = useCallback(
     async (userUid: string) => {
+      setIsLoading(true);
       try {
         const historyCollection = collection(db, 'requestHistory');
         const q = query(
@@ -53,6 +56,8 @@ const HistoryComponent: React.FC = () => {
       } catch (error) {
         errorNotifyMessage(t('history.errorLoadingHistory'));
         setHistoryItems([]);
+      } finally {
+        setIsLoading(false);
       }
     },
     [t],
@@ -61,6 +66,8 @@ const HistoryComponent: React.FC = () => {
   useEffect(() => {
     if (user) {
       loadHistoryFirestore(user.uid);
+    } else {
+      setIsLoading(false);
     }
   }, [loadHistoryFirestore, user]);
 
@@ -94,6 +101,7 @@ const HistoryComponent: React.FC = () => {
     if (item.method === 'GRAPHQL') {
       const encodedEndpoint = encodeBase64Url(item.url);
       const encodedQuery = item.requestBody ? encodeBase64Url(item.requestBody) : '';
+      const encodedVariables = item.variables ? `/${encodeBase64Url(item.variables)}` : '';
       let params: string[] = [];
 
       if (item.headers) {
@@ -111,16 +119,13 @@ const HistoryComponent: React.FC = () => {
         }
       }
 
-      if (item.variables) {
-        params.push(`variables=${encodeURIComponent(item.variables)}`);
-      }
-
       const encodedParams = params.length > 0 ? `?${params.join('&')}` : '';
 
-      return `${basePath}/GRAPHQL/${encodedEndpoint}/${encodedQuery}${encodedParams}`;
+      return `${basePath}/GRAPHQL/${encodedEndpoint}/${encodedQuery}${encodedVariables}${encodedParams}`;
     }
 
     const encodedUrl = encodeBase64Url(item.url);
+    const encodedVariables = item.variables ? `/${encodeBase64Url(item.variables)}` : '';
     const encodedBody = item.requestBody ? `/${encodeBase64Url(item.requestBody)}` : '';
     let params: string[] = [];
 
@@ -141,7 +146,7 @@ const HistoryComponent: React.FC = () => {
 
     const encodedParams = params.length > 0 ? `?${params.join('&')}` : '';
 
-    return `${basePath}/${item.method}/${encodedUrl}${encodedBody}${encodedParams}`;
+    return `${basePath}/${item.method}/${encodedUrl}${encodedVariables}${encodedBody}${encodedParams}`;
   };
 
   const getChipColor = (method: string) => {
@@ -163,6 +168,52 @@ const HistoryComponent: React.FC = () => {
     }
   };
 
+  const renderContent = () => {
+    if (isLoading) {
+      return <Loader />;
+    }
+
+    if (historyItems.length === 0) {
+      return (
+        <Box textAlign='center'>
+          <Typography variant='h6' gutterBottom>
+            {t('history.noRequests')}
+          </Typography>
+        </Box>
+      );
+    }
+
+    return (
+      <List>
+        {historyItems.map((item) => (
+          <ListItem key={item.timestamp}>
+            <ListItemButton component={Link} href={generateLink(item)}>
+              <Chip
+                label={item.method}
+                color={
+                  getChipColor(item.method) as
+                    | 'success'
+                    | 'primary'
+                    | 'warning'
+                    | 'error'
+                    | 'info'
+                    | 'secondary'
+                    | 'default'
+                }
+                size='small'
+                sx={{ mr: 2 }}
+              />
+              <ListItemText
+                primary={item.url}
+                secondary={new Date(item.timestamp).toLocaleString()}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    );
+  };
+
   return (
     <Box sx={{ padding: 2 }}>
       <Box display='flex' justifyContent='flex-end' alignItems='center' mb={2}>
@@ -172,41 +223,7 @@ const HistoryComponent: React.FC = () => {
           </Button>
         )}
       </Box>
-      {historyItems.length > 0 ? (
-        <List>
-          {historyItems.map((item) => (
-            <ListItem key={item.id} disablePadding>
-              <ListItemButton component={Link} href={generateLink(item)}>
-                <Chip
-                  label={item.method}
-                  color={
-                    getChipColor(item.method) as
-                      | 'success'
-                      | 'primary'
-                      | 'warning'
-                      | 'error'
-                      | 'info'
-                      | 'secondary'
-                      | 'default'
-                  }
-                  size='small'
-                  sx={{ mr: 2 }}
-                />
-                <ListItemText
-                  primary={item.url}
-                  secondary={new Date(item.timestamp).toLocaleString()}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      ) : (
-        <Box textAlign='center'>
-          <Typography variant='h6' gutterBottom>
-            {t('history.noRequests')}
-          </Typography>
-        </Box>
-      )}
+      {renderContent()}
     </Box>
   );
 };

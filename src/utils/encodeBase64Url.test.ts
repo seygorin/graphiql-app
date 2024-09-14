@@ -36,9 +36,11 @@ describe('GraphQL request params encoding', () => {
       { 'Content-Type': 'application/json' },
       '{"id": "123"}',
     );
-    expect(result).toMatch(/^\/GRAPHQL\/.+\/.+/);
+    expect(result).toMatch(/^\/GRAPHQL\/.+\/.+\/.+/);
     expect(result).toContain('Content-Type=application%2Fjson');
-    expect(result).toContain('variables=%7B%22id%22%3A%20%22123%22%7D');
+
+    const parts = result.split('/');
+    expect(decodeBase64Url(parts[4])).toMatch(/^{"id": "123"}/);
   });
 
   it('handles GraphQL request without headers and variables', () => {
@@ -69,9 +71,11 @@ describe('GraphQL request params encoding', () => {
       { Authorization: 'Bearer token' },
       '{"id": "456"}',
     );
-    expect(result).toMatch(/^\/GRAPHQL\/.+\/.+/);
+    expect(result).toMatch(/^\/GRAPHQL\/.+\/.+\/.+/);
     expect(result).toContain('Authorization=Bearer%20token');
-    expect(result).toContain('variables=%7B%22id%22%3A%20%22456%22%7D');
+
+    const parts = result.split('/');
+    expect(decodeBase64Url(parts[4])).toMatch(/^{"id": "456"}/);
   });
 });
 
