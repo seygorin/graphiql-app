@@ -47,6 +47,14 @@ vi.mock('firebase/firestore', () => ({
   where: vi.fn(),
 }));
 
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
+
 const MockComponent = ({ user, name }: { user?: User | null; name?: string | null }) => (
   <div>{user ? `User: ${name}` : 'No User'}</div>
 );

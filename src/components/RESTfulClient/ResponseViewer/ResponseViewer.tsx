@@ -33,7 +33,7 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
           height: '100%',
         }}
       >
-        <Loader />
+        <Loader data-testid='loader' />
       </Box>
     );
   }
@@ -58,6 +58,7 @@ const ResponseViewer: React.FC<ResponseViewerProps> = ({ isLoading, response }) 
         </IconButton>
         <CodeMirror
           value={formatJson(response)}
+          data-testid='code-mirror'
           theme={EditorView.theme({
             '&': {
               height: 'calc(100% - 40px)',

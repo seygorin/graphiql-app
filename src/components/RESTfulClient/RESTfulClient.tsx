@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { Box, Paper, useMediaQuery, useTheme } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useResizablePanes } from 'hooks/useResizablePanes';
@@ -11,7 +12,8 @@ import { encodeRestRequestParams } from 'utils/encodeBase64Url';
 import { fetchQuery } from 'utils/fetchQuery';
 import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
-import { saveToHistory } from 'utils/saveToHistory';
+import { saveToHistoryFirestore } from 'utils/saveToHistory';
+import { auth } from '../../lib/firebase';
 import {
   DEFAULT_HEADERS,
   DEFAULT_METHOD,
@@ -37,7 +39,8 @@ const RESTfulClient: React.FC = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD as HttpMethod);
+  const [user] = useAuthState(auth);
+  const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD);
   const [url, setUrl] = useState(DEFAULT_URL);
   const [requestBody, setRequestBody] = useState(DEFAULT_REQUEST_BODY);
   const [headers, setHeaders] = useState(DEFAULT_HEADERS);
@@ -77,6 +80,9 @@ const RESTfulClient: React.FC = () => {
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
     try {
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
       let headerObj;
       let variablesObj;
       let bodyObj;
@@ -115,13 +121,17 @@ const RESTfulClient: React.FC = () => {
       setResponse(responseData);
       setStatus('200');
 
-      saveToHistory({
-        method,
-        url,
-        requestBody,
-        headers: JSON.stringify(headerObj),
-        variables,
-      });
+      await saveToHistoryFirestore(
+        {
+          method,
+          url,
+          requestBody,
+          headers: JSON.stringify(headerObj),
+          variables,
+        },
+        user.uid,
+        t,
+      );
     } catch (error) {
       if (error instanceof Error) {
         const statusMatch = error.message.match(/status: (\d+)/);
@@ -139,7 +149,7 @@ const RESTfulClient: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [method, url, headers, requestBody, variables, t]);
+  }, [method, url, headers, requestBody, variables, t, user]);
 
   const handleMethodChange = (event: SelectChangeEvent<HttpMethod>) => {
     setMethod(event.target.value as HttpMethod);

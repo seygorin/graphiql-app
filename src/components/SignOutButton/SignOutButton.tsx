@@ -3,6 +3,17 @@ import React from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
 import { signOutUser } from '../../lib/auth';
+import { genStyles } from '../../styles/genStyles';
+import { ADDITION_COLOR } from '../../theme/theme';
+
+const STYLES = genStyles({
+  button: {
+    color: ADDITION_COLOR.backgroundMain,
+    '&:hover': {
+      color: ADDITION_COLOR.light,
+    },
+  },
+});
 
 const SignOutButton: React.FC = () => {
   const t = useTranslations();
@@ -18,11 +29,7 @@ const SignOutButton: React.FC = () => {
       color='secondary'
       onClick={onClickSignOut}
       endIcon={<LogoutIcon />}
-      sx={{
-        ':hover': {
-          color: 'white',
-        },
-      }}
+      sx={STYLES.button}
     >
       {t('header.logout')}
     </Button>

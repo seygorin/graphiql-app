@@ -1,24 +1,16 @@
+'use client';
+
 import * as React from 'react';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import Button from '@mui/material/Button';
-import Fade from '@mui/material/Fade';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Tooltip from '@mui/material/Tooltip';
 import Buttons from './Buttons';
 import SelectLanguage from './SelectLanguage';
 
-const STYLES = {
-  buttonMenu: {
-    margin: 0,
-  },
-  menu: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 3,
-  },
-};
-
-export default function FadeMenu() {
+export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,29 +19,59 @@ export default function FadeMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <>
-      <Button
-        sx={STYLES.buttonMenu}
-        id='fade-button'
-        aria-controls={open ? 'fade-menu' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        <MenuRoundedIcon fontSize='large' />
-      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        <Tooltip title='Account settings'>
+          <IconButton
+            onClick={handleClick}
+            size='small'
+            sx={{ ml: 2 }}
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup='true'
+            aria-expanded={open ? 'true' : undefined}
+          >
+            <MenuRoundedIcon fontSize='large' />
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Menu
-        sx={STYLES.menu}
-        id='fade-menu'
-        MenuListProps={{
-          'aria-labelledby': 'fade-button',
-        }}
         anchorEl={anchorEl}
+        id='account-menu'
         open={open}
         onClose={handleClose}
-        TransitionComponent={Fade}
+        onClick={handleClose}
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+              width: '187px',
+              '& .MuiAvatar-root': {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+              '&::before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-100%) rotate(45deg)',
+                zIndex: 0,
+              },
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
           <SelectLanguage />

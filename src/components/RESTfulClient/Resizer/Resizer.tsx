@@ -25,7 +25,7 @@ const Resizer: React.FC<ResizerProps> = React.memo(({ onMouseDown }) => {
     [theme.palette.divider, theme.palette.primary.main],
   );
 
-  return <Box sx={resizerStyle} onMouseDown={handleMouseDown} />;
+  return <Box data-testid='resizer' sx={resizerStyle} onMouseDown={handleMouseDown} />;
 });
 
 Resizer.displayName = 'Resizer';

@@ -1,7 +1,16 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { ADDITION_COLOR } from '../../theme/theme';
 import Loader from './Loader';
+
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
+}));
 
 describe('Loader', () => {
   it('renders the CircularProgress component', () => {
@@ -19,7 +28,7 @@ describe('Loader', () => {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 150px);
+      height: calc(100vh - (${ADDITION_COLOR.headerHeight} + ${ADDITION_COLOR.footerHeight}));
     `);
   });
 });

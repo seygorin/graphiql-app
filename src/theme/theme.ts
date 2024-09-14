@@ -13,6 +13,7 @@ const roboto = Roboto({
 export const ADDITION_COLOR = {
   headerHeight: vars.headerHeight,
   footerHeight: vars.footerHeight,
+  fontMessage: vars.fontMessage,
 
   backgroundMain: vars.backgroundMain,
   backgroundFooter: vars.backgroundFooter,
@@ -22,6 +23,13 @@ export const ADDITION_COLOR = {
   borderFooter: vars.borderFooter,
   textFoo: vars.textFoo,
   info: vars.infoMain,
+  main: vars.primaryMain,
+  mainLight: vars.primaryLight,
+  secondary: vars.secondaryMain,
+  light: vars.backgroundDefault,
+  translucent: vars.translucent,
+  fontGoogle: vars.textGoogle,
+  successLight: vars.successLight,
 };
 
 const theme = createTheme({
@@ -210,6 +218,14 @@ const theme = createTheme({
               borderColor: vars.primaryLight,
             },
           },
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          boxShadow:
+            '0px 11px 15px -7px rgba(0,0,0,0.2), 0px 24px 38px 3px rgba(0,0,0,0.14), 0px 9px 46px 8px rgba(0,0,0,0.12)',
         },
       },
     },

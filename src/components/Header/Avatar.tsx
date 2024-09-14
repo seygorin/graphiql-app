@@ -15,5 +15,5 @@ const AvatarUser: React.FC<IProps> = ({ user, name }) => {
 
   return null;
 };
-
-export default withUser(AvatarUser);
+// export default withUser(AvatarUser);
+export default withUser(AvatarUser, false);

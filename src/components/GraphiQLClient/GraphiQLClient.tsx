@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -27,7 +28,8 @@ import { encodeGraphQLRequestParams } from 'utils/encodeBase64Url';
 import { fetchGraphQLQuery } from 'utils/fetchGraphQLQuery';
 import { initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
-import { saveToHistory } from 'utils/saveToHistory';
+import { saveToHistoryFirestore } from 'utils/saveToHistory';
+import { auth } from '../../lib/firebase';
 import {
   DEFAULT_ENDPOINT,
   DEFAULT_HEADERS,
@@ -90,6 +92,7 @@ const GraphiQLClient: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { leftPaneWidth, handleMouseDown } = useResizablePanes();
 
+  const [user] = useAuthState(auth);
   const [endpoint, setEndpoint] = useState(DEFAULT_ENDPOINT);
   const [sdlEndpoint, setSdlEndpoint] = useState(`${DEFAULT_ENDPOINT}?sdl`);
   const [query, setQuery] = useState(DEFAULT_QUERY);
@@ -121,6 +124,10 @@ const GraphiQLClient: React.FC = () => {
   const sendRequest = useCallback(async () => {
     setIsLoading(true);
     try {
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
       let headerObj;
       let variablesObj;
 
@@ -150,13 +157,17 @@ const GraphiQLClient: React.FC = () => {
       setResponse(responseData);
       setStatus('200');
 
-      saveToHistory({
-        method: 'GRAPHQL',
-        url: endpoint,
-        requestBody: query,
-        headers,
-        variables,
-      });
+      await saveToHistoryFirestore(
+        {
+          method: 'GRAPHQL',
+          url: endpoint,
+          requestBody: query,
+          headers,
+          variables,
+        },
+        user.uid,
+        t,
+      );
     } catch (error) {
       if (error instanceof Error) {
         setStatus('Error');
@@ -170,7 +181,7 @@ const GraphiQLClient: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [endpoint, query, headers, variables, t]);
+  }, [endpoint, query, headers, variables, t, user]);
 
   const fetchSchema = useCallback(async () => {
     setIsLoading(true);
@@ -271,6 +282,7 @@ const GraphiQLClient: React.FC = () => {
                 onClick={handleSendRequest}
                 disabled={isLoading}
                 color='primary'
+                data-testid='send-request-button'
                 sx={{
                   width: 48,
                   height: 48,
@@ -307,6 +319,7 @@ const GraphiQLClient: React.FC = () => {
                 }}
                 disabled={isLoading}
                 color='primary'
+                data-testid='fetch-schema-button'
                 sx={{
                   width: 48,
                   height: 48,
@@ -385,7 +398,14 @@ const GraphiQLClient: React.FC = () => {
               borderBottom: isDocumentationExpanded ? '1px solid #e0e0e0' : 'none',
             }}
           >
-            <IconButton onClick={toggleDocumentationExpansion}>
+            <IconButton
+              onClick={toggleDocumentationExpansion}
+              data-testid={
+                isDocumentationExpanded
+                  ? 'collapse-documentation-button'
+                  : 'expand-documentation-button'
+              }
+            >
               {isDocumentationExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
             </IconButton>
             <Typography>{t('graphiql.documentation')}</Typography>

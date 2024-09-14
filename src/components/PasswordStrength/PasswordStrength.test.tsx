@@ -3,11 +3,12 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import PasswordStrength from './PasswordStrength';
 
-vi.mock('./PasswordStrength.module.scss', () => ({
-  default: {
-    power_meter: 'power_meter',
-    power_scale: 'power_scale',
-  },
+vi.mock('next/font/google', () => ({
+  Roboto: () => ({
+    style: {
+      fontFamily: 'Roboto, sans-serif',
+    },
+  }),
 }));
 
 describe('PasswordStrength', () => {

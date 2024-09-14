@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { FormControl, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { locales } from 'i18n/config';
+import withUser from 'utils/withUser';
 
 const SelectLanguage: React.FC = () => {
   const router = useRouter();
@@ -35,4 +36,5 @@ const SelectLanguage: React.FC = () => {
   );
 };
 
-export default SelectLanguage;
+// export default SelectLanguage;
+export default withUser(SelectLanguage, false);

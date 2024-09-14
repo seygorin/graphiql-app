@@ -1,134 +1,109 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { saveToHistory } from './saveToHistory';
+import {
+  FirestoreError,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+} from 'firebase/firestore';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { errorNotifyMessage } from 'utils/notifyMessage';
+import { saveToHistoryFirestore } from './saveToHistory';
 
-describe('saveToHistory', () => {
-  const mockLocalStorage = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
+vi.mock('firebase/firestore', () => ({
+  getFirestore: vi.fn(),
+  collection: vi.fn(),
+  addDoc: vi.fn(),
+  query: vi.fn(),
+  where: vi.fn(),
+  orderBy: vi.fn(),
+  limit: vi.fn(),
+  getDocs: vi.fn(),
+  deleteDoc: vi.fn(),
+  doc: vi.fn(),
+  FirestoreError: vi.fn(),
+}));
+
+const t = vi.fn((key: string) => key);
+
+vi.mock('../lib/firebase', () => ({
+  db: {},
+}));
+
+vi.mock('utils/notifyMessage', () => ({
+  errorNotifyMessage: vi.fn(),
+}));
+
+const generateExpectedObject = (requestData, userUid, timestamp) => {
+  const id = timestamp.toString();
+  return {
+    ...requestData,
+    id,
+    timestamp,
+    userUid,
   };
+};
+
+describe('saveToHistoryFirestore', () => {
+  const userUid = 'userUid';
+  const requestData = {
+    method: 'GET',
+    url: 'https://example.com',
+    requestBody: 'some request body',
+    headers: 'some headers',
+    variables: 'some variables',
+    sdlUrl: 'https://example.com/sdl',
+  };
+  const docsArray = [];
+  for (let i = 0; i <= 50; i += 1) {
+    docsArray.push({ id: `doc${i}` });
+  }
 
   beforeEach(() => {
-    Object.defineProperty(window, 'localStorage', {
-      value: mockLocalStorage,
-    });
+    vi.clearAllMocks();
     vi.useFakeTimers();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-    vi.useRealTimers();
-  });
-
-  it('saves new item to empty history', () => {
-    mockLocalStorage.getItem.mockReturnValue(null);
-    const now = new Date('2023-01-01T00:00:00Z');
-    vi.setSystemTime(now);
-
-    const requestData = {
-      method: 'GET',
-      url: 'https://api.example.com/data',
-    };
-
-    saveToHistory(requestData);
-
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
-      'requestHistory',
-      JSON.stringify([
-        {
-          ...requestData,
-          id: now.getTime().toString(),
-          timestamp: now.getTime(),
-        },
-      ]),
-    );
-  });
-
-  it('adds new item to existing history', () => {
-    const existingHistory = [
-      {
-        method: 'POST',
-        url: 'https://api.example.com/users',
-        id: '1672531200000',
-        timestamp: 1672531200000,
-      },
-    ];
-    mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingHistory));
-    const now = new Date('2023-01-02T00:00:00Z');
-    vi.setSystemTime(now);
-
-    const requestData = {
-      method: 'GET',
-      url: 'https://api.example.com/data',
-    };
-
-    saveToHistory(requestData);
-
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
-      'requestHistory',
-      JSON.stringify([
-        ...existingHistory,
-        {
-          ...requestData,
-          id: now.getTime().toString(),
-          timestamp: now.getTime(),
-        },
-      ]),
-    );
-  });
-
-  it('limits history to 50 items', () => {
-    const existingHistory = Array.from({ length: 50 }, (_, i) => ({
-      method: 'GET',
-      url: `https://api.example.com/data/${i}`,
-      id: (1672531200000 + i).toString(),
-      timestamp: 1672531200000 + i,
-    }));
-    mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingHistory));
-    const now = new Date('2023-01-02T00:00:00Z');
-    vi.setSystemTime(now);
-
-    const requestData = {
-      method: 'POST',
-      url: 'https://api.example.com/newdata',
-    };
-
-    saveToHistory(requestData);
-
-    const savedHistory = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
-    expect(savedHistory.length).toBe(50);
-    expect(savedHistory[49]).toEqual({
-      ...requestData,
-      id: now.getTime().toString(),
-      timestamp: now.getTime(),
+  it('should save request data to Firestore and delete old documents', async () => {
+    collection.mockReturnValue('historyCollection');
+    addDoc.mockResolvedValue(undefined);
+    query.mockReturnValue('query');
+    getDocs.mockResolvedValue({
+      docs: docsArray,
     });
-    expect(savedHistory[0].url).toBe('https://api.example.com/data/1');
+    deleteDoc.mockResolvedValue(undefined);
+
+    const fixedTimestamp = 1726142057758;
+    vi.setSystemTime(fixedTimestamp);
+
+    await saveToHistoryFirestore(requestData, userUid, t);
+
+    const expectedObject = generateExpectedObject(requestData, userUid, fixedTimestamp);
+    expect(addDoc).toHaveBeenCalledWith('historyCollection', expectedObject);
+    expect(deleteDoc).toHaveBeenCalledTimes(1);
+    expect(deleteDoc).toHaveBeenCalledWith(doc(undefined, 'requestHistory', 'doc50'));
   });
 
-  it('handles additional properties in requestData', () => {
-    mockLocalStorage.getItem.mockReturnValue(null);
-    const now = new Date('2023-01-01T00:00:00Z');
-    vi.setSystemTime(now);
+  it('should handle FirestoreError correctly', async () => {
+    (addDoc as vi.Mock).mockRejectedValue(new FirestoreError());
+    await saveToHistoryFirestore(requestData, userUid, t);
 
-    const requestData = {
-      method: 'POST',
-      url: 'https://api.example.com/graphql',
-      requestBody: '{ "query": "{ user { name } }" }',
-      headers: '{ "Content-Type": "application/json" }',
-      variables: '{ "id": "123" }',
-      sdlUrl: 'https://api.example.com/schema.graphql',
-    };
+    expect(errorNotifyMessage).toHaveBeenCalledWith('firestore.error.firestoreSave');
+  });
 
-    saveToHistory(requestData);
+  it('should handle generic Error correctly', async () => {
+    (addDoc as vi.Mock).mockRejectedValue(new Error('Generic error'));
+    await saveToHistoryFirestore(requestData, userUid, t);
 
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
-      'requestHistory',
-      JSON.stringify([
-        {
-          ...requestData,
-          id: now.getTime().toString(),
-          timestamp: now.getTime(),
-        },
-      ]),
-    );
+    expect(errorNotifyMessage).toHaveBeenCalledWith('Generic error');
+  });
+
+  it('should handle unknown error correctly', async () => {
+    const unknownError = { some: 'unknown error' };
+    (addDoc as vi.Mock).mockRejectedValue(unknownError);
+    await saveToHistoryFirestore(requestData, userUid, t);
+
+    expect(errorNotifyMessage).toHaveBeenCalledWith('firestore.error.unknown');
   });
 });

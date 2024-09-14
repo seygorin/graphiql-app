@@ -76,6 +76,7 @@ const Header: React.FC = () => {
                 sizes='100vw'
                 style={{ width: '100%', height: 'auto' }}
                 alt='logoRsSchool'
+                priority
               />
             </Box>
           </Link>

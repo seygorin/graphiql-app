@@ -1,9 +1,27 @@
 import { FC, useEffect, useRef } from 'react';
-import s from './PasswordStrength.module.scss';
+import Box from '@mui/material/Box';
+import { genStyles } from '../../styles/genStyles';
+import { ADDITION_COLOR } from '../../theme/theme';
 
 interface IPasswordStrengthProps {
   password: string;
 }
+
+const STYLES = genStyles({
+  powerMeter: {
+    width: '100%',
+    height: '0.25rem',
+    borderRadius: '0.2rem',
+    backgroundColor: ADDITION_COLOR.translucent,
+  },
+  powerScale: {
+    width: '1%',
+    height: '100%',
+    borderRadius: '0.2rem',
+    transition: '0.3s',
+    backgroundColor: ADDITION_COLOR.light,
+  },
+});
 
 const PasswordStrength: FC<IPasswordStrengthProps> = ({ password }) => {
   const passStrengthMeterRef = useRef<HTMLDivElement | null>(null);
@@ -49,9 +67,9 @@ const PasswordStrength: FC<IPasswordStrengthProps> = ({ password }) => {
   }, [password]);
 
   return (
-    <div className={s.power_meter}>
-      <div className={s.power_scale} ref={passStrengthMeterRef} data-testid='meter'></div>
-    </div>
+    <Box sx={STYLES.powerMeter}>
+      <Box sx={STYLES.powerScale} ref={passStrengthMeterRef} data-testid='meter'></Box>
+    </Box>
   );
 };
 

@@ -78,10 +78,17 @@
     "invalidHeadersJson": "Invalid JSON format in headers",
     "invalidVariablesJson": "Invalid JSON format in variables"
   },
+  "firestore": {
+    "error": {
+      "firestoreSave": "Error saving to Firestore",
+      "unknown": "Unknown Error"
+    }
+  },
   "history": {
     "noRequests": "You haven't executed any requests yet",
     "errorParsingHistory": "Error parsing history",
     "errorParsingHeaders": "Error parsing headers",
+    "errorHistoryCleared": "Error clearing history data",
     "historyCleared": "History cleared",
     "clearHistory": "Clear history"
   },

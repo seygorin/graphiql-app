@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import { User } from 'firebase/auth';
 import SignInButton from 'components/SignInButton';
 import SignOutButton from 'components/SignOutButton';
@@ -12,13 +12,12 @@ const STYLES = {
   wrapper: {
     display: 'flex',
     gap: 3,
-    [theme.breakpoints.down('md')]: { flexDirection: 'column' },
+    [theme.breakpoints.down('md')]: { flexDirection: 'column', alignItem: 'center' },
   },
 };
 
 export interface IProps {
   user?: User | null;
-  name?: string | null;
 }
 
 const Buttons: React.FC<IProps> = ({ user }) => {

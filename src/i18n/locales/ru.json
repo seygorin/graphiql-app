@@ -88,11 +88,18 @@
     "invalidHeadersJson": "Неверный формат JSON в заголовках",
     "invalidVariablesJson": "Неверный формат JSON в переменных"
   },
+  "firestore": {
+    "error": {
+      "firestoreSave": "Ошибка сохранения в Firestore",
+      "unknown": "Произошла неизвестная ошибка"
+    }
+  },
   "history": {
     "noRequests": "Вы еще не выполнили ни одного запроса",
     "tryRESTful": "Попробовать RESTful клиент",
     "errorParsingHistory": "Ошибка получения данных об истории",
     "errorParsingHeaders": "Ошибка получения данных о заголовках",
+    "errorHistoryCleared": "Ошибка при очистке данных истории",
     "historyCleared": "История очищена",
     "clearHistory": "Очистить историю"
   },

@@ -40,6 +40,7 @@ const STYLES = genStyles({
   link: {
     lineHeight: 1.25,
     color: 'background.default',
+    transition: '0.25s color ease',
     '&:hover': {
       color: 'secondary.main',
     },
