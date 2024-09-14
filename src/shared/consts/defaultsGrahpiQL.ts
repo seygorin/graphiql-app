@@ -2,6 +2,7 @@ export const DEFAULT_ENDPOINT = 'https://swapi-graphql.netlify.app/.netlify/func
 export const DEFAULT_QUERY = `query {
   allFilms {
     films {
+      id
       title
       director
       releaseDate

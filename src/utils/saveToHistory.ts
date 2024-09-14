@@ -1,74 +1,36 @@
-import {
-  CollectionReference,
-  FirestoreError,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  where,
-} from 'firebase/firestore';
-import { errorNotifyMessage } from 'utils/notifyMessage';
+import { FirestoreError, addDoc, collection } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { TFunction } from '../validations/signInValidation.schema';
+import { errorNotifyMessage } from './notifyMessage';
 
-interface HistoryItem {
+interface SaveToHistoryParams {
   method: string;
   url: string;
   requestBody?: string;
-  headers?: string;
+  headers: string;
   variables?: string;
-  sdlUrl?: string;
-}
-
-interface HistoryCollectionItem {
-  headers?: string;
-  id: string;
-  method: string;
-  requestBody?: string;
-  timestamp: number;
-  url: string;
-  userUid: string;
-  variables?: string;
-  sdlUrl?: string;
 }
 
 export const saveToHistoryFirestore = async (
-  requestData: HistoryItem,
+  { method, url, requestBody, headers, variables }: SaveToHistoryParams,
   userUid: string,
-  t: TFunction,
+  t: (key: string) => string,
 ) => {
   try {
-    const historyCollection = collection(
-      db,
-      'requestHistory',
-    ) as CollectionReference<HistoryCollectionItem>;
+    const historyCollection = collection(db, 'requestHistory');
+    const timestamp = new Date().getTime();
 
-    await addDoc(historyCollection, {
-      ...requestData,
-      id: Date.now().toString(),
-      timestamp: Date.now(),
+    const historyItem = {
+      method,
+      url,
+      headers,
+      variables,
+      timestamp,
       userUid,
-    });
 
-    const q = query(
-      historyCollection,
-      where('userUid', '==', userUid),
-      orderBy('timestamp', 'desc'),
-      limit(51),
-    );
-    const querySnapshot = await getDocs(q);
+      ...(method !== 'GET' && method !== 'DELETE' && requestBody ? { requestBody } : {}),
+    };
 
-    const docsToDelete: string[] = [];
-    querySnapshot.docs.forEach((data, index) => {
-      if (index >= 50) {
-        docsToDelete.push(data.id);
-      }
-    });
-    await Promise.all(docsToDelete.map((docId) => deleteDoc(doc(db, 'requestHistory', docId))));
+    await addDoc(historyCollection, historyItem);
   } catch (err) {
     if (err instanceof FirestoreError) {
       errorNotifyMessage(t('firestore.error.firestoreSave'));

@@ -120,7 +120,6 @@ const RESTfulClient: React.FC = () => {
 
       setResponse(responseData);
       setStatus('200');
-
       await saveToHistoryFirestore(
         {
           method,
@@ -158,11 +157,23 @@ const RESTfulClient: React.FC = () => {
   const handleSendRequest = () => {
     try {
       const parsedHeaders = JSON.parse(headers);
+      let parsedVariables = {};
+
+      if (variables.trim()) {
+        try {
+          parsedVariables = JSON.parse(variables);
+        } catch (variableError) {
+          errorNotifyMessage(t('restful.invalidVariablesJson'));
+          return;
+        }
+      }
+
       const newPath = encodeRestRequestParams(
         method,
         url,
         method !== 'GET' && method !== 'DELETE' ? requestBody : '',
         parsedHeaders,
+        parsedVariables,
       );
       updateURLWithoutNavigation(`/${locale}${newPath}`);
       sendRequest();

@@ -13,10 +13,17 @@ export function encodeRestRequestParams(
   url: string,
   body?: string,
   headers?: Record<string, string>,
+  variables?: Record<string, string>,
 ): string {
   const encodedUrl = encodeBase64Url(url);
   const encodedBody =
     body && method !== 'GET' && method !== 'DELETE' ? `/${encodeBase64Url(body)}` : '';
+
+  let encodedVariables = '';
+  if (variables && Object.keys(variables).length > 0) {
+    const variablesString = JSON.stringify(variables);
+    encodedVariables = `/${encodeBase64Url(variablesString)}`;
+  }
 
   let encodedHeaders = '';
   if (headers) {
@@ -26,7 +33,7 @@ export function encodeRestRequestParams(
     encodedHeaders = headerPairs.length > 0 ? `?${headerPairs.join('&')}` : '';
   }
 
-  return `/${method}/${encodedUrl}${encodedBody}${encodedHeaders}`;
+  return `/${method}/${encodedUrl}${encodedVariables}${encodedBody}${encodedHeaders}`;
 }
 
 export function encodeGraphQLRequestParams(
@@ -37,20 +44,16 @@ export function encodeGraphQLRequestParams(
 ): string {
   const encodedEndpoint = encodeBase64Url(endpoint);
   const encodedQuery = encodeBase64Url(query);
+  const encodedVariables = variables ? `/${encodeBase64Url(variables)}` : '';
 
-  let params: string[] = [];
+  let headerParams: string[] = [];
   if (headers) {
-    params = params.concat(
-      Object.entries(headers).map(
-        ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-      ),
+    headerParams = Object.entries(headers).map(
+      ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
     );
   }
-  if (variables) {
-    params.push(`variables=${encodeURIComponent(variables)}`);
-  }
 
-  const encodedParams = params.length > 0 ? `?${params.join('&')}` : '';
+  const encodedParams = headerParams.length > 0 ? `?${headerParams.join('&')}` : '';
 
-  return `/GRAPHQL/${encodedEndpoint}/${encodedQuery}${encodedParams}`;
+  return `/GRAPHQL/${encodedEndpoint}/${encodedQuery}${encodedVariables}${encodedParams}`;
 }

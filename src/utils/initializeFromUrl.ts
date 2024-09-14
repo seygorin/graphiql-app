@@ -1,4 +1,5 @@
 import { decodeBase64Url } from './encodeBase64Url';
+import { errorNotifyMessage } from './notifyMessage';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export type GraphQLMethod = 'GRAPHQL';
@@ -21,49 +22,57 @@ export const initializeFromUrl = (
   const parts = pathname.split('/');
   const result: InitializeFromUrlResult = {};
 
-  if (parts.length >= 3) {
-    result.method = parts[2] as AllMethods;
+  try {
+    if (parts.length >= 3) {
+      result.method = parts[2] as AllMethods;
 
-    if (parts.length >= 4) {
-      result.url = decodeBase64Url(parts[3]);
-    }
-
-    if (parts.length >= 5) {
-      if (result.method === 'GRAPHQL') {
-        result.query = decodeBase64Url(parts[4]);
-      } else {
-        result.requestBody = decodeBase64Url(parts[4]);
+      if (parts.length >= 4) {
+        result.url = decodeBase64Url(parts[3]);
       }
-    }
 
-    if (searchParams.size > 0) {
-      const headerObj: Record<string, string> = {};
-      const variablesObj: Record<string, unknown> = {};
-
-      searchParams.forEach((value, key) => {
-        const decodedKey = decodeURIComponent(key);
-        const decodedValue = decodeURIComponent(value);
-
-        const cleanKey = decodedKey.replace(/^["']|["']$/g, '');
-        const cleanValue = decodedValue.replace(/^["']|["']$/g, '');
-
-        if (cleanKey === 'variables' && result.method === 'GRAPHQL') {
-          try {
-            variablesObj[cleanKey] = JSON.parse(cleanValue);
-          } catch (e) {
-            variablesObj[cleanKey] = cleanValue;
-          }
+      if (parts.length >= 5) {
+        if (result.method === 'GRAPHQL') {
+          result.query = decodeBase64Url(parts[4]);
         } else {
-          headerObj[cleanKey] = cleanValue;
+          result.variables = decodeBase64Url(parts[4]);
         }
-      });
+      }
 
-      result.headers = JSON.stringify(headerObj, null, 2);
+      if (parts.length >= 6) {
+        if (result.method === 'GRAPHQL') {
+          result.variables = decodeBase64Url(parts[5]);
+        } else {
+          result.requestBody = decodeBase64Url(parts[5]);
+        }
+      }
 
-      if (Object.keys(variablesObj).length > 0) {
-        result.variables = JSON.stringify(variablesObj, null, 2);
+      if (searchParams.size > 0) {
+        const headerObj: Record<string, string> = {};
+
+        searchParams.forEach((value, key) => {
+          const decodedKey = decodeURIComponent(key);
+          const decodedValue = decodeURIComponent(value);
+
+          const cleanKey = decodedKey.replace(/^["']|["']$/g, '');
+          const cleanValue = decodedValue.replace(/^["']|["']$/g, '');
+
+          headerObj[cleanKey] = cleanValue;
+        });
+
+        result.headers = JSON.stringify(headerObj, null, 2);
+      }
+
+      if (result.variables) {
+        try {
+          const parsedVariables = JSON.parse(result.variables);
+          result.variables = JSON.stringify(parsedVariables, null, 2);
+        } catch (e) {
+          errorNotifyMessage('Error parsing variables JSON');
+        }
       }
     }
+  } catch (error) {
+    errorNotifyMessage('Error initializing from URL');
   }
 
   return result;
