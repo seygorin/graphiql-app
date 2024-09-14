@@ -1,10 +1,11 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Box, Paper } from '@mui/material';
+import { Box, Paper, useMediaQuery, useTheme } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useResizablePanes } from 'hooks/useResizablePanes';
 import { encodeRestRequestParams } from 'utils/encodeBase64Url';
@@ -13,27 +14,30 @@ import { HttpMethod, initializeFromUrl } from 'utils/initializeFromUrl';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistoryFirestore } from 'utils/saveToHistory';
 import { auth } from '../../lib/firebase';
-import HeadersEditor from './HeadersEditor';
-import RequestBodyEditor from './RequestBodyEditor';
-import RequestForm from './RequestForm/RequestForm';
-import Resizer from './Resizer';
-import ResponseViewer from './ResponseViewer/ResponseViewer';
-import VariablesEditor from './VariablesEditor/VariablesEditor';
+import {
+  DEFAULT_HEADERS,
+  DEFAULT_METHOD,
+  DEFAULT_REQUEST_BODY,
+  DEFAULT_URL,
+  DEFAULT_VARIABLES,
+} from '../../shared/consts/defaultRestful';
+
+const HeadersEditor = dynamic(() => import('./HeadersEditor'), { ssr: false });
+const RequestBodyEditor = dynamic(() => import('./RequestBodyEditor'), { ssr: false });
+const RequestForm = dynamic(() => import('./RequestForm/RequestForm'), { ssr: false });
+const Resizer = dynamic(() => import('./Resizer'), { ssr: false });
+const ResponseViewer = dynamic(() => import('./ResponseViewer/ResponseViewer'), { ssr: false });
+const VariablesEditor = dynamic(() => import('./VariablesEditor/VariablesEditor'), { ssr: false });
 
 type ResponseType = Record<string, unknown> | { error: string } | null;
 
-const DEFAULT_METHOD: HttpMethod = 'GET';
-const DEFAULT_URL = 'https://jsonplaceholder.typicode.com/posts';
-const DEFAULT_REQUEST_BODY = '{\n  "title": "foo",\n  "body": "bar",\n  "userId": 1\n}';
-const DEFAULT_HEADERS = '{\n  "Content-Type": "application/json"\n}';
-const DEFAULT_VARIABLES = '{\n  "id": 1\n}';
-
 const RESTfulClient: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const t = useTranslations();
   const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const effectRan = useRef(false);
 
   const [user] = useAuthState(auth);
   const [method, setMethod] = useState<HttpMethod>(DEFAULT_METHOD);
@@ -52,29 +56,25 @@ const RESTfulClient: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (effectRan.current === false) {
-      const {
-        method: initialMethod,
-        url: initialUrl,
-        requestBody: initialBody,
-        headers: initialHeaders,
-      } = initializeFromUrl(pathname, searchParams);
+    const {
+      method: initialMethod,
+      url: initialUrl,
+      requestBody: initialBody,
+      headers: initialHeaders,
+      variables: initialVariables,
+    } = initializeFromUrl(pathname, searchParams);
 
-      const isValidHttpMethod = (methodToCheck: string | undefined): methodToCheck is HttpMethod =>
-        methodToCheck !== undefined &&
-        ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(methodToCheck);
+    const isValidHttpMethod = (methodToCheck: string | undefined): methodToCheck is HttpMethod =>
+      methodToCheck !== undefined &&
+      ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(methodToCheck);
 
-      if (isValidHttpMethod(initialMethod)) {
-        setMethod(initialMethod);
-      } else {
-        setMethod(DEFAULT_METHOD);
-      }
-
-      setUrl(initialUrl || DEFAULT_URL);
-      setRequestBody(initialBody || DEFAULT_REQUEST_BODY);
-      setHeaders(initialHeaders || DEFAULT_HEADERS);
-      effectRan.current = true;
+    if (isValidHttpMethod(initialMethod)) {
+      setMethod(initialMethod);
     }
+    setUrl(initialUrl || DEFAULT_URL);
+    setRequestBody(initialBody || DEFAULT_REQUEST_BODY);
+    setHeaders(initialHeaders || DEFAULT_HEADERS);
+    setVariables(initialVariables || DEFAULT_VARIABLES);
   }, [pathname, searchParams]);
 
   const sendRequest = useCallback(async () => {
@@ -83,9 +83,32 @@ const RESTfulClient: React.FC = () => {
       if (!user) {
         throw new Error('User is not authenticated');
       }
-      const headerObj = JSON.parse(headers);
-      const variablesObj = JSON.parse(variables);
-      const bodyObj = method !== 'GET' && method !== 'DELETE' ? JSON.parse(requestBody) : undefined;
+      let headerObj;
+      let variablesObj;
+      let bodyObj;
+
+      try {
+        headerObj = JSON.parse(headers);
+      } catch (error) {
+        errorNotifyMessage(t('restful.invalidHeadersJson'));
+        return;
+      }
+
+      try {
+        variablesObj = JSON.parse(variables);
+      } catch (error) {
+        errorNotifyMessage(t('restful.invalidVariablesJson'));
+        return;
+      }
+
+      if (method !== 'GET' && method !== 'DELETE') {
+        try {
+          bodyObj = JSON.parse(requestBody);
+        } catch (error) {
+          errorNotifyMessage(t('restful.invalidRequestBodyJson'));
+          return;
+        }
+      }
 
       const responseData = await fetchQuery({
         url,
@@ -97,7 +120,6 @@ const RESTfulClient: React.FC = () => {
 
       setResponse(responseData);
       setStatus('200');
-
       await saveToHistoryFirestore(
         {
           method,
@@ -110,9 +132,7 @@ const RESTfulClient: React.FC = () => {
         t,
       );
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        errorNotifyMessage(t('restful.invalidJson'));
-      } else if (error instanceof Error) {
+      if (error instanceof Error) {
         const statusMatch = error.message.match(/status: (\d+)/);
         if (statusMatch) {
           setStatus(statusMatch[1]);
@@ -135,14 +155,31 @@ const RESTfulClient: React.FC = () => {
   };
 
   const handleSendRequest = () => {
-    const newPath = encodeRestRequestParams(
-      method,
-      url,
-      method !== 'GET' && method !== 'DELETE' ? requestBody : '',
-      JSON.parse(headers),
-    );
-    updateURLWithoutNavigation(`/${locale}${newPath}`);
-    sendRequest();
+    try {
+      const parsedHeaders = JSON.parse(headers);
+      let parsedVariables = {};
+
+      if (variables.trim()) {
+        try {
+          parsedVariables = JSON.parse(variables);
+        } catch (variableError) {
+          errorNotifyMessage(t('restful.invalidVariablesJson'));
+          return;
+        }
+      }
+
+      const newPath = encodeRestRequestParams(
+        method,
+        url,
+        method !== 'GET' && method !== 'DELETE' ? requestBody : '',
+        parsedHeaders,
+        parsedVariables,
+      );
+      updateURLWithoutNavigation(`/${locale}${newPath}`);
+      sendRequest();
+    } catch (error) {
+      errorNotifyMessage(t('restful.invalidHeadersJson'));
+    }
   };
 
   return (
@@ -150,7 +187,7 @@ const RESTfulClient: React.FC = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: 'calc(100vh - 250px)',
+        height: { xs: 'auto', md: 'calc(100vh - 250px)' },
         padding: 2,
       }}
     >
@@ -167,13 +204,22 @@ const RESTfulClient: React.FC = () => {
         />
       </Paper>
 
-      <Box sx={{ display: 'flex', flex: 1, gap: 2, minHeight: '10vh' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          flex: 1,
+          gap: 2,
+          minHeight: '10vh',
+        }}
+      >
         <Paper
           elevation={3}
           sx={{
-            width: `${leftPaneWidth}%`,
+            width: { xs: '100%', md: `${leftPaneWidth}%` },
             display: 'flex',
             flexDirection: 'column',
+            mb: { xs: 2, md: 0 },
           }}
         >
           <Box sx={{ flex: 1, overflow: 'auto' }}>
@@ -189,12 +235,12 @@ const RESTfulClient: React.FC = () => {
           </Box>
         </Paper>
 
-        <Resizer onMouseDown={handleMouseDown} />
+        {!isMobile && <Resizer onMouseDown={handleMouseDown} />}
 
         <Paper
           elevation={3}
           sx={{
-            width: `calc(${100 - leftPaneWidth}% - 8px)`,
+            width: { xs: '100%', md: `calc(${100 - leftPaneWidth}% - 8px)` },
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',

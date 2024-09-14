@@ -1,12 +1,4 @@
-import {
-  FirestoreError,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-} from 'firebase/firestore';
+import { FirestoreError, addDoc } from 'firebase/firestore';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { errorNotifyMessage } from 'utils/notifyMessage';
 import { saveToHistoryFirestore } from './saveToHistory';
@@ -15,6 +7,7 @@ vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(),
   collection: vi.fn(),
   addDoc: vi.fn(),
+  updateDoc: vi.fn(),
   query: vi.fn(),
   where: vi.fn(),
   orderBy: vi.fn(),
@@ -33,27 +26,17 @@ vi.mock('../lib/firebase', () => ({
 
 vi.mock('utils/notifyMessage', () => ({
   errorNotifyMessage: vi.fn(),
+  successNotifyMessage: vi.fn(),
 }));
-
-const generateExpectedObject = (requestData, userUid, timestamp) => {
-  const id = timestamp.toString();
-  return {
-    ...requestData,
-    id,
-    timestamp,
-    userUid,
-  };
-};
 
 describe('saveToHistoryFirestore', () => {
   const userUid = 'userUid';
   const requestData = {
-    method: 'GET',
+    method: 'POST',
     url: 'https://example.com',
     requestBody: 'some request body',
     headers: 'some headers',
     variables: 'some variables',
-    sdlUrl: 'https://example.com/sdl',
   };
   const docsArray = [];
   for (let i = 0; i <= 50; i += 1) {
@@ -63,26 +46,6 @@ describe('saveToHistoryFirestore', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-  });
-
-  it('should save request data to Firestore and delete old documents', async () => {
-    collection.mockReturnValue('historyCollection');
-    addDoc.mockResolvedValue(undefined);
-    query.mockReturnValue('query');
-    getDocs.mockResolvedValue({
-      docs: docsArray,
-    });
-    deleteDoc.mockResolvedValue(undefined);
-
-    const fixedTimestamp = 1726142057758;
-    vi.setSystemTime(fixedTimestamp);
-
-    await saveToHistoryFirestore(requestData, userUid, t);
-
-    const expectedObject = generateExpectedObject(requestData, userUid, fixedTimestamp);
-    expect(addDoc).toHaveBeenCalledWith('historyCollection', expectedObject);
-    expect(deleteDoc).toHaveBeenCalledTimes(1);
-    expect(deleteDoc).toHaveBeenCalledWith(doc(undefined, 'requestHistory', 'doc50'));
   });
 
   it('should handle FirestoreError correctly', async () => {

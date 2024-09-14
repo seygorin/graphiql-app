@@ -1,6 +1,6 @@
 'use client';
 
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 
 interface IProps {
   children: ReactNode;
@@ -19,10 +19,6 @@ class ErrorBoundary extends Component<IProps, IState> {
 
   static getDerivedStateFromError(): IState {
     return { hasError: true };
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('ErrorBoundary caught an error', error, errorInfo);
   }
 
   render() {

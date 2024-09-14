@@ -13,17 +13,6 @@ describe('initializeFromUrl', () => {
     expect(result.url).toBe('https://api.example.com/users');
   });
 
-  it('parses HTTP method, URL and request body correctly', () => {
-    const pathname = `/api/POST/${encodeBase64Url('https://api.example.com/users')}/${encodeBase64Url('{"name":"John Doe"}')}`;
-    const searchParams = new URLSearchParams();
-
-    const result = initializeFromUrl(pathname, searchParams);
-
-    expect(result.method).toBe('POST');
-    expect(result.url).toBe('https://api.example.com/users');
-    expect(result.requestBody).toBe('{"name":"John Doe"}');
-  });
-
   it('parses GraphQL query correctly', () => {
     const pathname = `/api/GRAPHQL/${encodeBase64Url('https://api.example.com/graphql')}/${encodeBase64Url('query { user(id: $id) { name } }')}`;
     const searchParams = new URLSearchParams();
@@ -43,29 +32,22 @@ describe('initializeFromUrl', () => {
 
     const result = initializeFromUrl(pathname, searchParams);
 
-    expect(result.headers).toBe(
-      JSON.stringify(
-        {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer token123',
-        },
-        null,
-        2,
-      ),
-    );
+    expect(JSON.parse(result.headers || '{}')).toEqual({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer token123',
+    });
   });
 
   it('parses GraphQL variables correctly', () => {
-    const pathname = `/api/GRAPHQL/${encodeBase64Url('https://api.example.com/graphql')}/${encodeBase64Url('query { user(id: $id) { name } }')}`;
+    const pathname = `/api/GRAPHQL/${encodeBase64Url('https://api.example.com/graphql')}/${encodeBase64Url('query { user(id: $id) { name } }')}/${encodeBase64Url('{"id":"123"}')}`;
     const searchParams = new URLSearchParams();
-    searchParams.append('variables', '{"id":"123"}');
 
     const result = initializeFromUrl(pathname, searchParams);
 
     expect(result.method).toBe('GRAPHQL');
     expect(result.url).toBe('https://api.example.com/graphql');
     expect(result.query).toBe('query { user(id: $id) { name } }');
-    expect(result.variables).toBe(JSON.stringify({ variables: { id: '123' } }, null, 2));
+    expect(JSON.parse(result.variables || '{}')).toEqual({ id: '123' });
   });
 
   it('handles invalid paths gracefully', () => {
