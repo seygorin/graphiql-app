@@ -7,6 +7,7 @@ export type AllMethods = HttpMethod | GraphQLMethod;
 interface InitializeFromUrlResult {
   method?: AllMethods;
   url?: string;
+  sdlUrl?: string;
   requestBody?: string;
   headers?: string;
   query?: string;

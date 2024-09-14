@@ -74,7 +74,9 @@
     "noDocumentation": "No Documentation Available",
     "loadingDocumentation": "Loading Documentation...",
     "schemaFetchError": "Error Fetching Schema",
-    "unknownError": "Unknown Error"
+    "unknownError": "Unknown Error",
+    "invalidHeadersJson": "Invalid JSON format in headers",
+    "invalidVariablesJson": "Invalid JSON format in variables"
   },
   "firestore": {
     "error": {
@@ -102,7 +104,10 @@
     "responseBody": "Response Body",
     "variables": "Variables",
     "invalidJson": "Infalid JSON format",
-    "unknownError": "Unknown Error"
+    "unknownError": "Unknown Error",
+    "invalidHeadersJson": "Invalid JSON format in headers",
+    "invalidVariablesJson": "Invalid JSON format in variables",
+    "invalidRequestBodyJson": "Invalid JSON format in request body"
   },
   "auth": {
     "success": {
