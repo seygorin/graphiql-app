@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import logo from 'public/logo-rsschool3.png';

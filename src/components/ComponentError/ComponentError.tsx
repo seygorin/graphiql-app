@@ -50,6 +50,7 @@ function ComponentError({ error }: { error?: Error }): JSX.Element {
             sizes='100vw'
             style={{ width: '100%', height: 'auto' }}
             alt='error'
+            priority
           ></Image>
         </Box>
         <Typography variant='h6' sx={STYLES.textBottom}>
