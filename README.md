@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Rolling Scopes School React Course 2024Q3
 
-## Getting Started
+## [REST/GraphiQL Client](https://github.com/rolling-scopes-school/tasks/blob/master/react/modules/tasks/final.md)
 
-First, run the development server:
+### How to start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repo - run command in CLI `https://github.com/KsushaSher/graphiql-app.git`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Move to the root folder of the app - run command in CLI `cd graphiql-app`
 
-You can start editing the page by modifying `app/SignUpForm.tsx`. The page auto-updates as you edit the file.
+3. Install dependencies - run command in CLI `npm install`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. Switch to the branch **develop** - run in CLI `git checkout develop`
 
-## Learn More
+5. Start the application - run command in CLI `npm run dev`
 
-To learn more about Next.js, take a look at the following resources:
+6. Start the application in browser by provided link in CLI
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Script commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Start **esLint** to run code analysis and verification for compliance with established rules - run command in CLI `npm run lint`
 
-## Deploy on Vercel
+2. Start **Prettier** to automatically format code - run command in CLI `npm run format:fix`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Husky** is configured to automatically start **esLint** and **Prettier** during `pre-commit` Git-operations
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+4. **Husky** is configured to automatically run tests on the pre-push hook, ensuring that tests are automatically executed before any code is pushed.
+
+5. To start **testing** - run command in CLI `npm run test`
+
+6. To start **testing with coverage report** - run command in CLI `npm run test:coverage`
