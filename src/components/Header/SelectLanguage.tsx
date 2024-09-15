@@ -36,5 +36,4 @@ const SelectLanguage: React.FC = () => {
   );
 };
 
-// export default SelectLanguage;
 export default withUser(SelectLanguage, false);

@@ -1,6 +1,5 @@
 import { useTranslations } from 'next-intl';
 import { fireEvent, render, screen } from '@testing-library/react';
-// import { User } from 'firebase/auth';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { signOutUser } from '../../lib/auth';
 import SignOutButton from './SignOutButton';

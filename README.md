@@ -8,9 +8,9 @@
 
 2. Move to the root folder of the app - run command in CLI `cd graphiql-app`
 
-3. Install dependencies - run command in CLI `npm install`
+3. Switch to the branch **develop** - run in CLI `git checkout develop`
 
-4. Switch to the branch **develop** - run in CLI `git checkout develop`
+4. Install dependencies - run command in CLI `npm install`
 
 5. Start the application - run command in CLI `npm run dev`
 

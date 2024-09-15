@@ -109,6 +109,19 @@ vi.mock('./VariablesEditor/VariablesEditor', () => ({
   default: () => <div data-testid='variables-editor' />,
 }));
 
+vi.mock('firebase/auth', () => ({
+  GoogleAuthProvider: vi.fn(),
+  createUserWithEmailAndPassword: vi.fn(),
+  signInWithEmailAndPassword: vi.fn(),
+  signInWithPopup: vi.fn(),
+  signOut: vi.fn(),
+  getAuth: vi.fn(),
+  onIdTokenChanged: vi.fn((auth, callback) => {
+    callback({ getIdTokenResult: vi.fn() });
+    return () => {};
+  }),
+}));
+
 describe('RESTfulClient', () => {
   beforeEach(() => {
     vi.clearAllMocks();
