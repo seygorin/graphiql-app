@@ -4,7 +4,7 @@
 
 ### How to start
 
-1. Clone the repo - run command in CLI `https://github.com/KsushaSher/graphiql-app.git`
+1. Clone the repo - run command in CLI `git clone https://github.com/KsushaSher/graphiql-app.git`
 
 2. Move to the root folder of the app - run command in CLI `cd graphiql-app`
 
