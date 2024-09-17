@@ -1,0 +1,85 @@
+{
+  "name": "graphiql-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint && eslint . --ext .js,.jsx,.ts,.tsx",
+    "format:fix": "prettier --write 'src//**/*.{js,jsx,ts,tsx}'",
+    "test": "vitest",
+    "test:check": "vitest --run",
+    "coverage": "vitest run --coverage"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --quiet --fix",
+      "prettier --write --ignore-unknown"
+    ],
+    "*.{json,html}": [
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.13.1",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/lab": "^5.0.0-alpha.173",
+    "@mui/material": "^5.16.7",
+    "@mui/material-nextjs": "^5.16.6",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@uiw/codemirror-extensions-langs": "^4.21.21",
+    "@uiw/react-codemirror": "^4.21.21",
+    "clsx": "^2.1.1",
+    "cm6-graphql": "^0.1.1",
+    "firebase": "^10.13.1",
+    "firebase-admin": "^12.4.0",
+    "js-base64": "^3.7.7",
+    "next": "14.2.5",
+    "next-intl": "^3.17.6",
+    "react": "^18",
+    "react-cookie": "^7.2.0",
+    "react-dom": "^18",
+    "react-firebase-hooks": "^5.1.1",
+    "react-hook-form": "^7.52.2",
+    "react-toastify": "^10.0.5",
+    "sass": "^1.77.8",
+    "sharp": "^0.33.5",
+    "vite-tsconfig-paths": "^5.0.1",
+    "yup": "^1.4.0"
+  },
+  "overrides": {
+    "@codemirror/state": "6.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/coverage-v8": "^2.0.5",
+    "eslint": "^8",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-next": "14.2.5",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.34.4",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "husky": "^9.1.5",
+    "jsdom": "^24.1.1",
+    "typescript": "^5",
+    "vitest": "^2.0.5"
+  }
+}

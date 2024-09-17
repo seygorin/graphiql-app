@@ -1,0 +1,88 @@
+$spacer: 1rem;
+$padding-base: 1.5rem;
+
+$header-height: 70px;
+$footer-height: 70px;
+
+$background-main: #edede7;
+$background-footer: #4f4f4f;
+$shadow-main: #a1a1a1;
+$border-footer: #cbc8c8;
+$text-footer: #fff;
+
+$primary-main: #842106;
+$primary-light: #d20000;
+$primary-dark: #5c1705;
+$primary-contrastText: #fff;
+
+$secondary-main: #748381;
+$secondary-light: #b7cac8;
+$secondary-dark: #697c7a;
+$secondary-contrastText: #fff;
+
+$translucent: rgba(201, 201, 201, 0.5);
+
+$text-google: #757575;
+$background-google: #f8f9fa;
+
+$error-main: #222;
+
+$warning-main: #e8b86d;
+
+$info-main: #bcbcb0;
+
+$success-main: rgba(136, 137, 143, 0.57);
+$success-light: #e5e3e1;
+
+$background-default: #ffffff;
+$background-paper: #e5e6e1;
+
+$text-primary: #222;
+$text-secondary: #333;
+$text-disabled: #a5a4a4;
+
+$font-family-message: 'Arial', serif;
+
+:export {
+  headerHeight: $header-height;
+  footerHeight: $footer-height;
+
+  backgroundMain: $background-main;
+  backgroundFooter: $background-footer;
+  shadow-main: $shadow-main;
+  borderFooter: $border-footer;
+  textFoo: $text-footer;
+
+  textGoogle: $text-google;
+  backgroundGoogle: $background-google;
+
+  primaryMain: $primary-main;
+  primaryLight: $primary-light;
+  primaryDark: $primary-dark;
+  primaryContrastText: $primary-contrastText;
+
+  secondaryMain: $secondary-main;
+  secondaryLight: $secondary-light;
+  secondaryDark: $secondary-dark;
+  secondaryContrastText: $secondary-contrastText;
+
+  errorMain: $error-main;
+
+  warningMain: $warning-main;
+
+  infoMain: $info-main;
+
+  successMain: $success-main;
+  successLight: $success-light;
+
+  backgroundDefault: $background-default;
+  backgroundPaper: $background-paper;
+
+  translucent: $translucent;
+
+  textPrimary: $text-primary;
+  textSecondary: $text-secondary;
+  textDisabled: $text-disabled;
+
+  fontMessage: $font-family-message;
+}

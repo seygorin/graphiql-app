@@ -1,0 +1,144 @@
+{
+  "ru": "ru",
+  "en": "en",
+  "notfound": {
+    "messageNotFound": "Sorry, but page was not found",
+    "message": "You may have mistyped the address or the page may have moved",
+    "link": "Return Home"
+  },
+  "error": { "message": "Oops!", "link": "Return Home", "description": "Something went wrong..." },
+  "header": {
+    "select": { "language": "Language" },
+    "login": "Sign in",
+    "logout": "Sign out",
+    "signUp": "Sign up"
+  },
+  "loader": {
+    "message": "Loading..."
+  },
+  "main": {
+    "welcomeUser": "Welcome back",
+    "welcome": "Welcome!",
+    "text": "Please select the desired section:"
+  },
+  "footer": { "year": "year" },
+  "component": { "input": "Input" },
+  "form": {
+    "title": { "signUp": "Sign up", "signIn": "Sign in" },
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "button": { "signUp": "Sign up", "signIn": "Sign in", "google": "Sign in with Google" },
+    "subtitle": {
+      "signUp": "If you already have an account, please sign in",
+      "signIn": "If you don't have an account yet, please register",
+      "google": "Or continue with your Google account"
+    },
+    "error": {
+      "name": {
+        "required": "Name is required",
+        "capitalized": "The first letter of the name must be capitalized"
+      },
+      "email": { "required": "Email is required", "format": "Invalid email format" },
+      "password": {
+        "required": "Password is required",
+        "content": "Password must have at least one letter, one digit, one special character",
+        "length": "Password must be at least 8 characters long"
+      },
+      "confirmPassword": { "required": "Password is required", "match": "Passwords do not match" }
+    }
+  },
+  "dashboard": {
+    "restful": "RESTful Client",
+    "graphiql": "GraphiQL Client",
+    "history": "Query history"
+  },
+  "graphiql": {
+    "title": "GraphiQL Client",
+    "endpoint": "Endpoint URL",
+    "sdlEndpoint": "SDL Endpoint URL",
+    "query": "Query",
+    "variables": "Variables",
+    "headers": "Headers",
+    "executeQuery": "Execute Query",
+    "response": "Response",
+    "documentation": "Documentation",
+    "documentationPlaceholder": "Documentation will be displayed here when available",
+    "queryPlaceholder": "Enter your GraphQL query here",
+    "formatQuery": "Format Query",
+    "endpointLabel": "Endpoint URL",
+    "sdlEndpointLabel": "SDL Endpoint URL",
+    "sendRequest": "Send Request",
+    "fetchSchema": "Fetch Schema",
+    "noDocumentation": "No Documentation Available",
+    "loadingDocumentation": "Loading Documentation...",
+    "schemaFetchError": "Error Fetching Schema",
+    "unknownError": "Unknown Error",
+    "invalidHeadersJson": "Invalid JSON format in headers",
+    "invalidVariablesJson": "Invalid JSON format in variables"
+  },
+  "firestore": {
+    "error": {
+      "firestoreSave": "Error saving to Firestore",
+      "unknown": "Unknown Error"
+    }
+  },
+  "history": {
+    "noRequests": "You haven't executed any requests yet",
+    "errorParsingHistory": "Error parsing history",
+    "errorParsingHeaders": "Error parsing headers",
+    "errorHistoryCleared": "Error clearing history data",
+    "historyCleared": "History cleared",
+    "clearHistory": "Clear history"
+  },
+  "restful": {
+    "title": "RESTful Client",
+    "method": "Method",
+    "endpoint": "Endpoint URL",
+    "requestBody": "Request Body",
+    "headers": "Headers",
+    "sendRequest": "Send Request",
+    "response": "Response",
+    "status": "Status",
+    "responseBody": "Response Body",
+    "variables": "Variables",
+    "invalidJson": "Infalid JSON format",
+    "unknownError": "Unknown Error",
+    "invalidHeadersJson": "Invalid JSON format in headers",
+    "invalidVariablesJson": "Invalid JSON format in variables",
+    "invalidRequestBodyJson": "Invalid JSON format in request body"
+  },
+  "auth": {
+    "success": {
+      "signin": "Successful sign in",
+      "signup": "Successful sign up",
+      "signinGoogle": "Successful login via Google account",
+      "signout": "You signed out. See you soon!"
+    },
+    "error": {
+      "signin": "Invalid email or password, please try again",
+      "signup": {
+        "failed": "Registration failed, please try again later",
+        "userExists": "An account with the same email already exists"
+      },
+      "database": "An error occurred while retrieving information from the database",
+      "google": "Google sign in failed",
+      "unknown": "An unknown error occurred",
+      "token": "Firebase session token expired"
+    }
+  },
+  "aboutUs": {
+    "titleTeam": "Our team",
+    "name1": "Intrstng",
+    "dev1": "An ambitious developer who strives to grow and improve his skills with each project.",
+    "name2": "seygorin",
+    "dev2": "Talented developer with an eye for detail and a passion for creating quality code.",
+    "name3": "KsushaSher",
+    "dev3": "A novice developer with a great desire to learn and develop, mastering new technologies.",
+    "titleProject": "About the project",
+    "project": "This project required the development of a simplified API application that combines Postman and GraphiQL functionality. It should allow making requests to RESTful and GraphQL APIs, support authentication and authorization, and store request history.",
+    "titleCourse": "About the course",
+    "course": "The current course is designed to deepen knowledge and acquire practical skills in working with React."
+  }
+}
