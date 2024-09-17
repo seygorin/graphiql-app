@@ -48,13 +48,14 @@ vi.mock('./styles.aboutUs', () => ({
     cardsInfo: {},
     devName: {},
     devText: {},
+    devRole: {},
   },
 }));
 
 describe('AboutUs', () => {
   it('renders AboutUs component', () => {
     render(<AboutUs />);
-    expect(screen.getByText('aboutUs.titleTeam')).toBeInTheDocument();
+    expect(screen.getByText('titleTeam')).toBeInTheDocument();
   });
 
   it('renders three developer cards', () => {
@@ -63,26 +64,29 @@ describe('AboutUs', () => {
     expect(cards).toHaveLength(3);
   });
 
-  it('renders developer names and descriptions', () => {
+  it('renders developer names, descriptions, and roles', () => {
     render(<AboutUs />);
-    expect(screen.getByText('aboutUs.name1')).toBeInTheDocument();
-    expect(screen.getByText('aboutUs.dev1')).toBeInTheDocument();
-    expect(screen.getByText('aboutUs.name2')).toBeInTheDocument();
-    expect(screen.getByText('aboutUs.dev2')).toBeInTheDocument();
-    expect(screen.getByText('aboutUs.name3')).toBeInTheDocument();
-    expect(screen.getByText('aboutUs.dev3')).toBeInTheDocument();
+    expect(screen.getByText('name1')).toBeInTheDocument();
+    expect(screen.getByText('dev1')).toBeInTheDocument();
+    expect(screen.getByText('role1')).toBeInTheDocument();
+    expect(screen.getByText('name2')).toBeInTheDocument();
+    expect(screen.getByText('dev2')).toBeInTheDocument();
+    expect(screen.getByText('role2')).toBeInTheDocument();
+    expect(screen.getByText('name3')).toBeInTheDocument();
+    expect(screen.getByText('dev3')).toBeInTheDocument();
+    expect(screen.getByText('role3')).toBeInTheDocument();
   });
 
   it('renders project title and description', () => {
     render(<AboutUs />);
-    expect(screen.getByText('aboutUs.titleProject')).toBeInTheDocument();
-    expect(screen.getByText('aboutUs.project')).toBeInTheDocument();
+    expect(screen.getByText('titleProject')).toBeInTheDocument();
+    expect(screen.getByText('project')).toBeInTheDocument();
   });
 
   it('renders course title and description', () => {
     render(<AboutUs />);
-    expect(screen.getByText('aboutUs.titleCourse')).toBeInTheDocument();
-    expect(screen.getByText('aboutUs.course')).toBeInTheDocument();
+    expect(screen.getByText('titleCourse')).toBeInTheDocument();
+    expect(screen.getByText('course')).toBeInTheDocument();
   });
 
   it('renders images with correct attributes', () => {
