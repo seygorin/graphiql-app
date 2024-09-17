@@ -10,12 +10,12 @@ import avatarThree from 'public/ava3.jpg';
 import { STYLES } from './styles.aboutUs';
 
 const AboutUs: React.FC = () => {
-  const t = useTranslations();
+  const t = useTranslations('aboutUs');
 
   return (
     <Box sx={STYLES.wrapper}>
       <Typography variant='h3' sx={STYLES.title}>
-        {t('aboutUs.titleTeam')}
+        {t('titleTeam')}
       </Typography>
 
       <Box sx={STYLES.cards}>
@@ -25,10 +25,13 @@ const AboutUs: React.FC = () => {
           </CardMedia>
           <CardContent sx={STYLES.cardsInfo}>
             <Typography variant='h4' sx={STYLES.devName}>
-              {t('aboutUs.name1')}
+              {t('name1')}
             </Typography>
             <Typography variant='body1' sx={STYLES.devText}>
-              {t('aboutUs.dev1')}
+              {t('dev1')}
+            </Typography>
+            <Typography variant='body1' sx={STYLES.devRole}>
+              {t('role1')}
             </Typography>
           </CardContent>
         </Card>
@@ -39,10 +42,13 @@ const AboutUs: React.FC = () => {
           </CardMedia>
           <CardContent sx={STYLES.cardsInfo}>
             <Typography variant='h4' sx={STYLES.devName}>
-              {t('aboutUs.name2')}
+              {t('name2')}
             </Typography>
             <Typography variant='body1' sx={STYLES.devText}>
-              {t('aboutUs.dev2')}
+              {t('dev2')}
+            </Typography>
+            <Typography variant='body1' sx={STYLES.devRole}>
+              {t('role2')}
             </Typography>
           </CardContent>
         </Card>
@@ -53,25 +59,28 @@ const AboutUs: React.FC = () => {
           </CardMedia>
           <CardContent sx={STYLES.cardsInfo}>
             <Typography variant='h4' sx={STYLES.devName}>
-              {t('aboutUs.name3')}
+              {t('name3')}
             </Typography>
             <Typography variant='body1' sx={STYLES.devText}>
-              {t('aboutUs.dev3')}
+              {t('dev3')}
+            </Typography>
+            <Typography variant='body1' sx={STYLES.devRole}>
+              {t('role3')}
             </Typography>
           </CardContent>
         </Card>
       </Box>
       <Typography variant='h3' sx={STYLES.title}>
-        {t('aboutUs.titleProject')}
+        {t('titleProject')}
       </Typography>
       <Typography variant='body1' px={4} color='text.secondary'>
-        {t('aboutUs.project')}
+        {t('project')}
       </Typography>
       <Typography variant='h3' sx={STYLES.title}>
-        {t('aboutUs.titleCourse')}
+        {t('titleCourse')}
       </Typography>
       <Typography variant='body1' pb='110px' px={4} color='text.secondary'>
-        {t('aboutUs.course')}
+        {t('course')}
       </Typography>
     </Box>
   );

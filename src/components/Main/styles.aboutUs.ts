@@ -86,6 +86,7 @@ export const STYLES = genStyles({
       sm: '1.3rem',
       xs: '1.1rem',
     },
+    textAlign: 'center',
   },
   devText: {
     fontSize: {
@@ -93,5 +94,15 @@ export const STYLES = genStyles({
       sm: '1.05rem',
       xs: '1rem',
     },
+    textAlign: 'center',
+  },
+  devRole: {
+    fontSize: {
+      md: '1rem',
+      sm: '0.95 rem',
+      xs: '0.9 rem',
+    },
+    fontStyle: 'italic',
+    textAlign: 'center',
   },
 });

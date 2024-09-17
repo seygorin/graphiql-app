@@ -27,6 +27,7 @@ This project is a REST/GraphiQL Client developed as part of the [Rolling Scopes 
    ```
    npm install
    ```
+4. Create a `.env.local` file in the root directory and add your Firebase API key. You can refer to the `.env.example` file for the required structure.
 
 ## Usage
 
