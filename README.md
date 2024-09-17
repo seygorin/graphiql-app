@@ -1,31 +1,65 @@
-# Rolling Scopes School React Course 2024Q3
+# REST/GraphiQL App
 
-## [REST/GraphiQL Client](https://github.com/rolling-scopes-school/tasks/blob/master/react/modules/tasks/final.md)
+## Description
 
-### How to start
+This project is a REST/GraphiQL Client developed as part of the [Rolling Scopes School](https://rs.school) React Course 2024Q3. It provides a user-friendly interface for making GraphQL queries and RESTful API requests.
 
-1. Clone the repo - run command in CLI `git clone https://github.com/KsushaSher/graphiql-app.git`
+## Table of Contents
 
-2. Move to the root folder of the app - run command in CLI `cd graphiql-app`
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [Scripts](#scripts)
+- [Authors](#authors)
+- [Project Evaluation](#project-evaluation)
 
-3. Switch to the branch **develop** - run in CLI `git checkout develop`
+## Installation
 
-4. Install dependencies - run command in CLI `npm install`
+1. Clone the repository:
+   ```
+   git clone https://github.com/seygorin/graphiql-app.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd graphiql-app
+   ```
+3. Install dependencies:
+   ```
+   npm install
+   ```
 
-5. Start the application - run command in CLI `npm run dev`
+## Usage
 
-6. Start the application in browser by provided link in CLI
+To start the application, run:
 
-## Script commands
+```
+npm run dev
+```
 
-1. Start **esLint** to run code analysis and verification for compliance with established rules - run command in CLI `npm run lint`
+Then open your browser and navigate to the URL provided in the CLI.
 
-2. Start **Prettier** to automatically format code - run command in CLI `npm run format:fix`
+## Features
 
-3. **Husky** is configured to automatically start **esLint** and **Prettier** during `pre-commit` Git-operations
+- GraphQL query editor with syntax highlighting and auto-completion
+- RESTful API client
+- Request history
+- Multi-language support
+- User authentication
+- Responsive design
 
-4. **Husky** is configured to automatically run tests on the pre-push hook, ensuring that tests are automatically executed before any code is pushed.
+## Scripts
 
-5. To start **testing** - run command in CLI `npm run test`
+- `npm run lint`: Run ESLint for code analysis
+- `npm run format:fix`: Run Prettier to automatically format code
+- `npm run test`: Run tests
+- `npm run test:coverage`: Run tests with coverage report
 
-6. To start **testing with coverage report** - run command in CLI `npm run test:coverage`
+## Authors
+
+- [seygorin](https://github.com/seygorin)
+- [KsushaSher](https://github.com/KsushaSher)
+- [Intrstng](https://github.com/Intrstng)
+
+## Project Evaluation
+
+For detailed information about the project's score and evaluation, please refer to the [SCORE.md](./SCORE.md) file.
