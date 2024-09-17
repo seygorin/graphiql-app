@@ -56,9 +56,9 @@ Then open your browser and navigate to the URL provided in the CLI.
 
 ## Authors
 
-- [seygorin](https://github.com/seygorin)
-- [KsushaSher](https://github.com/KsushaSher)
-- [Intrstng](https://github.com/Intrstng)
+- [seygorin](https://github.com/seygorin): GraphiQL/RESTful, History
+- [KsushaSher](https://github.com/KsushaSher): Deployment, Styles, Routing, i18n
+- [Intrstng](https://github.com/Intrstng): Login/Logout, Firebase/Firestore
 
 ## Project Evaluation
 
